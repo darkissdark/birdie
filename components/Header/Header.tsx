@@ -1,5 +1,5 @@
 const Header = () => {
-  return <header>Header</header>;
+  return <header>Looks like only for mobile version</header>;
 };
 
 export default Header;

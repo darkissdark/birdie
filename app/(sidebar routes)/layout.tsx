@@ -13,8 +13,8 @@ export default function NotesLayout({ children }: NotesLayoutProps) {
     <div className={css.pageLayout}>
       <SideBar />
       <div className={css.pageWrapper}>
-        <Breadcrumbs />
         <Header />
+        <Breadcrumbs />
         <main>{children}</main>
       </div>
     </div>
