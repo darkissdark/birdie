@@ -20,11 +20,11 @@ import css from "./page.module.css";
 
 function NotFound() {
   return (
-    <main className={css.main}>
-      <div className={css.container}>
-        <h1 className={css.title}>404 - Page not found</h1>
+    <main className={css.container}>
+      <div className={css.main}>
+        <h1 className={css.title}>404 - Сторінку не знайдено</h1>
         <p className={css.description}>
-          Sorry, the page you are looking for does not exist.
+          Вибачте, сторінку, яку ви шукаєте, не існує.
         </p>
       </div>
     </main>

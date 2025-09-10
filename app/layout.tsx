@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Lato, Comfortaa } from "next/font/google";
-import SideBar from "@/components/SideBar/SideBar";
-import Header from "@/components/Header/Header";
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import "./globals.css";
-import css from "./page.module.css";
 import "modern-normalize/modern-normalize.css";
 
 const lato = Lato({
@@ -37,14 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${lato.variable} ${comfortaa.variable}`}>
-        <div className={css.container}>
-          <SideBar />
-          <div className={css.pageWrapper}>
-            <Breadcrumbs />
-            <Header />
-            <main>{children}</main>
-          </div>
-        </div>
+        {children}
       </body>
     </html>
   );

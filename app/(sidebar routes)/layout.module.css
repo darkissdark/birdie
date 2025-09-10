@@ -1,0 +1,8 @@
+.pageWrapper {
+  width: 100%;
+}
+
+.pageLayout {
+  display: flex;
+  min-height: 100%;
+}
