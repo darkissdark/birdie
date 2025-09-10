@@ -16,7 +16,37 @@
   font-family: var(--font-geist-sans);
 }
 
-@media (prefers-color-scheme: dark) {
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 90%;
+  max-width: 1280px;
+  margin: 0px auto;
+  padding: 0 16px 16px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.description {
+  font-size: 18px;
+  color: #444444;
+  line-height: 28px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* @media (prefers-color-scheme: dark) {
   .page {
     --gray-rgb: 255, 255, 255;
     --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
@@ -107,7 +137,7 @@ a.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
+
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
     background: var(--button-primary-hover);
@@ -164,4 +194,4 @@ a.secondary {
   .logo {
     filter: invert();
   }
-}
+} */
