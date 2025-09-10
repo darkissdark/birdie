@@ -1,0 +1,17 @@
+.dairySection {
+    padding-block: 32px;
+}
+
+.dairyContainer{
+    margin: 0 auto;
+    padding-inline: 20px;
+}
+
+
+
+@media (min-width: 1440px) {
+    .dairyPageContainer2{
+        width: 1128px;
+        background-color: blue;
+    }
+}
