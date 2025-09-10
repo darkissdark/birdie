@@ -40,9 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prettierrc
 
+# prettierrc
 .prettierrc
 .prettierrc.*
 .prettierignore
 .prettiercache
+
+
