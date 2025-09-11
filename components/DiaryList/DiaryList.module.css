@@ -1,3 +1,16 @@
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
 .diaryWrapper {
     /* max-width: 704px; */
     min-width: 335px;
@@ -20,9 +33,22 @@
     gap: 56px;
     width: 100%;
     min-width: 271px;
+    
 }
 
-.addButton{
+.addButton {
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    background-color: transparent;
+    border-color: transparent;
+    display: flex;
+    gap: 8px;
+}
+
+.addLogo{
     width: 22px;
     height: 22px;
 }
@@ -42,12 +68,16 @@
     color: #000;
 }
 
-.miniSubtitle {
-    font-family: "Lato", sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #000;
+
+.diaryCardList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.warningText{
+    text-align: center;
 }
 
 @media (min-width: 1440px) {

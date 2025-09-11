@@ -1,29 +1,33 @@
+import { DiaryEntry } from "@/types/dairy";
 import css from "./DiaryEntryCard.module.css";
 
-const DiaryEntryCard = () => {
+interface DiaryEntryCardProps {
+  entry: DiaryEntry;
+}
+
+const DiaryEntryCard = ({ entry }: DiaryEntryCardProps) => {
   const handleItemListClick = () => {};
 
+  const date = new Date(entry.date).toLocaleDateString("uk-UA", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
-    <ul className={css.diaryCardList}>
-      <li className={css.diaryCardListItem} onClick={handleItemListClick}>
-        <div className={css.diaryCardListItemWrapper}>
-          <p className={css.diaryCardListItemWrapperText}>Дивне бажання</p>
-          <p className={css.diaryCardListItemWrapperDate}> 9 липня 2025</p>
-        </div>
-        <ul className={css.diaryCardListItemWrapperEmotions}>
-          <li className={css.emotionsItem}>Натхнення</li>
-          <li className={css.emotionsItem}>дивні бажання</li>
-          <li className={css.emotionsItem}>дивні бажання</li>
-          <li className={css.emotionsItem}>дивні бажання</li>
-        </ul>
-        {/* <div className={css.diaryCardListItemWrapperEmotions}>
-          <p className={css.emotionsItem}>Натхнення</p>
-          <p className={css.emotionsItem}>дивні бажання</p>
-          <p className={css.emotionsItem}>дивні бажання</p>
-          <p className={css.emotionsItem}>дивні бажання</p>
-        </div> */}
-      </li>
-    </ul>
+    <li className={css.diaryCardListItem} onClick={handleItemListClick}>
+      <div className={css.diaryCardListItemWrapper}>
+        <p className={css.diaryCardListItemWrapperText}>{entry.title}</p>
+        <p className={css.diaryCardListItemWrapperDate}>{date}</p>
+      </div>
+      <ul className={css.diaryCardListItemWrapperEmotions}>
+        {entry.emotions.map((emo) => (
+          <li key={emo._id} className={css.emotionsItem}>
+            {emo.title}
+          </li>
+        ))}
+      </ul>
+    </li>
   );
 };
 

@@ -9,7 +9,7 @@ const DiaryEntryDetails = () => {
       <div className={css.diaryEntryDetailsWrapper}>
         <div className={css.titleDateBtn}>
           <div className={css.diaryEntryDetailsTitleWrapper}>
-            <h2 className={css.diaryEntryDetailsTitle}>Lorem, ipsum</h2>
+            <h2 className={css.diaryEntryDetailsTitle}></h2>
             <button className={css.diaryEntryDetailsEditBtn}>
               <TbEdit className={css.editBtn} />
             </button>
