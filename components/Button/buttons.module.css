@@ -1,0 +1,164 @@
+.baseButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 23px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  user-select: none;
+  width: 268px;
+}
+
+.primaryButton {
+  color-scheme: baseButton;
+  background-color: #ffdae0;
+  color: #000000;
+  border: none;
+}
+
+.primaryButton:hover {
+  background-color: #ffcbd3;
+  transform: translateY(-1px);
+}
+
+.primaryButton:active {
+  background-color: #ffb6c1;
+  transform: translateY(0);
+}
+
+.secondaryButton {
+  composes: baseButton;
+  background-color: transparent;
+  color: #9747ff;
+  border: 2px solid #9747ff;
+}
+
+.secondaryButton:hover {
+  background-color: rgba(151, 71, 255, 0.1);
+  border-color: #8a3fff;
+}
+
+.secondaryButton:active {
+  background-color: rgba(151, 71, 255, 0.2);
+}
+
+.outlineButton {
+  composes: baseButton;
+  background-color: transparent;
+  color: #9747ff;
+  border: 2px dashed #9747ff;
+}
+
+.outlineButton:hover {
+  border-style: solid;
+  background-color: rgba(151, 71, 255, 0.05);
+}
+
+.gradientButton {
+  composes: baseButton;
+  background: linear-gradient(135deg, #ffdae0 0%, #ffcbd3 100%);
+  color: #000000;
+  border: none;
+}
+
+.gradientButton:hover {
+  background: linear-gradient(135deg, #ffcbd3 0%, #ffb6c1 100%);
+}
+
+.largeButton {
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 28px;
+  min-height: 56px;
+}
+
+.smallButton {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 18px;
+  min-height: 36px;
+}
+
+.extraSmallButton {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 16px;
+  min-height: 32px;
+}
+
+.disabledButton {
+  background-color: #f0f0f0;
+  color: #999999;
+  border-color: #dddddd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loadingButton {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.loadingButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: buttonSpinner 1s linear infinite;
+}
+
+@keyframes buttonSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fullWidthButton {
+  width: 100%;
+  display: flex;
+}
+
+.iconButton {
+  gap: 8px;
+}
+
+.iconOnlyButton {
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+}
+
+.baseButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(151, 71, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .baseButton {
+    padding: 10px 20px;
+    font-size: 15px;
+    min-height: 44px;
+  }
+
+  .largeButton {
+    padding: 14px 28px;
+    font-size: 17px;
+    min-height: 52px;
+  }
+}
