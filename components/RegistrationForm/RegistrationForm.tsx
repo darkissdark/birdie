@@ -1,7 +1,6 @@
 "use client";
 import css from "./RegistrationForm.module.css";
 import { register } from "@/lib/api/clientApi";
-import useAuthStore from "@/lib/store/authStore";
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import { ApiError } from "next/dist/server/api-utils";
 import Image from "next/image";
@@ -22,9 +21,9 @@ const initialValues: RegistrationValues = { name: "", email: "", password: "" };
 
 const Schema = Yup.object().shape({
   name: Yup.string()
-    .min(2, "min length 2 symbols")
-    .max(20, "max length 20 symbols")
-    .required("this field is required"),
+    .min(2, "Мінімальна довжина 2 символи")
+    .max(20, "Максимальна довжина 20 символів")
+    .required("Обов'язкове поле"),
   email: Yup.string().email("Некоректний email").required("Обов'язкове поле"),
   password: Yup.string()
     .min(8, "Мінімум 8 символів")
@@ -34,22 +33,23 @@ const Schema = Yup.object().shape({
 const RegistrationForm = () => {
   const router = useRouter();
   const [error, seterror] = useState("");
-  const setUser = useAuthStore((state) => state.setUser);
   const handleSubmit = async (
     values: RegistrationValues,
     actions: FormikHelpers<RegistrationValues>
   ) => {
     try {
-      // const user = await register(values);
-      // setUser(user);
+      await register(values);
       actions.resetForm();
-      router.push("/profile/edit");
+      router.push("/profile");
     } catch (error) {
       seterror((error as ApiError).message);
     }
   };
   return (
     <>
+      <header>
+        <svg></svg>
+      </header>
       <h1>Реєстрація</h1>
       <div className={css.pageWrapper}>
         <Formik
