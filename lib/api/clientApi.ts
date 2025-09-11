@@ -1,4 +1,4 @@
-import { User } from "@/types/user";
+import { CreateTask, Task, User } from "@/types/user";
 import { nextServer } from "./api";
 
 export interface Credentials {
@@ -26,5 +26,10 @@ export const checkSession = async () => {
 
 export const getMe = async () => {
   const { data } = await nextServer.get<User>("/users/current");
+  return data;
+};
+
+export const createTask = async (newTask: CreateTask): Promise<Task> => {
+  const { data } = await nextServer.post<Task>("/tasks", newTask);
   return data;
 };
