@@ -1,10 +1,4 @@
-.diaryCardList{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
 
-}
 
 .diaryCardListItem {
     padding: 16px;

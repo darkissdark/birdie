@@ -3,6 +3,7 @@ import { Lato, Comfortaa } from "next/font/google";
 import "./globals.css";
 import "modern-normalize/modern-normalize.css";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
+import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -33,11 +34,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={`${lato.variable} ${comfortaa.variable}`}>
-          {children}
-        </body>
-      </AuthProvider>
+      <TanStackProvider>
+        <AuthProvider>
+          <body className={`${lato.variable} ${comfortaa.variable}`}>
+            {children}
+          </body>
+        </AuthProvider>
+      </TanStackProvider>
     </html>
   );
 }
