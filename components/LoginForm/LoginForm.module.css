@@ -1,7 +1,15 @@
+.pageWrapper {
+  height: calc(100% - 72px);
+  display: flex;
+  align-items: center;
+}
+
 @media (min-width: 1440px) {
   .pageWrapper {
-    display: flex;
-    justify-content: center;
+    height: 100%;
+  }
+  .pageWrapper > div {
+    padding-top: 72px;
   }
 }
 
@@ -11,6 +19,7 @@
   padding-right: 20px;
   padding-left: 20px;
   position: relative;
+  height: 100%;
 }
 
 /* Styles for Tablet devices */
@@ -25,16 +34,18 @@
 @media only screen and (min-width: 1440px) {
   .container {
     max-width: 1440px;
-    padding-left: 64px;
-    padding-right: 64px;
+    padding: 0;
+    position: relative;
+  }
+  .header {
+    position: absolute;
+    padding: 0 64px;
   }
 }
-.logo {
-  margin-top: 22px;
-}
 .header {
-  position: absolute;
   height: 72px;
+  display: flex;
+  align-items: center;
 }
 
 .title {
@@ -45,21 +56,18 @@
   letter-spacing: 0.01em;
   text-align: center;
   width: 335px;
-  padding-top: 293px;
   padding-bottom: 32px;
   font-weight: 700;
 }
 @media (min-width: 768px) {
   .title {
     width: 480px;
-    padding-top: 352px;
     padding-bottom: 32px;
     margin-left: 112px;
   }
 }
 @media (min-width: 1440px) {
   .title {
-    padding-top: 338px;
     margin-left: 120px;
     font-size: 48px;
   }
@@ -202,6 +210,8 @@
 
 .image {
   display: none;
+  object-fit: cover;
+  height: 100%;
 }
 @media (min-width: 1440px) {
   .image {
