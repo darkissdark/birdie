@@ -3,7 +3,7 @@ import { Lato, Comfortaa } from "next/font/google";
 import "modern-normalize/modern-normalize.css";
 import "./globals.css";
 import LogoSprite from "@/components/Logo/LogoSprite";
-import UiSprite from "@/components/Sprite/UiSprite";
+import UiSprite from "@/components/Icon/UiSprite";
 
 const lato = Lato({
   variable: "--font-lato",
