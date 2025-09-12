@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { isAxiosError } from "axios";
 import { logErrorResponse } from "../_utils/utils";
 
-// GET - отримати список емоцій
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();

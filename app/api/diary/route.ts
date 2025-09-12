@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { isAxiosError } from "axios";
 import { logErrorResponse } from "../_utils/utils";
 
-// GET - отримати всі записи щоденника
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
@@ -40,7 +39,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - створити новий запис
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies();

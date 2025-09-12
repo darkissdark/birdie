@@ -1,7 +1,6 @@
 import styles from "./buttons.module.css";
 import { forwardRef, ButtonHTMLAttributes, ReactNode } from "react";
 
-// Інтерфейс для властивостей Button
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
   children?: ReactNode;
@@ -53,14 +52,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         default:
           classes.push(styles.primaryButton);
       }
-
-      // Розміри кнопок
       switch (size) {
         case "large":
           classes.push(styles.largeButton);
           break;
         case "medium":
-          // За замовчуванням, можна не додавати клас
           break;
         case "small":
           classes.push(styles.smallButton);
@@ -70,14 +66,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           break;
       }
 
-      // Стани кнопок
       if (disabled) classes.push(styles.disabledButton);
       if (loading) classes.push(styles.loadingButton);
       if (fullWidth) classes.push(styles.fullWidthButton);
       if (icon) classes.push(styles.iconButton);
       if (iconOnly) classes.push(styles.iconOnlyButton);
 
-      // Додатковий клас
       if (className) classes.push(className);
 
       return classes.join(" ");

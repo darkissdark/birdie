@@ -8,7 +8,6 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-// GET - отримати один запис
 export async function GET(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
@@ -35,7 +34,6 @@ export async function GET(request: Request, { params }: Props) {
   }
 }
 
-// DELETE - видалити запис
 export async function DELETE(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
@@ -62,8 +60,6 @@ export async function DELETE(request: Request, { params }: Props) {
     );
   }
 }
-
-// PUT - оновити запис
 export async function PUT(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();

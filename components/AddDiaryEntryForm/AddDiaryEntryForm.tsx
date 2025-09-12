@@ -71,11 +71,11 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         setEmotionsLoading(true);
         setEmotionsError(null);
 
-        console.log("🔄 Запит до API");
+        console.log(" Запит до API");
         const response = await axiosInstance.get("/emotions?page=1&limit=10");
 
-        console.log("📦 Повна відповідь:", response);
-        console.log("📊 response.data:", response.data);
+        console.log(" Повна відповідь:", response);
+        console.log(" response.data:", response.data);
 
         let emotionsData: ApiEmotion[] = [];
 
@@ -95,7 +95,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
           emotionsData = response.data.results;
         }
 
-        console.log("✅ Оброблені емоції:", emotionsData);
+        console.log(" Оброблені емоції:", emotionsData);
 
         const validEmotions = emotionsData.filter(
           (emotion): emotion is ApiEmotion => {
@@ -115,7 +115,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
         setEmotions(validEmotions);
       } catch (error: any) {
-        console.error("❌ Помилка завантаження емоцій:", error);
+        console.error(" Помилка завантаження емоцій:", error);
         setEmotionsError(error.message || "Помилка завантаження емоцій");
 
         const fallbackEmotions: ApiEmotion[] = [
@@ -140,14 +140,14 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     { setSubmitting }: FormikHelpers<DiaryFormValues>
   ) => {
     try {
-      console.log("📤 Відправка форми:", values);
+      console.log("Відправка форми:", values);
 
       const url = entry ? `/diary/${entry._id}` : "/diary";
       const method = entry ? "put" : "post";
 
       const response = await axiosInstance[method](url, values);
 
-      console.log("✅ Успішна відповідь:", response.data);
+      console.log("Успішна відповідь:", response.data);
 
       toast.success(
         entry ? "Запис успішно оновлено!" : "Запис успішно створено!"
@@ -155,7 +155,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
       onSuccess();
     } catch (error: any) {
-      console.error("❌ Помилка відправки:", error);
+      console.error(" Помилка відправки:", error);
 
       const errorMessage =
         error.response?.data?.message ||
@@ -275,7 +275,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
               {emotionsLoading ? (
                 <div className={styles.loadingContainer}>
                   <div className={styles.spinner}></div>
-                  <span>Завантаження емоцій...</span>
+                  <span>Завантаження категорій...</span>
                 </div>
               ) : emotionsError ? (
                 <div className={styles.errorContainer}>
@@ -292,7 +292,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                 </div>
               ) : emotions.length === 0 ? (
                 <div className={styles.noDataContainer}>
-                  <span>🔭 Емоції не знайдено</span>
+                  <span> Емоції не знайдено</span>
                   <button
                     type="button"
                     onClick={retryLoadEmotions}
