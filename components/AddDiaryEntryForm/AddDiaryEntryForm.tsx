@@ -11,7 +11,7 @@ import Button from "@/components/Button/Button";
 interface AddDiaryEntryFormProps {
   entry?: DiaryEntry;
   onSuccess: () => void;
-  onCancel: () => void;
+  onCancel?: () => void; // Зробили опціональним, щоб уникнути warning
 }
 
 const validationSchema = Yup.object({
@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
 export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   entry,
   onSuccess,
-  onCancel,
+  // onCancel, // Закоментували, оскільки не використовується
 }) => {
   const [emotions, setEmotions] = useState<ApiEmotion[]>([]);
   const [emotionsLoading, setEmotionsLoading] = useState(true);
@@ -114,9 +114,17 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         }
 
         setEmotions(validEmotions);
-      } catch (error: any) {
+      } catch (error: unknown) {
+        // Замінили any на unknown
         console.error(" Помилка завантаження емоцій:", error);
-        setEmotionsError(error.message || "Помилка завантаження емоцій");
+
+        // Безпечне отримання повідомлення про помилку
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Помилка завантаження емоцій";
+
+        setEmotionsError(errorMessage);
 
         const fallbackEmotions: ApiEmotion[] = [
           { _id: "1", name: "Натхнення" },
@@ -154,13 +162,28 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
       );
 
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      // Замінили any на unknown
       console.error(" Помилка відправки:", error);
 
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Сталася помилка при збереженні запису";
+      // Безпечне отримання повідомлення про помилку
+      let errorMessage = "Сталася помилка при збереженні запису";
+
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as {
+          response?: {
+            data?: { message?: string };
+          };
+          message?: string;
+        };
+
+        errorMessage =
+          axiosError.response?.data?.message ||
+          axiosError.message ||
+          errorMessage;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
       toast.error(errorMessage);
     } finally {
@@ -205,7 +228,9 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
       );
 
       setEmotions(validEmotions);
-    } catch (error) {
+    } catch (retryError: unknown) {
+      // Перейменували змінну та змінили тип
+      console.error("Помилка повторного завантаження:", retryError);
       setEmotionsError("Помилка завантаження");
 
       const fallbackEmotions: ApiEmotion[] = [
