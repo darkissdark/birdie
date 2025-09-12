@@ -1,4 +1,5 @@
-import { CreateTask, Task, User } from "@/types/user";
+import { User } from "@/types/user";
+import { CreateTask, Task } from "@/types/task";
 import { nextServer } from "./api";
 
 export interface Credentials {

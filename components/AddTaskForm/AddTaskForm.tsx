@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/lib/api/clientApi";
-import type { CreateTask, Task } from "../../types/user";
+import type { CreateTask, Task } from "../../types/task";
 
 interface TaskFormProps {
   onClose: () => void;
@@ -18,6 +18,7 @@ const ValidationSchema = Yup.object().shape({
     .typeError("Введіть коректну дату"),
 });
 const AddTaskForm = ({ onClose }: TaskFormProps) => {
+  const today = new Date().toISOString().split("T")[0];
   const queryClient = useQueryClient();
   const mutation = useMutation<Task, Error, CreateTask>({
     mutationFn: createTask,
@@ -41,14 +42,20 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
   return (
     <Formik
       validationSchema={ValidationSchema}
-      initialValues={{ name: "", date: "" }}
+      initialValues={{ name: "", date: today }}
       onSubmit={handleSubmit}
     >
       {(formik) => (
         <Form className={css.form}>
           <div className={css.formDiv}>
             <label htmlFor="name">Назва завдання</label>
-            <Field id="name" type="text" name="name" className={css.name} />
+            <Field
+              id="name"
+              type="text"
+              name="name"
+              placeholder="Прийняти вітаміни"
+              className={css.name}
+            />
             <ErrorMessage name="name" component="div" className={css.error} />
           </div>
           <div className={css.formDiv}>
