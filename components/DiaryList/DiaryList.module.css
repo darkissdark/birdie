@@ -12,7 +12,7 @@
 }
 
 .diaryWrapper {
-    /* max-width: 704px; */
+    max-width: 704px;
     min-width: 335px;
     width: 100%;
     padding: 24px 16px;
@@ -30,7 +30,7 @@
 .titleWrapper {
     display: flex;
     justify-content: space-between;
-    gap: 56px;
+    /* gap: 56px; */
     width: 100%;
     min-width: 271px;
     
@@ -46,6 +46,9 @@
     border-color: transparent;
     display: flex;
     gap: 8px;
+    &:hover,focus {
+            cursor: pointer;
+        }
 }
 
 .addLogo{
@@ -53,10 +56,27 @@
     height: 22px;
 }
 
+.sortButton {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.sortLogo{
+    width: 22px;
+    height: 22px;
+}
+
+.titlesort {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .wrapper {
     display: flex;
     gap: 8px;
     align-items: center;
+    
 }
 
 .subtitle {
@@ -80,8 +100,18 @@
     text-align: center;
 }
 
+.wrapperList {
+    width: 100%;
+}
+
 @media (min-width: 1440px) {
     .diaryWrapper {
         width: 389px;
+        height: 727px;
+        margin-inline: 0;
+    }
+
+    .wrapperList{
+        overflow: scroll;
     }
 }

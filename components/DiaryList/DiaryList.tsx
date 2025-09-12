@@ -1,17 +1,28 @@
+"use client";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
 import { DiaryEntry } from "@/types/dairy";
+// import { useState } from "react";
 
 interface DiaryListProps {
   entries: DiaryEntry[];
+  onSelect?: (entry: DiaryEntry) => void;
 }
 
-const DiaryList = ({ entries }: DiaryListProps) => {
+const DiaryList = ({ entries, onSelect }: DiaryListProps) => {
+  // const [isSort, setIsSort] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const hasValidDates = entries?.some((e) => e.date);
 
+  //Логіка сортування
+  // const handleToogleSort = () => {
+  //   setIsSort(!isSort);
+  // };
+
+  // Логіка модалки AddDiaryEntryModal
   const handleClick = () => {
-    // Логіка модалки AddDiaryEntryModal
+    // setIsModalOpen(true);
   };
 
   return (
@@ -19,7 +30,16 @@ const DiaryList = ({ entries }: DiaryListProps) => {
       <h1 className={css.visuallyHidden}>Щоденник</h1>
 
       <div className={css.titleWrapper}>
-        <h2 className={css.subtitle}>Ваші записи</h2>
+        <div className={css.titlesort}>
+          <h2 className={css.subtitle}>Ваші записи</h2>
+          {/* <button className={css.sortButton} onClick={handleToogleSort}>
+            {isSort ? (
+              <IoIosArrowDropup className={css.sortLogo} />
+            ) : (
+              <IoIosArrowDropdown className={css.sortLogo} />
+            )}
+          </button> */}
+        </div>
 
         <div className={css.wrapper} onClick={handleClick}>
           <button type="button" className={css.addButton}>
@@ -28,15 +48,25 @@ const DiaryList = ({ entries }: DiaryListProps) => {
           </button>
         </div>
       </div>
-      {hasValidDates ? (
-        <ul className={css.diaryCardList}>
-          {entries.map((entry, index) => (
-            <DiaryEntryCard key={index} entry={entry} />
-          ))}
-        </ul>
-      ) : (
-        <p className={css.warningText}>Наразі записів немає</p>
-      )}
+
+      <div className={css.wrapperList}>
+        {hasValidDates ? (
+          <ul className={css.diaryCardList}>
+            {entries.map((entry) => (
+              <DiaryEntryCard
+                key={entry._id}
+                entry={entry}
+                onSelect={onSelect}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p className={css.warningText}>Наразі записів немає</p>
+        )}
+        {/* {isModalOpen && (
+          <AddDiaryEntryModal onClose={() => setIsModalOpen(false)} />
+        )} */}
+      </div>
     </div>
   );
 };
