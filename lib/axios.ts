@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://lehlehka.b.goit.study",
+  baseURL: "/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -14,7 +14,9 @@ axiosInstance.interceptors.response.use(
     console.error("API Error:", error.response?.status, error.response?.data);
 
     if (error.response?.status === 401) {
-      window.location.href = "/login";
+      if (typeof window !== "undefined") {
+        window.location.href = "/auth/login";
+      }
     }
     return Promise.reject(error);
   }

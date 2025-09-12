@@ -20,9 +20,11 @@
   background-color: #ffdae0;
   color: #000000;
   border: none;
+  border-bottom: 4px solid #ffcbd3;
 }
 
 .primaryButton:hover {
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
   background-color: #ffcbd3;
   transform: translateY(-1px);
 }

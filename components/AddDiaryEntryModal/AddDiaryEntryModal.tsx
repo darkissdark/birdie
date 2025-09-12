@@ -1,18 +1,8 @@
 "use client";
-import { DiaryEntry, ApiEmotion } from "@/types/diary";
+import { DiaryEntry } from "@/types/diary";
 import { useEffect } from "react";
 import { AddDiaryEntryForm } from "@/components/AddDiaryEntryForm/AddDiaryEntryForm";
 import styles from "./AddDiaryEntryModal.module.css";
-
-interface DiaryEntry {
-  _id?: string;
-  title: string;
-  description: string;
-  emotions: Array<{
-    _id: string;
-    title: string;
-  }>;
-}
 
 interface AddDiaryEntryModalProps {
   isOpen: boolean;

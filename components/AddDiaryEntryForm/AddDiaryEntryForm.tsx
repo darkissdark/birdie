@@ -1,5 +1,5 @@
 "use client";
-import { DiaryEntry, ApiEmotion } from "@/types/diary";
+import { DiaryEntry, ApiEmotion, DiaryFormValues } from "@/types/diary";
 import { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
@@ -7,12 +7,6 @@ import axiosInstance from "@/lib/axios";
 import toast from "react-hot-toast";
 import styles from "./AddDiaryEntryForm.module.css";
 import Button from "@/components/Button/Button";
-
-interface FormValues {
-  title: string;
-  description: string;
-  emotions: string[];
-}
 
 interface AddDiaryEntryFormProps {
   entry?: DiaryEntry;
@@ -46,7 +40,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const initialValues: FormValues = {
+  const initialValues: DiaryFormValues = {
     title: entry?.title || "",
     description: entry?.description || "",
     emotions: entry?.emotions || [],
@@ -77,11 +71,12 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         setEmotionsLoading(true);
         setEmotionsError(null);
 
-        console.log(" Запит до API ");
+        console.log("🔄 Запит до API");
         const response = await axiosInstance.get("/emotions?page=1&limit=10");
 
-        console.log(" Повна відповідь:", response);
-        console.log(" response.data:", response.data);
+        console.log("📦 Повна відповідь:", response);
+        console.log("📊 response.data:", response.data);
+
         let emotionsData: ApiEmotion[] = [];
 
         if (Array.isArray(response.data)) {
@@ -103,8 +98,15 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         console.log("✅ Оброблені емоції:", emotionsData);
 
         const validEmotions = emotionsData.filter(
-          (emotion): emotion is ApiEmotion =>
-            emotion && emotion._id && (emotion.name || emotion.title)
+          (emotion): emotion is ApiEmotion => {
+            return (
+              emotion &&
+              typeof emotion._id === "string" &&
+              emotion._id.length > 0 &&
+              (typeof emotion.name === "string" ||
+                typeof emotion.title === "string")
+            );
+          }
         );
 
         if (validEmotions.length === 0) {
@@ -113,7 +115,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
         setEmotions(validEmotions);
       } catch (error: any) {
-        console.error(" Помилка завантаження емоцій:", error);
+        console.error("❌ Помилка завантаження емоцій:", error);
         setEmotionsError(error.message || "Помилка завантаження емоцій");
 
         const fallbackEmotions: ApiEmotion[] = [
@@ -134,18 +136,18 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   }, []);
 
   const handleSubmit = async (
-    values: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
+    values: DiaryFormValues,
+    { setSubmitting }: FormikHelpers<DiaryFormValues>
   ) => {
     try {
-      console.log(" Відправка форми:", values);
+      console.log("📤 Відправка форми:", values);
 
       const url = entry ? `/diary/${entry._id}` : "/diary";
       const method = entry ? "put" : "post";
 
       const response = await axiosInstance[method](url, values);
 
-      console.log("Успішна відповідь:", response.data);
+      console.log("✅ Успішна відповідь:", response.data);
 
       toast.success(
         entry ? "Запис успішно оновлено!" : "Запис успішно створено!"
@@ -153,7 +155,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
       onSuccess();
     } catch (error: any) {
-      console.error("Помилка відправки:", error);
+      console.error("❌ Помилка відправки:", error);
 
       const errorMessage =
         error.response?.data?.message ||
@@ -166,30 +168,58 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     }
   };
 
-  const retryLoadEmotions = () => {
+  const retryLoadEmotions = async () => {
     setEmotionsError(null);
     setEmotionsLoading(true);
 
-    const fetchEmotions = async () => {
-      try {
-        const response = await axiosInstance.get("/emotions?page=1&limit=10");
-        let emotionsData: ApiEmotion[] = [];
+    try {
+      const response = await axiosInstance.get("/emotions?page=1&limit=10");
+      let emotionsData: ApiEmotion[] = [];
 
-        if (Array.isArray(response.data)) {
-          emotionsData = response.data;
-        } else if (response.data.data) {
-          emotionsData = response.data.data;
-        }
-
-        setEmotions(emotionsData);
-      } catch (error) {
-        setEmotionsError("Помилка завантаження");
-      } finally {
-        setEmotionsLoading(false);
+      if (Array.isArray(response.data)) {
+        emotionsData = response.data;
+      } else if (response.data.data && Array.isArray(response.data.data)) {
+        emotionsData = response.data.data;
+      } else if (
+        response.data.emotions &&
+        Array.isArray(response.data.emotions)
+      ) {
+        emotionsData = response.data.emotions;
+      } else if (
+        response.data.results &&
+        Array.isArray(response.data.results)
+      ) {
+        emotionsData = response.data.results;
       }
-    };
 
-    fetchEmotions();
+      const validEmotions = emotionsData.filter(
+        (emotion): emotion is ApiEmotion => {
+          return (
+            emotion &&
+            typeof emotion._id === "string" &&
+            emotion._id.length > 0 &&
+            (typeof emotion.name === "string" ||
+              typeof emotion.title === "string")
+          );
+        }
+      );
+
+      setEmotions(validEmotions);
+    } catch (error) {
+      setEmotionsError("Помилка завантаження");
+
+      const fallbackEmotions: ApiEmotion[] = [
+        { _id: "1", name: "Натхнення" },
+        { _id: "2", name: "Вдячність" },
+        { _id: "3", name: "Тривога" },
+        { _id: "4", name: "Дивні бажання" },
+        { _id: "5", name: "Нудота" },
+      ];
+
+      setEmotions(fallbackEmotions);
+    } finally {
+      setEmotionsLoading(false);
+    }
   };
 
   const getSelectedEmotionsDisplay = (selectedIds: string[]) => {
@@ -307,7 +337,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                         <path
                           d="M5.99989 5.20762L1.67164 0.87937C1.50164 0.70937 1.30273 0.62854 1.07489 0.63687C0.847061 0.64521 0.648145 0.73437 0.478145 0.90437C0.308145 1.07437 0.223145 1.27746 0.223145 1.51362C0.223145 1.74979 0.308145 1.95287 0.478145 2.12287L5.39715 7.04187C5.56715 7.21187 5.76806 7.29687 5.99989 7.29687C6.23173 7.29687 6.43264 7.21187 6.60264 7.04187L11.5466 2.09787C11.7166 1.92787 11.8016 1.72896 11.8016 1.50112C11.8016 1.27329 11.7166 1.07437 11.5466 0.90437C11.3766 0.73437 11.1736 0.64937 10.9374 0.64937C10.7012 0.64937 10.4981 0.73437 10.3281 0.90437L5.99989 5.20762Z"
                           fill="black"
-                          fill-opacity="0.6"
+                          fillOpacity="0.6"
                         />
                       </svg>
                     </span>

@@ -1,7 +1,22 @@
 import styles from "./buttons.module.css";
-import { forwardRef } from "react";
+import { forwardRef, ButtonHTMLAttributes, ReactNode } from "react";
 
-const Button = forwardRef(
+// Інтерфейс для властивостей Button
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "size"> {
+  children?: ReactNode;
+  variant?: "primary" | "secondary" | "outline" | "gradient";
+  size?: "large" | "medium" | "small" | "extraSmall";
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  icon?: boolean;
+  iconOnly?: boolean;
+  className?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       children,
@@ -18,11 +33,10 @@ const Button = forwardRef(
     },
     ref
   ) => {
-    const getButtonClasses = () => {
-      let classes = [styles.baseButton];
+    const getButtonClasses = (): string => {
+      const classes: string[] = [styles.baseButton];
 
-      // Варінти кнопок
-
+      // Варіанти кнопок
       switch (variant) {
         case "primary":
           classes.push(styles.primaryButton);
@@ -40,9 +54,13 @@ const Button = forwardRef(
           classes.push(styles.primaryButton);
       }
 
+      // Розміри кнопок
       switch (size) {
         case "large":
           classes.push(styles.largeButton);
+          break;
+        case "medium":
+          // За замовчуванням, можна не додавати клас
           break;
         case "small":
           classes.push(styles.smallButton);
@@ -52,15 +70,23 @@ const Button = forwardRef(
           break;
       }
 
+      // Стани кнопок
       if (disabled) classes.push(styles.disabledButton);
       if (loading) classes.push(styles.loadingButton);
       if (fullWidth) classes.push(styles.fullWidthButton);
       if (icon) classes.push(styles.iconButton);
       if (iconOnly) classes.push(styles.iconOnlyButton);
 
+      // Додатковий клас
       if (className) classes.push(className);
 
       return classes.join(" ");
+    };
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (!disabled && !loading && onClick) {
+        onClick(event);
+      }
     };
 
     return (
@@ -68,9 +94,15 @@ const Button = forwardRef(
         ref={ref}
         className={getButtonClasses()}
         disabled={disabled || loading}
-        onClick={onClick}
+        onClick={handleClick}
+        aria-disabled={disabled || loading}
         {...props}
       >
+        {loading && (
+          <span className={styles.loadingSpinner} aria-hidden="true">
+            ⟳
+          </span>
+        )}
         {children}
       </button>
     );
@@ -80,3 +112,4 @@ const Button = forwardRef(
 Button.displayName = "Button";
 
 export default Button;
+export type { ButtonProps };
