@@ -40,7 +40,7 @@ const RegistrationForm = () => {
     try {
       await register(values);
       actions.resetForm();
-      router.push("/profile");
+      router.push("/profile/edit");
     } catch (error) {
       seterror((error as ApiError).message);
     }
