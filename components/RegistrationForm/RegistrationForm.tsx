@@ -126,10 +126,11 @@ const RegistrationForm = () => {
           </Formik>
         </div>
         <Image
-          src={"/regFoto.jpg"}
-          alt={"User Avatar"}
+          src={"/auth/regFoto.jpg"}
+          alt={"registration page image"}
           width={720}
           height={900}
+          className={css.image}
         />
       </div>
     </div>
