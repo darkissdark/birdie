@@ -1,12 +1,26 @@
 import { DiaryEntry } from "@/types/dairy";
 import css from "./DiaryEntryCard.module.css";
+import { useMediaQuery } from "react-responsive";
+import { useRouter } from "next/navigation";
 
 interface DiaryEntryCardProps {
   entry: DiaryEntry;
+  onSelect?: (entry: DiaryEntry) => void;
 }
 
-const DiaryEntryCard = ({ entry }: DiaryEntryCardProps) => {
-  const handleItemListClick = () => {};
+const DiaryEntryCard = ({ entry, onSelect }: DiaryEntryCardProps) => {
+  const router = useRouter();
+  const isDesktop = useMediaQuery({ minWidth: 1440 });
+
+  const handleItemListClick = () => {
+    if (!isDesktop) {
+      router.push(`/diary/${entry._id}`);
+    }
+
+    if (onSelect) {
+      onSelect(entry);
+    }
+  };
 
   const date = new Date(entry.date).toLocaleDateString("uk-UA", {
     year: "numeric",
@@ -21,8 +35,8 @@ const DiaryEntryCard = ({ entry }: DiaryEntryCardProps) => {
         <p className={css.diaryCardListItemWrapperDate}>{date}</p>
       </div>
       <ul className={css.diaryCardListItemWrapperEmotions}>
-        {entry.emotions.map((emo) => (
-          <li key={emo._id} className={css.emotionsItem}>
+        {entry.emotions.map((emo, index) => (
+          <li key={`${emo._id}-${index}`} className={css.emotionsItem}>
             {emo.title}
           </li>
         ))}
