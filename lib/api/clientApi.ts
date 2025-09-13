@@ -34,3 +34,8 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   const { data } = await nextServer.post<Task>("/tasks", newTask);
   return data;
 };
+
+export const uploadImage = async (file: any) => {
+  const res = await nextServer.patch("/users/current/avatars", file);
+  return res;
+};
