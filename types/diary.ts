@@ -2,7 +2,7 @@ export interface DiaryEntry {
   _id: string;
   title: string;
   description: string;
-  emotions: string[];
+  emotions: { _id: string; title: string }[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -18,11 +18,9 @@ export interface DiaryFormValues {
   description: string;
   emotions: string[];
 }
+
 export interface DiarySubmitValues {
   title: string;
   description: string;
-  emotions: {
-    _id: string;
-    name: string;
-  }[];
+  emotions: string[];
 }
