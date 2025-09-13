@@ -13,22 +13,31 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const clearisAuthenticated = useAuthStore(
     (state) => state.clearIsAuthenticated
   );
+
   useEffect(() => {
     const fetchUser = async () => {
-      const isAuthenticated = await checkSession();
-      if (isAuthenticated) {
-        const user = await getMe();
-        if (user) {
-          setUser(user);
+      try {
+        const isAuthenticated = await checkSession();
+        if (isAuthenticated) {
+          const user = await getMe();
+          if (user) {
+            setUser(user);
+          } else {
+            clearisAuthenticated();
+          }
+        } else {
+          clearisAuthenticated();
         }
-      } else {
+      } catch (error) {
+        console.error("Auth check failed:", error);
         clearisAuthenticated();
       }
     };
 
     fetchUser();
   }, [setUser, clearisAuthenticated]);
-  return children;
+
+  return <>{children}</>;
 };
 
 export default AuthProvider;

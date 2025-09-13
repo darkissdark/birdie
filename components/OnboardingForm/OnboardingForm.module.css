@@ -1,0 +1,139 @@
+.titleContent {
+  margin: 57px 56px 32px;
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 120%;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #000;
+}
+.titleContent span {
+  display: block;
+}
+
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.uploadButton {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
+  border-radius: 100px;
+  padding: 8px 20px;
+  width: 179px;
+  height: 42px;
+  background: rgba(0, 0, 0, 0.05);
+
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 160%;
+  color: #000;
+
+  cursor: pointer;
+}
+
+.labelGender {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #000;
+}
+
+.formField {
+  margin: 32px 56px 0 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.labelGender {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #000;
+}
+
+.selectGender {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 480px;
+  height: 40px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7f7f7f;
+}
+
+.labelbirthDate {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #000;
+}
+
+.input {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 480px;
+  height: 40px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7f7f7f;
+}
+
+.submitButton {
+  margin: 32px 56px 0 56px;
+  border-bottom: 4px solid #ffcbd3;
+  border-radius: 100px;
+  padding: 10px 24px;
+  width: 480px;
+  height: 46px;
+  border: none;
+
+  background: #ffdae0;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 160%;
+  color: #000;
+}
+
+/* .submitButton[data-gender="boy"] {
+  background-color: #4a90e2; 
+} */
+
+.submitButton[data-gender="girl"] {
+  background-color: #ffdae0;
+}
+
+/* .submitButton[data-gender="unknown"] {
+  background-color: #f7c948;
+} */
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,4 +1,5 @@
 import { User } from "@/types/user";
+import { CreateTask, Task } from "@/types/task";
 import { nextServer } from "./api";
 import { DiaryEntry } from "@/types/dairy";
 
@@ -39,5 +40,10 @@ export interface DiaryListResponse {
 
 export const getDiaryList = async (): Promise<DiaryListResponse> => {
   const { data } = await nextServer.get<DiaryListResponse>("/diary");
+  return data;
+};
+
+export const createTask = async (newTask: CreateTask): Promise<Task> => {
+  const { data } = await nextServer.post<Task>("/tasks", newTask);
   return data;
 };

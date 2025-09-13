@@ -1,0 +1,166 @@
+.sidebar {
+  display: none;
+  width: 300px;
+  flex: 0 0 300px;
+  min-height: 100dvh;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.inner {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.nav {
+  display: grid;
+  gap: 6px;
+}
+
+.link,
+.logoutBtn,
+.authLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 0 10px;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-align: left;
+}
+
+.link:hover,
+.authLink:hover,
+.logoutBtn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.active {
+  background: #fff4f6;
+}
+
+.footer {
+  margin-top: auto;
+  display: grid;
+  gap: 6px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+}
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 300px;
+  transform: translateX(-100%);
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  z-index: 51;
+  display: flex;
+  flex-direction: column;
+}
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerHeader {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.closeBtn {
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.userRow {
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e5e5e5;
+}
+
+.userName {
+  font-weight: 600;
+}
+
+.logoutInline {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+/* ≥1440: desktop */
+@media (min-width: 1440px) {
+  .sidebar {
+    display: block;
+    width: 312px;
+    flex-basis: 312px;
+  }
+
+  .overlay,
+  .drawer {
+    display: none;
+  }
+
+  .inner {
+    padding: 24px;
+  }
+
+  .logoFull {
+    width: 105px;
+    height: 45px;
+  }
+
+  .userRow {
+    display: flex;
+  }
+}
