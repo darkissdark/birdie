@@ -35,7 +35,15 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   return data;
 };
 
-export const uploadImage = async (file: any) => {
-  const res = await nextServer.patch("/users/current/avatars", file);
-  return res;
+export const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("avatar", file); // "avatar" — ключ, який сервер очікує
+
+  const res = await nextServer.patch("/users/current/avatars", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
 };
