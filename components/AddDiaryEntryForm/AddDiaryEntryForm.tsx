@@ -3,7 +3,7 @@ import { DiaryEntry, ApiEmotion, DiaryFormValues } from "@/types/diary";
 import { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import axiosInstance from "@/lib/axios";
+import api from "@/lib/axios";
 import toast from "react-hot-toast";
 import styles from "./AddDiaryEntryForm.module.css";
 import Button from "@/components/Button/Button";
@@ -96,7 +96,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         setEmotionsLoading(true);
         setEmotionsError(null);
 
-        const response = await axiosInstance.get("/emotions?page=1&limit=18");
+        const response = await api.get("/emotions?page=1&limit=18");
 
         let emotionsData: ApiEmotion[] = [];
 
@@ -215,7 +215,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     setEmotionsLoading(true);
 
     try {
-      const response = await axiosInstance.get("/emotions?page=1&limit=18");
+      const response = await api.get("/emotions?page=1&limit=18");
       let emotionsData: ApiEmotion[] = [];
 
       if (Array.isArray(response.data)) {
