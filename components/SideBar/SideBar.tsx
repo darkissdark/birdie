@@ -10,14 +10,7 @@ import api from "@/lib/axios";
 import { getWeekFromDueDate } from "@/lib/pregnancy/week";
 import BrandLogo from "@/components/Logo/BrandLogo";
 import css from "./SideBar.module.css";
-
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  avatarUrl: string;
-  dueDate?: string;
-};
+import { User } from "@/types/user";
 
 function isUser(v: unknown): v is User {
   return (

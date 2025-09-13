@@ -1,8 +1,8 @@
 export interface User {
-  id: string;
+  _id: string;
   name: string;
   email: string;
-  avatar: string;
+  avatarUrl: string;
   dueDate: string;
   babyGender: string;
   theme: string;
