@@ -1,6 +1,6 @@
 import { User } from "@/types/user";
 import { nextServer } from "./api";
-import { DiaryEntry } from "@/types/dairy";
+import { DiaryEntry, SortOrder } from "@/types/dairy";
 
 export interface Credentials {
   name?: string;
@@ -37,7 +37,11 @@ export interface DiaryListResponse {
   page: number;
 }
 
-export const getDiaryList = async (): Promise<DiaryListResponse> => {
-  const { data } = await nextServer.get<DiaryListResponse>("/diary");
+export const getDiaryList = async (
+  sortOrder: SortOrder
+): Promise<DiaryListResponse> => {
+  const { data } = await nextServer.get<DiaryListResponse>("/diary", {
+    params: { sortOrder: sortOrder },
+  });
   return data;
 };

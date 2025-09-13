@@ -10,9 +10,10 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies();
     // const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
     // const limit = Number(request.nextUrl.searchParams.get("limit") ?? 10);
-    // const sortOrder = request.nextUrl.searchParams.get("sortOrder") ?? "asc";
+    const sortOrder = request.nextUrl.searchParams.get("sortOrder") ?? "asc";
 
     const res = await api<DiaryListResponse>("/diary", {
+      params: { sortOrder },
       headers: {
         Cookie: cookieStore.toString(),
       },
