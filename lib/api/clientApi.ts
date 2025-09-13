@@ -22,8 +22,13 @@ interface SessionStatus {
   success: boolean;
 }
 export const checkSession = async () => {
-  const { data } = await nextServer.get<SessionStatus>("/auth/session");
-  return data.success;
+  try {
+    const { data } = await nextServer.get<SessionStatus>("/auth/session");
+    return data.success;
+  } catch (error) {
+    console.error("Session check failed:", error);
+    return false;
+  }
 };
 
 export const getMe = async () => {
