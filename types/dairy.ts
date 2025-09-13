@@ -10,3 +10,5 @@ export interface DiaryEntry {
   description: string;
   emotions: Emotion[];
 }
+
+export type SortOrder = "asc" | "desc";

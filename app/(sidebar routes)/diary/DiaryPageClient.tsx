@@ -8,15 +8,16 @@ import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails"
 import { useQuery } from "@tanstack/react-query";
 import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { DiaryEntry } from "@/types/dairy";
+import { DiaryEntry, SortOrder } from "@/types/dairy";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
   const { data, isLoading, isError } = useQuery<DiaryListResponse>({
-    queryKey: ["diary"],
-    queryFn: () => getDiaryList(),
+    queryKey: ["diary", sortOrder],
+    queryFn: () => getDiaryList(sortOrder),
   });
 
   useEffect(() => {
@@ -33,11 +34,20 @@ const DiaryPageClient = () => {
 
   return isDesktop ? (
     <div className={css.diaryMainWrapper}>
-      <DiaryList entries={entries} onSelect={setSelectedEntry} />
+      <DiaryList
+        entries={entries}
+        onSelect={setSelectedEntry}
+        setSortOrder={setSortOrder}
+        sortOrder={sortOrder}
+      />
       <DiaryEntryDetails />
     </div>
   ) : (
-    <DiaryList entries={entries} />
+    <DiaryList
+      entries={entries}
+      sortOrder={sortOrder}
+      setSortOrder={setSortOrder}
+    />
   );
 };
 

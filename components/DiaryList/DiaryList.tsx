@@ -1,29 +1,40 @@
 "use client";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import {
+  IoIosAddCircleOutline,
+  IoIosArrowDropdown,
+  IoIosArrowDropup,
+} from "react-icons/io";
 import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
 import { DiaryEntry } from "@/types/dairy";
-// import { useState } from "react";
+import { useState } from "react";
+import { AddDiaryEntryModal } from "../AddDiaryEntryForm";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DiaryListProps {
   entries: DiaryEntry[];
   onSelect?: (entry: DiaryEntry) => void;
+  sortOrder: "asc" | "desc";
+  setSortOrder: (order: "asc" | "desc") => void;
 }
 
-const DiaryList = ({ entries, onSelect }: DiaryListProps) => {
-  // const [isSort, setIsSort] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+const DiaryList = ({
+  entries,
+  onSelect,
+  sortOrder,
+  setSortOrder,
+}: DiaryListProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasValidDates = entries?.some((e) => e.date);
+  const queryClient = useQueryClient();
 
-  //Логіка сортування
-  // const handleToogleSort = () => {
-  //   setIsSort(!isSort);
-  // };
-
-  // Логіка модалки AddDiaryEntryModal
-  const handleClick = () => {
-    // setIsModalOpen(true);
+  const handleToggleSort = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    // На апі йдуть запроси нормальні, як у свагері описано, а у відповідь одне й теж сортування
   };
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <div className={css.diaryWrapper}>
@@ -32,17 +43,21 @@ const DiaryList = ({ entries, onSelect }: DiaryListProps) => {
       <div className={css.titleWrapper}>
         <div className={css.titlesort}>
           <h2 className={css.subtitle}>Ваші записи</h2>
-          {/* <button className={css.sortButton} onClick={handleToogleSort}>
-            {isSort ? (
+          <button className={css.sortButton} onClick={handleToggleSort}>
+            {sortOrder === "asc" ? (
               <IoIosArrowDropup className={css.sortLogo} />
             ) : (
               <IoIosArrowDropdown className={css.sortLogo} />
             )}
-          </button> */}
+          </button>
         </div>
 
-        <div className={css.wrapper} onClick={handleClick}>
-          <button type="button" className={css.addButton}>
+        <div className={css.wrapper}>
+          <button
+            type="button"
+            className={css.addButton}
+            onClick={handleOpenModal}
+          >
             Новий запис
             <IoIosAddCircleOutline className={css.addLogo} />
           </button>
@@ -63,9 +78,15 @@ const DiaryList = ({ entries, onSelect }: DiaryListProps) => {
         ) : (
           <p className={css.warningText}>Наразі записів немає</p>
         )}
-        {/* {isModalOpen && (
-          <AddDiaryEntryModal onClose={() => setIsModalOpen(false)} />
-        )} */}
+        {isModalOpen && (
+          <AddDiaryEntryModal
+            onClose={handleCloseModal}
+            isOpen={isModalOpen}
+            onSuccess={() =>
+              queryClient.invalidateQueries({ queryKey: ["diary"] })
+            }
+          />
+        )}
       </div>
     </div>
   );
