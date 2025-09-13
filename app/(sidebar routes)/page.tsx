@@ -46,8 +46,6 @@ export default function HomePage() {
           onClose={() => setIsModalOpen(false)}
           onSuccess={() => {
             setIsModalOpen(false);
-
-            console.log("Запис успішно створено!");
           }}
         />
       )}
