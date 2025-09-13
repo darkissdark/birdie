@@ -15,7 +15,9 @@ export default function NotesLayout({ children }: NotesLayoutProps) {
       <div className={css.pageWrapper}>
         <Header />
         <Breadcrumbs />
-        <main>{children}</main>
+        <main id="content" role="main" className={css.main}>
+          {children}
+        </main>
       </div>
     </div>
   );

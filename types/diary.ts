@@ -22,5 +22,8 @@ export interface DiaryFormValues {
 export interface DiarySubmitValues {
   title: string;
   description: string;
-  emotions: string[];
+  emotions: {
+    _id: string;
+    name: string;
+  }[];
 }
