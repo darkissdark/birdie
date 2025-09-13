@@ -1,3 +1,5 @@
+import LoginForm from "@/components/LoginForm/LoginForm";
+import RegistrationForm from "@/components/RegistrationForm/RegistrationForm";
 import { notFound } from "next/navigation";
 
 type JourneyPageProps = {
@@ -10,5 +12,5 @@ export default async function JourneyPage({ params }: JourneyPageProps) {
   if (!authType || !validTypes.includes(authType[0])) {
     return notFound();
   }
-  return <div>authType: {authType}</div>;
+  return authType[0] === "login" ? <LoginForm /> : <RegistrationForm />;
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lato, Comfortaa } from "next/font/google";
 import "modern-normalize/modern-normalize.css";
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import "./globals.css";
 import LogoSprite from "@/components/Logo/LogoSprite";
 import UiSprite from "@/components/Icon/UiSprite";
@@ -34,11 +35,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lato.variable} ${comfortaa.variable}`}>
-        <LogoSprite />
-        <UiSprite />
-        {children}
-      </body>
+      <AuthProvider>
+        <body className={`${lato.variable} ${comfortaa.variable}`}>
+            <LogoSprite />
+            <UiSprite />
+            {children}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

@@ -1,0 +1,440 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+/* === ІНПУТИ === */
+.input,
+.textarea,
+.select {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: #ffcbd3;
+  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
+}
+
+/* === ТЕКСТ ПОМИЛКИ === */
+.input.error,
+.textarea.error,
+.selectTrigger.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+
+.input.error:focus,
+.textarea.error:focus,
+.selectTrigger.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.textarea {
+  min-height: 258px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.select {
+  min-height: 120px;
+  padding: 12px;
+  background-color: white;
+  resize: vertical;
+}
+
+.select option {
+  padding: 8px;
+  font-size: 1rem;
+}
+
+/* ===  СЕЛЕКТ === */
+.customSelect {
+  position: relative;
+  z-index: 100;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 101;
+  min-height: 44px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.selectTrigger:hover {
+  border-color: #d1d5db;
+}
+
+.selectTriggerOpen {
+  border-radius: 12px 12px 0px 0px;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.selectContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.selectPlaceholder {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.selectArrow {
+  color: #9ca3af;
+  transition: transform 0.2s;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.selectArrowOpen {
+  transform: rotate(180deg);
+}
+
+/* === ТЕГИ === */
+.selectedTags,
+.emotionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.emotionTags {
+  gap: 8px;
+}
+
+.selectedTag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgb(0, 0, 0);
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.emotionTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 16px;
+  font-size: 0.875rem;
+}
+
+.removeTag {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  margin-left: 4px;
+  transition: color 0.2s;
+}
+
+.removeTag:hover {
+  color: #fecaca;
+}
+
+/* === ДРОПДАУН === */
+.selectDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgb(242, 242, 242);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-top: none;
+  border-radius: 0px 0px 12px 12px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  max-height: 200px;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.selectDropdownInner {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 203, 211, 0.8) transparent;
+}
+
+.selectDropdownInner::-webkit-scrollbar {
+  width: 8px;
+}
+
+.selectDropdownInner::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.selectDropdownInner::-webkit-scrollbar-thumb {
+  background: rgba(255, 203, 211, 0.8);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s;
+}
+
+.selectDropdownInner::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 203, 211, 1);
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  color: #374151;
+}
+
+.selectOption:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.selectOption:focus {
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.selectOptionSelected {
+  color: #000000;
+  font-weight: 500;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.selectOptionSelected .checkbox {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+.checkbox svg {
+  display: block;
+}
+
+/* === СТАНИ ТА ПОВІДОМЛЕННЯ === */
+.loadingContainer,
+.errorContainer,
+.noDataContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.errorContainer {
+  border-color: #fecaca;
+  background-color: #fef2f2;
+}
+
+/* === ПОМИЛКИ === */
+.errorMessageContainer {
+  min-height: 24px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.25;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  transform: translateY(-2px);
+}
+
+.errorMessage.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+.spinner,
+.loadingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #ffdae0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+/* === КНОПКИ === */
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.retryButton {
+  padding: 6px 12px;
+  background-color: #ffdae0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #ffdae0;
+}
+
+/* === СЕЛЕКТИ === */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.selectedEmotions {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+.selectedLabel {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* === МОДАЛКА === */
+.modal .customSelect {
+  z-index: 1050;
+}
+
+.modal .selectDropdown {
+  z-index: 10000;
+  position: fixed;
+}
+
+/* === АНІМАЦІЇ === */
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* === АДАПТИВНІСТЬ === */
+@media (max-width: 768px) {
+  .selectDropdown {
+    max-height: 180px;
+    z-index: 10001;
+  }
+
+  .selectOption {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+  }
+}
