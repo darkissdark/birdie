@@ -1,4 +1,5 @@
 import { User } from "@/types/user";
+import { CreateTask, Task } from "@/types/task";
 import { nextServer } from "./api";
 import { DiaryEntry, SortOrder } from "@/types/dairy";
 
@@ -43,5 +44,10 @@ export const getDiaryList = async (
   const { data } = await nextServer.get<DiaryListResponse>("/diary", {
     params: { sortOrder: sortOrder },
   });
+  return data;
+};
+
+export const createTask = async (newTask: CreateTask): Promise<Task> => {
+  const { data } = await nextServer.post<Task>("/tasks", newTask);
   return data;
 };

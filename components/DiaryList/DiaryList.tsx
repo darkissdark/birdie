@@ -8,6 +8,8 @@ import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
 import { DiaryEntry } from "@/types/dairy";
 import { useState } from "react";
+import { AddDiaryEntryModal } from "../AddDiaryEntryForm";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DiaryListProps {
   entries: DiaryEntry[];
@@ -22,18 +24,17 @@ const DiaryList = ({
   sortOrder,
   setSortOrder,
 }: DiaryListProps) => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasValidDates = entries?.some((e) => e.date);
-  const [isSortTrue, setIsSortTrue] = useState(true);
+  const queryClient = useQueryClient();
 
-  const handleToogleSort = () => {
-    setIsSortTrue(!isSortTrue);
+  const handleToggleSort = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     // На апі йдуть запроси нормальні, як у свагері описано, а у відповідь одне й теж сортування
   };
 
-  // Логіка модалки AddDiaryEntryModal
-  const handleClick = () => {};
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <div className={css.diaryWrapper}>
@@ -42,17 +43,21 @@ const DiaryList = ({
       <div className={css.titleWrapper}>
         <div className={css.titlesort}>
           <h2 className={css.subtitle}>Ваші записи</h2>
-          <button className={css.sortButton} onClick={handleToogleSort}>
-            {isSortTrue ? (
-              <IoIosArrowDropdown className={css.sortLogo} />
-            ) : (
+          <button className={css.sortButton} onClick={handleToggleSort}>
+            {sortOrder === "asc" ? (
               <IoIosArrowDropup className={css.sortLogo} />
+            ) : (
+              <IoIosArrowDropdown className={css.sortLogo} />
             )}
           </button>
         </div>
 
-        <div className={css.wrapper} onClick={handleClick}>
-          <button type="button" className={css.addButton}>
+        <div className={css.wrapper}>
+          <button
+            type="button"
+            className={css.addButton}
+            onClick={handleOpenModal}
+          >
             Новий запис
             <IoIosAddCircleOutline className={css.addLogo} />
           </button>
@@ -73,9 +78,15 @@ const DiaryList = ({
         ) : (
           <p className={css.warningText}>Наразі записів немає</p>
         )}
-        {/* {isModalOpen && (
-          <AddDiaryEntryModal onClose={() => setIsModalOpen(false)} />
-        )} */}
+        {isModalOpen && (
+          <AddDiaryEntryModal
+            onClose={handleCloseModal}
+            isOpen={isModalOpen}
+            onSuccess={() =>
+              queryClient.invalidateQueries({ queryKey: ["diary"] })
+            }
+          />
+        )}
       </div>
     </div>
   );

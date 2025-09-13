@@ -40,63 +40,100 @@ const RegistrationForm = () => {
     try {
       await register(values);
       actions.resetForm();
-      router.push("/profile");
+      router.push("/profile/edit");
     } catch (error) {
       seterror((error as ApiError).message);
     }
   };
   return (
-    <>
-      <header>
-        <svg></svg>
+    <div className={css.container}>
+      <header className={css.header}>
+        <Link href={"/"}>
+          <svg className={css.logo} width={105} height={45}>
+            <use href="/auth/Logo.svg#logo" />
+          </svg>
+        </Link>
       </header>
-      <h1>Реєстрація</h1>
+
       <div className={css.pageWrapper}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={Schema}
-        >
-          {({ isValid, dirty }) => (
-            <Form>
-              <div>
-                <label htmlFor="title">{`Ім'я`}</label>
-                <Field id="title" type="text" name="name" />
-                <ErrorMessage component="span" name="name" />
-              </div>
+        <div className={css.formWrapper}>
+          <h1 className={css.title}>Реєстрація</h1>
 
-              <div>
-                <label htmlFor="email">Пошта</label>
-                <Field id="email" name="email" type="text" />
-                <ErrorMessage component="span" name="email" />
-              </div>
-
-              <div>
-                <label htmlFor="password">Пароль</label>
-                <Field id="password" name="password" type="password" />
-                <ErrorMessage component="span" name="password" />
-              </div>
-
-              <div>
-                <button type="submit" disabled={!isValid || !dirty}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={Schema}
+          >
+            {({ isValid, dirty }) => (
+              <Form className={css.form}>
+                <div className={css.inputBox}>
+                  <label htmlFor="title" className={css.label}>{`Імʼя*`}</label>
+                  <Field
+                    id="title"
+                    type="text"
+                    name="name"
+                    className={css.inputField}
+                    placeholder="Ваше імʼя"
+                  />
+                  <ErrorMessage name="name">
+                    {(msg) => <span className={css.errorMessage}>{msg}</span>}
+                  </ErrorMessage>
+                </div>
+                <div className={css.inputBox}>
+                  <label htmlFor="email" className={css.label}>
+                    Пошта*
+                  </label>
+                  <Field
+                    id="email"
+                    name="email"
+                    type="text"
+                    className={css.inputField}
+                    placeholder="hello@leleka.com"
+                  />
+                  <ErrorMessage name="email">
+                    {(msg) => <span className={css.errorMessage}>{msg}</span>}
+                  </ErrorMessage>
+                </div>
+                <div className={css.inputBox}>
+                  <label htmlFor="password" className={css.label}>
+                    Пароль*
+                  </label>
+                  <Field
+                    id="password"
+                    name="password"
+                    type="password"
+                    className={css.inputField}
+                    placeholder="********"
+                  />
+                  <ErrorMessage name="password">
+                    {(msg) => <span className={css.errorMessage}>{msg}</span>}
+                  </ErrorMessage>
+                </div>
+                <button
+                  type="submit"
+                  disabled={!isValid || !dirty}
+                  className={css.submitBtn}
+                >
                   Зареєструватись
                 </button>
-                {error && <p>{error}</p>}
-              </div>
-              <div>
-                Вже маєте акаунт? <Link href={"/auth/login"}>Увійти</Link>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                {error && <p className={css.apiError}>{error}</p>}
+                <p className={css.text}> Вже маєте акаунт?</p>
+                <Link href={"/auth/login"} className={css.link}>
+                  Увійти
+                </Link>
+              </Form>
+            )}
+          </Formik>
+        </div>
         <Image
-          src={"/regFoto.jpg"}
-          alt={"User Avatar"}
+          src={"/auth/regFoto.jpg"}
+          alt={"registration page image"}
           width={720}
           height={900}
+          className={css.image}
         />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -31,7 +31,6 @@ const DiaryPageClient = () => {
   }
 
   const entries = data?.diaryNotes ?? [];
-  console.log(entries);
 
   return isDesktop ? (
     <div className={css.diaryMainWrapper}>
