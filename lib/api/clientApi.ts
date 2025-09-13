@@ -1,6 +1,7 @@
 import { User } from "@/types/user";
 import { CreateTask, Task } from "@/types/task";
 import { nextServer } from "./api";
+import { DiaryEntry } from "@/types/dairy";
 
 export interface Credentials {
   name?: string;
@@ -27,6 +28,18 @@ export const checkSession = async () => {
 
 export const getMe = async () => {
   const { data } = await nextServer.get<User>("/users/current");
+  return data;
+};
+
+export interface DiaryListResponse {
+  diaryNotes: DiaryEntry[];
+  totalCount: number;
+  totalPages: number;
+  page: number;
+}
+
+export const getDiaryList = async (): Promise<DiaryListResponse> => {
+  const { data } = await nextServer.get<DiaryListResponse>("/diary");
   return data;
 };
 
