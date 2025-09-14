@@ -1,5 +1,5 @@
 import { User } from "@/types/user";
-import { CreateTask, Task } from "@/types/task";
+import { CreateTask } from "@/types/task";
 import { nextServer } from "./api";
 import { DiaryEntry, SortOrder } from "@/types/dairy";
 import { TasksResponse, Task } from "@/types/tasks";
@@ -66,7 +66,6 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   return data;
 };
 
-
 export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("avatar", file); // "avatar" — ключ, який сервер очікує
@@ -114,7 +113,6 @@ export const getEmotions = async (
     params,
   });
   return data;
-
 };
 
 export const getTasks = async (): Promise<Task[]> => {
@@ -129,9 +127,16 @@ export const updateTaskStatus = async (taskId: string, isDone: boolean) => {
 
 export const getBabyToday = async (): Promise<BabyToday> => {
   const { data } = await nextServer.get<WeekGreetingResponse>(
-    "/week/greeting/public"
+    "/weeks/greeting/public"
   );
   return data.babyToday;
+};
+
+export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
+  const { data } = await nextServer.get<FeelingsResponse>(
+    `/weeks/${weekNumber}/mom`
+  );
+  return data.comfortTips[0];
 };
 
 export const getComfortTips = async (

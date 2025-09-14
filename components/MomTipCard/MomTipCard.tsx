@@ -1,15 +1,31 @@
+"use client";
+
 import css from "./MomTipCard.module.css";
+import { useQuery } from "@tanstack/react-query";
+import { getMomTip } from "@/lib/api/clientApi";
 
 interface ComfortTip {
   category: string;
   tip: string;
 }
 
-interface MomTipCardProps {
-  momTip: ComfortTip;
-}
+const MomTipCard = () => {
+  const {
+    data: momTip,
+    isLoading,
+    isError,
+  } = useQuery<ComfortTip>({
+    queryKey: ["momTip", 1],
+    queryFn: () => getMomTip(1),
+  });
 
-const MomTipCard = ({ momTip }: MomTipCardProps) => {
+  if (isLoading) {
+    return <div className={css.card}>Завантаження...</div>;
+  }
+
+  if (isError || !momTip) {
+    return <div className={css.card}>Помилка завантаження даних</div>;
+  }
   return (
     <div className={css.card}>
       <h2>Порада для мами</h2>

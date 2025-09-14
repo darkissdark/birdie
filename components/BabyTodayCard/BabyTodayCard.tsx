@@ -1,12 +1,28 @@
+"use client";
+
 import css from "./BabyTodayCard.module.css";
 import Image from "next/image";
-import { BabyToday } from "@/types/baby"; // ваш інтерфейс
+import { BabyToday } from "@/types/baby";
+import { useQuery } from "@tanstack/react-query";
+import { getBabyToday } from "@/lib/api/clientApi";
 
-interface BabyTodayCardProps {
-  babyToday: BabyToday;
-}
+const BabyTodayCard = () => {
+  const {
+    data: babyToday,
+    isLoading,
+    isError,
+  } = useQuery<BabyToday>({
+    queryKey: ["babyToday"],
+    queryFn: getBabyToday,
+  });
 
-const BabyTodayCard = ({ babyToday }: BabyTodayCardProps) => {
+  if (isLoading) {
+    return <div className={css.card}>Завантаження...</div>;
+  }
+
+  if (isError || !babyToday) {
+    return <div className={css.card}>Помилка завантаження даних</div>;
+  }
   return (
     <div className={css.card}>
       <h2 className={css.title}>Малюк сьогодні</h2>
