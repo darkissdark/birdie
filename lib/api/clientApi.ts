@@ -49,9 +49,11 @@ export const getBabyToday = async (): Promise<BabyToday> => {
   return data.babyToday;
 };
 
-export const getComfortTips = async (): Promise<ComfortTip[]> => {
+export const getComfortTips = async (
+  weekNumber: number
+): Promise<ComfortTip[]> => {
   const { data } = await nextServer.get<FeelingsResponse>(
-    "/weeks/{weekNumber}/mom"
+    `/weeks/${weekNumber}/mom`
   );
   return data.comfortTips ?? [];
 };

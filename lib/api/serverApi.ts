@@ -4,21 +4,14 @@ import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 
-export const checkServerSession = async (): Promise<boolean> => {
+export const checkServerSession = async () => {
   const cookieStore = await cookies();
-  try {
-    const { data } = await nextServer.get<{ success: boolean }>(
-      "/auth/session",
-      {
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      }
-    );
-    return !!data.success;
-  } catch {
-    return false;
-  }
+  const res = await nextServer.get("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return res;
 };
 
 export const getTasksServer = async (): Promise<Task[]> => {
