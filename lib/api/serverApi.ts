@@ -57,9 +57,17 @@ export const getTasksServer = async (): Promise<Task[]> => {
 
 export const getBabyToday = async (): Promise<BabyToday> => {
   const cookieStore = await cookies();
+  
+  const accessToken = cookieStore.get("accessToken")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+  
+
+  const endpoint = (accessToken || refreshToken) 
+    ? "/weeks/greeting"  
+    : "/weeks/greeting/public";
 
   const { data } = await nextServer.get<WeekGreetingResponse>(
-    "/week/greeting/public",
+    endpoint,
     {
       headers: {
         Cookie: cookieStore.toString(),
