@@ -1,220 +1,174 @@
-.pageWrapper {
-  height: calc(100% - 72px);
+/* mobile */
+
+.formProfile {
+  margin-top: 32px;
+  padding: 0px 20px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+  width: 375px;
+  height: 436px;
 }
 
-@media (min-width: 1440px) {
-  .pageWrapper {
-    height: 100%;
-  }
-  .pageWrapper > div {
-    padding-top: 72px;
-  }
-}
-
-.container {
-  max-width: 375px;
-  margin: 0 auto;
-  padding-right: 20px;
-  padding-left: 20px;
-  position: relative;
-  height: 100%;
-}
-
-/* Styles for Tablet devices */
-@media only screen and (min-width: 768px) {
-  .container {
-    max-width: 768px;
-    padding-right: 32px;
-    padding-left: 32px;
-  }
-}
-/* Styles for Desktop devices */
-@media only screen and (min-width: 1440px) {
-  .container {
-    max-width: 1440px;
-    padding: 0;
-    position: relative;
-  }
-  .header {
-    position: absolute;
-    padding: 0 64px;
-  }
-}
-.header {
-  height: 72px;
-  display: flex;
-  align-items: center;
-}
-
-.title {
-  font-family: var(--font-comfortaa);
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 1.2;
-  letter-spacing: 0.01em;
-  text-align: center;
-  width: 335px;
-  padding-bottom: 32px;
-  font-weight: 700;
-}
-@media (min-width: 768px) {
-  .title {
-    width: 480px;
-    padding-bottom: 32px;
-    margin-left: 112px;
-  }
-}
-@media (min-width: 1440px) {
-  .title {
-    margin-left: 120px;
-    font-size: 48px;
-  }
-}
-
-.form {
-  width: 335px;
-}
-
-@media (min-width: 768px) {
-  .form {
-    width: 480px;
-    margin-left: 112px;
-    margin-right: 112px;
-  }
-}
-@media (min-width: 1440px) {
-  .form {
-    margin-left: 120px;
-    margin-right: 120px;
-  }
-}
-.inputBox {
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 24px;
-  position: relative;
 }
+
 .label {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
 }
-@media (min-width: 1440px) {
-  .label {
-    font-size: 16px;
-  }
-}
-.errorMessage {
-  position: absolute;
-  bottom: -20px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #c60000;
-}
+
 .inputField {
-  width: 335px;
   border: 2px solid rgba(255, 255, 255, 0);
   border-radius: 12px;
   padding: 8px 12px;
+  width: 335px;
   height: 37px;
-  background: rgba(0, 0, 0, 0.05);
-}
-@media (min-width: 768px) {
-  .inputField {
-    width: 480px;
-  }
-}
-@media (min-width: 1440px) {
-  .inputField {
-    height: 40px;
-  }
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.submitBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  width: 335px;
-  height: 42px;
-  border-bottom: 4px solid #ffcbd3;
-  border-radius: 100px;
-  padding: 10px 24px;
-  background: #ffdae0;
-  margin-bottom: 24px;
+.labelGender {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.6;
+  line-height: 1.5;
   color: #000;
 }
 
-@media (min-width: 768px) {
-  .submitBtn {
-    width: 480px;
-    height: 42px;
-  }
-}
-@media (min-width: 1440px) {
-  .submitBtn {
-    font-size: 16px;
-  }
-}
-.submitBtn:disabled {
-  opacity: 0.3;
-}
-.text {
-  display: inline-block;
-  margin-left: 56px;
-  margin-right: 5px;
-  text-align: center;
+.selectGender {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 335px;
+  height: 40px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
-}
-@media (min-width: 768px) {
-  .text {
-    margin-left: 129px;
-  }
-}
-@media (min-width: 1440px) {
-  .text {
-    font-size: 16px;
-    margin-left: 113px;
-  }
+  color: #7f7f7f;
 }
 
-.link {
+.labelbirthDate {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.dueDate {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 335px;
+  height: 48px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #7f7f7f;
+}
+
+.formAction {
+  display: flex;
+
+  justify-content: center;
+  gap: 16px;
+}
+
+.actionBtn {
+  font-weight: 500;
   font-size: 14px;
   line-height: 1.6;
-  text-decoration: underline;
-  text-decoration-skip-ink: none;
-  text-align: center;
+  color: #191919;
+
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
+  border-radius: 100px;
+  padding: 8px 20px;
+  width: 159px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.05);
+  margin-top: 24px;
 }
-@media (min-width: 1440px) {
-  .link {
-    font-size: 16px;
-    line-height: 1.6;
-    text-decoration: underline;
-    text-decoration-skip-ink: none;
-    text-align: center;
+
+.actionBtn:hover {
+  background: #ffdae0;
+}
+
+@media screen and (min-width: 768px) {
+  .formProfile {
+    padding: 0px 32px;
+    width: 768px;
+    height: 436px;
+  }
+
+  .inputField {
+    width: 704px;
+    height: 37px;
+  }
+
+  .selectGender {
+    width: 704px;
+  }
+
+  .dueDate {
+    width: 704px;
+  }
+
+  .formAction {
+    justify-content: flex-end;
+    gap: 16px;
+  }
+
+  .actionBtn {
+    /* margin-top: 24px; */
+    width: 150px;
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 
-.apiError {
-  text-align: center;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #c60000;
-}
+@media screen and (min-width: 1440px) {
+  .formProfile {
+    width: 768px;
+    height: 436px;
+  }
 
-.image {
-  display: none;
-  object-fit: cover;
-  height: 100%;
-}
-@media (min-width: 1440px) {
-  .image {
-    display: block;
+  .label {
+    font-size: 16px;
+  }
+
+  .labelGender {
+    font-size: 16px;
+    color: #000;
+  }
+
+  .selectGender {
+    width: 704px;
+    height: 40px;
+  }
+
+  .labelbirthDate {
+    font-size: 16px;
+  }
+
+  .dueDate {
+    width: 704px;
+    font-size: 16px;
+  }
+
+  .formAction {
+    /* display: flex; */
+    /* justify-content: flex-end; */
+    gap: 12px;
+    /* margin-top: 20px; */
   }
 }

@@ -1,10 +1,10 @@
 "use client";
 import { uploadImage } from "@/lib/api/clientApi";
-// import { getMe } from "@/lib/api/clientApi";
 import useAuthStore from "@/lib/store/authStore";
 import { ApiError } from "next/dist/server/api-utils";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import css from "./ProfileAvatar.module.css";
 
 export default function ProfileAvatar() {
   const [error, setError] = useState("");
@@ -32,7 +32,7 @@ export default function ProfileAvatar() {
   };
 
   return (
-    <div>
+    <div className={css.profileSection}>
       <>
         <Image
           src={
@@ -42,18 +42,23 @@ export default function ProfileAvatar() {
           height={132}
           width={132}
           alt="user avatar"
+          className={css.avatarImage}
         />
-        <p>{user?.name}</p>
-        <p>{user?.email}</p>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-        <button onClick={handleButtonClick}>Завантажити нове фото</button>
-        {error && <p>{error}</p>}
+        <div className={css.profileInfo}>
+          <p className={css.infoName}>{user?.name}</p>
+          <p className={css.infoEmail}>{user?.email}</p>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          <button onClick={handleButtonClick} className={css.uploadBtn}>
+            Завантажити нове фото
+          </button>
+          {error && <p>{error}</p>}
+        </div>
       </>
     </div>
   );

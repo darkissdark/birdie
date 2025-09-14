@@ -7,7 +7,7 @@ import { ApiError } from "next/dist/server/api-utils";
 import { useState } from "react";
 import * as Yup from "yup";
 import css from "./ProfileEditForm.module.css";
-import Link from "next/link";
+// import Link from "next/link";
 // import Image from "next/image";
 
 interface ProfileFormValues {
@@ -59,33 +59,33 @@ const ProfileEditForm = () => {
         validationSchema={Schema}
       >
         {({ isValid, dirty }) => (
-          <Form className={css.form}>
-            <div className={css.inputBox}>
+          <Form className={css.formProfile}>
+            <div className={css.formGroup}>
               <label htmlFor="name" className={css.label}>
-                Name
+                Імʼя
               </label>
               <Field
                 id="name"
                 name="name"
                 type="text"
                 className={css.inputField}
-                placeholder="Name"
+                placeholder="Імʼя"
               />
               <ErrorMessage name="name">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
               </ErrorMessage>
             </div>
 
-            <div className={css.inputBox}>
+            <div className={css.formGroup}>
               <label htmlFor="Email" className={css.label}>
-                Email
+                Пошта
               </label>
               <Field
                 id="Email"
                 name="Email"
                 type="email"
                 className={css.inputField}
-                placeholder="Email"
+                placeholder="Пошта"
               />
               <ErrorMessage name="Email">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
@@ -93,44 +93,59 @@ const ProfileEditForm = () => {
             </div>
 
             {/* change babygender */}
-            <div className={css.inputBox}>
-              <label htmlFor="gender">Gender</label>
+
+            <div className={css.formGroup}>
+              <label htmlFor="gender" className={css.labelGender}>
+                Стать дитини
+              </label>
               <Field
                 as="select"
-                id="gender"
-                name="gender"
-                className={css.select}
+                id="babyGender"
+                name="babyGender"
+                className={css.selectGender}
               >
-                <option value="girl">Girl</option>
-                <option value="boy">Boy</option>
-                <option value="noidea">Dont know</option>
+                <option value="boy">Хлопчик</option>
+                <option value="girl">Дівчинка</option>
+                <option value="unknown">Ще не знаю</option>
               </Field>
-              <ErrorMessage name="gender">
+              <ErrorMessage name="babyGender">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
               </ErrorMessage>
             </div>
 
             {/* edit calendar section  */}
-            <div>
-              <label htmlFor="date">Choose a date:</label>
-              <Field name="date" type="date" />
-              <ErrorMessage name="duedate">
+            <div className={css.formGroup}>
+              <label htmlFor="dueDate" className={css.labelbirthDate}>
+                Планова дата пологів
+              </label>
+              <Field
+                name="dueDate"
+                type="date"
+                id="dueDate"
+                className={css.dueDate}
+              />
+              <ErrorMessage name="dueDate">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
               </ErrorMessage>
             </div>
 
-            <button
-              type="submit"
-              disabled={!isValid || !dirty}
-              className={css.submitBtn}
-            >
-              Увійти
-            </button>
+            <div className={css.formAction}>
+              <button
+                type="submit"
+                disabled={!isValid || !dirty}
+                className={css.actionBtn}
+              >
+                Відминити зміни
+              </button>
+              <button
+                type="submit"
+                disabled={!isValid || !dirty}
+                className={css.actionBtn}
+              >
+                Зберігти зміни
+              </button>
+            </div>
             {error && <p className={css.apiError}>{error}</p>}
-            <p className={css.text}> Немає аккаунту?</p>
-            <Link href={"/auth/login"} className={css.link}>
-              Зареєструватися
-            </Link>
           </Form>
         )}
       </Formik>
