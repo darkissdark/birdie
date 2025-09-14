@@ -43,11 +43,17 @@ export interface DiaryListResponse {
   page: number;
 }
 
+export interface DiaryListParams {
+  page: number;
+  limit?: number;
+  sortOrder: SortOrder;
+}
+
 export const getDiaryList = async (
-  sortOrder: SortOrder
+  params: DiaryListParams
 ): Promise<DiaryListResponse> => {
   const { data } = await nextServer.get<DiaryListResponse>("/diary", {
-    params: { sortOrder: sortOrder },
+    params,
   });
   return data;
 };

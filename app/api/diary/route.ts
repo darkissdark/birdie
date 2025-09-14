@@ -8,12 +8,12 @@ import { DiaryListResponse } from "@/lib/api/clientApi";
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
-    // const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
-    // const limit = Number(request.nextUrl.searchParams.get("limit") ?? 10);
+    const page = Number(request.nextUrl.searchParams.get("page") ?? 1);
+    const limit = Number(request.nextUrl.searchParams.get("limit") ?? 10);
     const sortOrder = request.nextUrl.searchParams.get("sortOrder") ?? "asc";
 
     const res = await api<DiaryListResponse>("/diary", {
-      params: { sortOrder },
+      params: { page, limit, sortOrder },
       headers: {
         Cookie: cookieStore.toString(),
       },

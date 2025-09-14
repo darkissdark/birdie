@@ -14,10 +14,11 @@ const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-
+  const [page, setPage] = useState<number>(1);
+  const params = { page, sortOrder };
   const { data, isLoading, isError } = useQuery<DiaryListResponse>({
-    queryKey: ["diary", sortOrder],
-    queryFn: () => getDiaryList(sortOrder),
+    queryKey: ["diary", params],
+    queryFn: () => getDiaryList(params),
   });
 
   useEffect(() => {
