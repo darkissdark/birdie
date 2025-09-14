@@ -1,12 +1,64 @@
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
+import { TasksResponse, Task } from "@/types/tasks";
+import { BabyToday, WeekGreetingResponse } from "@/types/baby";
+import { ComfortTip, FeelingsResponse } from "@/types/tip";
 
-export const checkServerSession = async () => {
+export const checkServerSession = async (): Promise<boolean> => {
   const cookieStore = await cookies();
-  const res = await nextServer.get("/users/current", {
+  try {
+    const { data } = await nextServer.get<{ success: boolean }>(
+      "/auth/session",
+      {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+      }
+    );
+    return !!data.success;
+  } catch {
+    return false;
+  }
+};
+
+export const getTasksServer = async (): Promise<Task[]> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.get<TasksResponse>("/tasks", {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
-  return res;
+
+  return data.tasks;
+};
+
+export const getBabyToday = async (): Promise<BabyToday> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.get<WeekGreetingResponse>(
+    "/week/greeting/public",
+    {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    }
+  );
+
+  return data.babyToday;
+};
+
+export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.get<FeelingsResponse>(
+    `/weeks/${weekNumber}/mom`,
+    {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    }
+  );
+
+  return data.comfortTips[0];
 };
