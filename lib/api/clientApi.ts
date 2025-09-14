@@ -56,3 +56,13 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   const { data } = await nextServer.post<Task>("/tasks", newTask);
   return data;
 };
+
+export interface UserStats {
+  currentWeek: number;
+  daysUntilMeeting: number;
+}
+
+export const getUserStats = async (): Promise<UserStats> => {
+  const { data } = await nextServer.get<UserStats>("/user/stats");
+  return data;
+};

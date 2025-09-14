@@ -1,0 +1,12 @@
+.greetingContainer {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.greetingText {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
