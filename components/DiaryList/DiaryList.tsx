@@ -10,9 +10,11 @@ import { DiaryEntry } from "@/types/dairy";
 import { useState } from "react";
 import { AddDiaryEntryModal } from "../AddDiaryEntryForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { Emotion } from "@/lib/api/clientApi";
 
 interface DiaryListProps {
   entries: DiaryEntry[];
+  emotions: Emotion[];
   onSelect?: (entry: DiaryEntry) => void;
   sortOrder: "asc" | "desc";
   setSortOrder: (order: "asc" | "desc") => void;
@@ -20,6 +22,7 @@ interface DiaryListProps {
 
 const DiaryList = ({
   entries,
+  emotions,
   onSelect,
   sortOrder,
   setSortOrder,
@@ -71,6 +74,7 @@ const DiaryList = ({
               <DiaryEntryCard
                 key={entry._id}
                 entry={entry}
+                emotions={emotions}
                 onSelect={onSelect}
               />
             ))}

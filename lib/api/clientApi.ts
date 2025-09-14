@@ -72,3 +72,29 @@ export const getUserStats = async (): Promise<UserStats> => {
   const { data } = await nextServer.get<UserStats>("/user/stats");
   return data;
 };
+
+export interface Emotion {
+  _id: string;
+  title: string;
+}
+
+export interface EmotionsResponse {
+  emotions: Emotion[];
+  totalCount: number;
+  totalPages: number;
+  page: number;
+}
+
+export interface EmotionsParams {
+  page?: number;
+  limit?: number;
+}
+
+export const getEmotions = async (
+  params: EmotionsParams = {}
+): Promise<EmotionsResponse> => {
+  const { data } = await nextServer.get<EmotionsResponse>("/emotions", {
+    params,
+  });
+  return data;
+};
