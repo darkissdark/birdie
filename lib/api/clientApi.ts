@@ -116,9 +116,14 @@ export const getEmotions = async (
 };
 
 export const getTasks = async (): Promise<Task[]> => {
-  const response = await nextServer.get<TasksResponse>("/tasks");
-
-  return response.data.tasks ?? [];
+  try {
+    const response = await nextServer.get<TasksResponse>("/tasks");
+    const tasks = response.data?.tasks;
+    return Array.isArray(tasks) ? tasks : [];
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    return [];
+  }
 };
 
 export const updateTaskStatus = async (taskId: string, isDone: boolean) => {
@@ -126,9 +131,11 @@ export const updateTaskStatus = async (taskId: string, isDone: boolean) => {
 };
 
 export const getBabyToday = async (): Promise<BabyToday> => {
-  const { data } = await nextServer.get<WeekGreetingResponse>(
-    "/weeks/greeting/public"
-  );
+  const isAuth = await checkSession();
+
+  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+
+  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint);
   return data.babyToday;
 };
 

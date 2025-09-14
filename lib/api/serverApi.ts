@@ -1,6 +1,11 @@
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
-import { DiaryListResponse, DiaryListParams, EmotionsResponse, EmotionsParams } from "./clientApi";
+import {
+  DiaryListResponse,
+  DiaryListParams,
+  EmotionsResponse,
+  EmotionsParams,
+} from "./clientApi";
 
 export const getDiaryListServer = async (
   params: DiaryListParams
@@ -44,36 +49,34 @@ export const checkServerSession = async () => {
 };
 
 export const getTasksServer = async (): Promise<Task[]> => {
-  const cookieStore = await cookies();
+  try {
+    const cookieStore = await cookies();
 
-  const { data } = await nextServer.get<TasksResponse>("/tasks", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
+    const { data } = await nextServer.get<TasksResponse>("/tasks", {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
 
-  return data.tasks;
+    const tasks = data?.tasks;
+    return Array.isArray(tasks) ? tasks : [];
+  } catch (error) {
+    console.error("Error fetching tasks server:", error);
+    return [];
+  }
 };
 
 export const getBabyToday = async (): Promise<BabyToday> => {
   const cookieStore = await cookies();
-  
-  const accessToken = cookieStore.get("accessToken")?.value;
-  const refreshToken = cookieStore.get("refreshToken")?.value;
-  
+  const isAuth = await checkServerSession();
 
-  const endpoint = (accessToken || refreshToken) 
-    ? "/weeks/greeting"  
-    : "/weeks/greeting/public";
+  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
 
-  const { data } = await nextServer.get<WeekGreetingResponse>(
-    endpoint,
-    {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    }
-  );
+  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
 
   return data.babyToday;
 };
