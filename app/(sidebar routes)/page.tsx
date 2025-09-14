@@ -3,7 +3,12 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getTasksServer, getBabyToday, getMomTip } from "@/lib/api/serverApi";
+import {
+  getTasksServer,
+  getBabyToday,
+  getMomTip,
+  checkServerSession,
+} from "@/lib/api/serverApi";
 import TasksReminderCard from "@/components/TasksReminderCard/TasksReminderCard";
 import BabyTodayCard from "@/components/BabyTodayCard/BabyTodayCard";
 import MomTipCard from "@/components/MomTipCard/MomTipCard";
@@ -12,11 +17,10 @@ import css from "./page.module.css";
 export default async function DashboardPage() {
   const queryClient = new QueryClient();
 
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ["tasks"],
-      queryFn: getTasksServer,
-    }),
+  const authResponse = await checkServerSession();
+  const isAuth = authResponse?.data?.success || false;
+
+  const prefetchPromises = [
     queryClient.prefetchQuery({
       queryKey: ["momTip", 1],
       queryFn: () => getMomTip(1),
@@ -25,7 +29,18 @@ export default async function DashboardPage() {
       queryKey: ["babyToday"],
       queryFn: getBabyToday,
     }),
-  ]);
+  ];
+
+  if (isAuth) {
+    prefetchPromises.push(
+      queryClient.prefetchQuery({
+        queryKey: ["tasks"],
+        queryFn: getTasksServer,
+      })
+    );
+  }
+
+  await Promise.all(prefetchPromises);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
