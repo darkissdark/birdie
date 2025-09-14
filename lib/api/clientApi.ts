@@ -39,7 +39,7 @@ export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("avatar", file); // "avatar" — ключ, який сервер очікує
 
-  const res = await nextServer.patch("/users/current/avatars", formData, {
+  const res = await nextServer.patch<User>("/users/current/avatars", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
