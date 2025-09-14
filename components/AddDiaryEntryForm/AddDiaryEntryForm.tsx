@@ -16,7 +16,7 @@ interface AddDiaryEntryFormProps {
 interface DiarySubmitValues {
   title: string;
   description: string;
-  emotions: { _id: string; name: string }[];
+  emotions: string[];
 }
 
 const validationSchema = Yup.object({
@@ -158,18 +158,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     fetchEmotions();
   }, []);
 
-  const transformEmotionsForSubmit = (
-    selectedEmotionIds: string[]
-  ): { _id: string; name: string }[] => {
-    return selectedEmotionIds.map((id) => {
-      const emotion = emotions.find((e) => e._id === id);
-      return {
-        _id: id,
-        name: emotion?.name || emotion?.title || "Невідомо",
-      };
-    });
-  };
-
   const handleSubmit = async (
     values: DiaryFormValues,
     { setSubmitting }: FormikHelpers<DiaryFormValues>
@@ -178,8 +166,15 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
       const submitData: DiarySubmitValues = {
         title: values.title,
         description: values.description,
-        emotions: transformEmotionsForSubmit(values.emotions),
+        emotions: values.emotions,
       };
+
+      if (entry) {
+        await api.put(`/diary/${entry._id}`, submitData);
+      } else {
+        await api.post("/diary", submitData);
+      }
+
       toast.success(
         entry ? "Запис успішно оновлено!" : "Запис успішно створено!"
       );

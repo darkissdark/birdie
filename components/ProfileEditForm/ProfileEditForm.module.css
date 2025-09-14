@@ -1,0 +1,174 @@
+/* mobile */
+
+.formProfile {
+  margin-top: 32px;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 375px;
+  height: 436px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.inputField {
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 335px;
+  height: 37px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.labelGender {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.selectGender {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 335px;
+  height: 40px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #7f7f7f;
+}
+
+.labelbirthDate {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.dueDate {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 335px;
+  height: 48px;
+  background: #f2f2f2;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #7f7f7f;
+}
+
+.formAction {
+  display: flex;
+
+  justify-content: center;
+  gap: 16px;
+}
+
+.actionBtn {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #191919;
+
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
+  border-radius: 100px;
+  padding: 8px 20px;
+  width: 159px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.05);
+  margin-top: 24px;
+}
+
+.actionBtn:hover {
+  background: #ffdae0;
+}
+
+@media screen and (min-width: 768px) {
+  .formProfile {
+    padding: 0px 32px;
+    width: 768px;
+    height: 436px;
+  }
+
+  .inputField {
+    width: 704px;
+    height: 37px;
+  }
+
+  .selectGender {
+    width: 704px;
+  }
+
+  .dueDate {
+    width: 704px;
+  }
+
+  .formAction {
+    justify-content: flex-end;
+    gap: 16px;
+  }
+
+  .actionBtn {
+    /* margin-top: 24px; */
+    width: 150px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .formProfile {
+    width: 768px;
+    height: 436px;
+  }
+
+  .label {
+    font-size: 16px;
+  }
+
+  .labelGender {
+    font-size: 16px;
+    color: #000;
+  }
+
+  .selectGender {
+    width: 704px;
+    height: 40px;
+  }
+
+  .labelbirthDate {
+    font-size: 16px;
+  }
+
+  .dueDate {
+    width: 704px;
+    font-size: 16px;
+  }
+
+  .formAction {
+    /* display: flex; */
+    /* justify-content: flex-end; */
+    gap: 12px;
+    /* margin-top: 20px; */
+  }
+}
