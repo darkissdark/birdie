@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Lato, Comfortaa } from "next/font/google";
-import "./globals.css";
 import "modern-normalize/modern-normalize.css";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
+import "./globals.css";
+import LogoSprite from "@/components/Logo/LogoSprite";
+import UiSprite from "@/components/Icon/UiSprite";
+import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -33,11 +36,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={`${lato.variable} ${comfortaa.variable}`}>
-          {children}
-        </body>
-      </AuthProvider>
+      <TanStackProvider>
+        <AuthProvider>
+          <body className={`${lato.variable} ${comfortaa.variable}`}>
+            <LogoSprite />
+            <UiSprite />
+            {children}
+          </body>
+        </AuthProvider>
+      </TanStackProvider>
     </html>
   );
 }

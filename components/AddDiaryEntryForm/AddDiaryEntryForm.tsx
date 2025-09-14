@@ -1,9 +1,9 @@
 "use client";
 import { DiaryEntry, ApiEmotion, DiaryFormValues } from "@/types/diary";
 import { useState, useEffect, useRef } from "react";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import axiosInstance from "@/lib/axios";
+import api from "@/lib/axios";
 import toast from "react-hot-toast";
 import styles from "./AddDiaryEntryForm.module.css";
 import Button from "@/components/Button/Button";
@@ -11,7 +11,12 @@ import Button from "@/components/Button/Button";
 interface AddDiaryEntryFormProps {
   entry?: DiaryEntry;
   onSuccess: () => void;
-  onCancel?: () => void; // Зробили опціональним, щоб уникнути warning
+  onCancel?: () => void;
+}
+interface DiarySubmitValues {
+  title: string;
+  description: string;
+  emotions: string[];
 }
 
 const validationSchema = Yup.object({
@@ -25,14 +30,30 @@ const validationSchema = Yup.object({
     .required("Опис є обов'язковим полем"),
   emotions: Yup.array()
     .of(Yup.string())
-    .min(1, "Оберіть принаймні одну емоцію")
+    .min(1, "Оберіть принаймні одну категорію")
     .required("Емоції є обов'язковим полем"),
 });
+
+const CustomErrorMessage: React.FC<{ error?: string; touched?: boolean }> = ({
+  error,
+  touched,
+}) => {
+  return (
+    <div className={styles.errorMessageContainer}>
+      <div
+        className={`${styles.errorMessage} ${
+          error && touched ? styles.visible : ""
+        }`}
+      >
+        {error || ""}
+      </div>
+    </div>
+  );
+};
 
 export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   entry,
   onSuccess,
-  // onCancel, // Закоментували, оскільки не використовується
 }) => {
   const [emotions, setEmotions] = useState<ApiEmotion[]>([]);
   const [emotionsLoading, setEmotionsLoading] = useState(true);
@@ -43,7 +64,11 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   const initialValues: DiaryFormValues = {
     title: entry?.title || "",
     description: entry?.description || "",
-    emotions: entry?.emotions || [],
+    emotions: entry?.emotions
+      ? entry.emotions.map((emotion) =>
+          typeof emotion === "string" ? emotion : emotion._id
+        )
+      : [],
   };
 
   useEffect(() => {
@@ -71,11 +96,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         setEmotionsLoading(true);
         setEmotionsError(null);
 
-        console.log(" Запит до API");
-        const response = await axiosInstance.get("/emotions?page=1&limit=10");
-
-        console.log(" Повна відповідь:", response);
-        console.log(" response.data:", response.data);
+        const response = await api.get("/emotions?page=1&limit=18");
 
         let emotionsData: ApiEmotion[] = [];
 
@@ -95,8 +116,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
           emotionsData = response.data.results;
         }
 
-        console.log(" Оброблені емоції:", emotionsData);
-
         const validEmotions = emotionsData.filter(
           (emotion): emotion is ApiEmotion => {
             return (
@@ -115,10 +134,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
         setEmotions(validEmotions);
       } catch (error: unknown) {
-        // Замінили any на unknown
-        console.error(" Помилка завантаження емоцій:", error);
-
-        // Безпечне отримання повідомлення про помилку
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -148,14 +163,17 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     { setSubmitting }: FormikHelpers<DiaryFormValues>
   ) => {
     try {
-      console.log("Відправка форми:", values);
+      const submitData: DiarySubmitValues = {
+        title: values.title,
+        description: values.description,
+        emotions: values.emotions,
+      };
 
-      const url = entry ? `/diary/${entry._id}` : "/diary";
-      const method = entry ? "put" : "post";
-
-      const response = await axiosInstance[method](url, values);
-
-      console.log("Успішна відповідь:", response.data);
+      if (entry) {
+        await api.put(`/diary/${entry._id}`, submitData);
+      } else {
+        await api.post("/diary", submitData);
+      }
 
       toast.success(
         entry ? "Запис успішно оновлено!" : "Запис успішно створено!"
@@ -163,10 +181,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
       onSuccess();
     } catch (error: unknown) {
-      // Замінили any на unknown
-      console.error(" Помилка відправки:", error);
-
-      // Безпечне отримання повідомлення про помилку
       let errorMessage = "Сталася помилка при збереженні запису";
 
       if (error && typeof error === "object" && "response" in error) {
@@ -196,7 +210,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     setEmotionsLoading(true);
 
     try {
-      const response = await axiosInstance.get("/emotions?page=1&limit=10");
+      const response = await api.get("/emotions?page=1&limit=18");
       let emotionsData: ApiEmotion[] = [];
 
       if (Array.isArray(response.data)) {
@@ -229,7 +243,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
 
       setEmotions(validEmotions);
     } catch (retryError: unknown) {
-      // Перейменували змінну та змінили тип
       console.error("Помилка повторного завантаження:", retryError);
       setEmotionsError("Помилка завантаження");
 
@@ -274,7 +287,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting, values, setFieldValue }) => (
+        {({ isSubmitting, values, setFieldValue, errors, touched }) => (
           <Form className={styles.form}>
             <div className={styles.fieldGroup}>
               <label htmlFor="title" className={styles.label}>
@@ -284,13 +297,14 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                 id="title"
                 name="title"
                 type="text"
-                className={styles.input}
+                className={`${styles.input} ${
+                  errors.title && touched.title ? styles.error : ""
+                }`}
                 placeholder="Введіть заголовок запису"
               />
-              <ErrorMessage
-                name="title"
-                component="div"
-                className={styles.errorMessage}
+              <CustomErrorMessage
+                error={errors.title}
+                touched={touched.title}
               />
             </div>
 
@@ -317,7 +331,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                 </div>
               ) : emotions.length === 0 ? (
                 <div className={styles.noDataContainer}>
-                  <span> Емоції не знайдено</span>
+                  <span>Категорії не знайдено</span>
                   <button
                     type="button"
                     onClick={retryLoadEmotions}
@@ -329,7 +343,11 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
               ) : (
                 <div className={styles.customSelect} ref={dropdownRef}>
                   <div
-                    className={`${styles.selectTrigger} ${isDropdownOpen ? styles.selectTriggerOpen : ""}`}
+                    className={`${styles.selectTrigger} ${
+                      isDropdownOpen ? styles.selectTriggerOpen : ""
+                    } ${
+                      errors.emotions && touched.emotions ? styles.error : ""
+                    }`}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
                     <div className={styles.selectContent}>
@@ -350,7 +368,9 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                       )}
                     </div>
                     <span
-                      className={`${styles.selectArrow} ${isDropdownOpen ? styles.selectArrowOpen : ""}`}
+                      className={`${styles.selectArrow} ${
+                        isDropdownOpen ? styles.selectArrowOpen : ""
+                      }`}
                     >
                       <svg
                         width="12"
@@ -379,7 +399,9 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                             <button
                               key={emotion._id}
                               type="button"
-                              className={`${styles.selectOption} ${isSelected ? styles.selectOptionSelected : ""}`}
+                              className={`${styles.selectOption} ${
+                                isSelected ? styles.selectOptionSelected : ""
+                              }`}
                               onClick={() => {
                                 const newEmotions = isSelected
                                   ? values.emotions.filter(
@@ -420,10 +442,9 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                 </div>
               )}
 
-              <ErrorMessage
-                name="emotions"
-                component="div"
-                className={styles.errorMessage}
+              <CustomErrorMessage
+                error={errors.emotions as string}
+                touched={touched.emotions}
               />
             </div>
 
@@ -435,14 +456,15 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                 id="description"
                 name="description"
                 as="textarea"
-                className={styles.textarea}
+                className={`${styles.textarea} ${
+                  errors.description && touched.description ? styles.error : ""
+                }`}
                 placeholder="Запишіть, як ви себе відчуваєте"
                 rows={5}
               />
-              <ErrorMessage
-                name="description"
-                component="div"
-                className={styles.errorMessage}
+              <CustomErrorMessage
+                error={errors.description}
+                touched={touched.description}
               />
             </div>
 

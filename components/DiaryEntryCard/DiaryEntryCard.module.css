@@ -1,0 +1,47 @@
+
+
+.diaryCardListItem {
+    padding: 16px;
+    background: #ffdae0;
+    /* width: 303px; */
+    min-width: 303px;
+    border: 1px solid #ffdae0;
+    border-radius: 16px;
+    &:hover,focus{cursor: pointer;}
+}
+
+.diaryCardListItemWrapper {
+    display: flex; 
+    justify-content: space-between;
+    margin-bottom: 8px;
+    align-items: center
+}
+
+.diaryCardListItemWrapperText{
+    font-family: "Lato", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.diaryCardListItemWrapperDate {
+    font-family: "Lato", sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.diaryCardListItemWrapperEmotions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.emotionsItem {
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0);
+    padding: 2px 12px;
+    background: #fff4f6;
+    border-radius: 100px;
+}

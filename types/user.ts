@@ -6,4 +6,6 @@ export interface User {
   dueDate: string;
   babyGender: string;
   theme: string;
+  avatarUrl: string;
+  _id: string;
 }

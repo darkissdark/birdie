@@ -1,0 +1,117 @@
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.diaryWrapper {
+    max-width: 704px;
+    min-width: 335px;
+    width: 100%;
+    padding: 24px 16px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: 32px;
+    background: #fff4f6;
+}
+
+
+.titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    /* gap: 56px; */
+    width: 100%;
+    min-width: 271px;
+    
+}
+
+.addButton {
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    background-color: transparent;
+    border-color: transparent;
+    display: flex;
+    gap: 8px;
+    &:hover,focus {
+            cursor: pointer;
+        }
+}
+
+.addLogo{
+    width: 22px;
+    height: 22px;
+}
+
+.sortButton {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.sortLogo{
+    width: 22px;
+    height: 22px;
+}
+
+.titlesort {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    
+}
+
+.subtitle {
+    font-family: "Comfortaa", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    color: #000;
+}
+
+
+.diaryCardList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.warningText{
+    text-align: center;
+}
+
+.wrapperList {
+    width: 100%;
+}
+
+@media (min-width: 1440px) {
+    .diaryWrapper {
+        width: 389px;
+        height: 727px;
+        margin-inline: 0;
+    }
+
+    .wrapperList{
+        overflow: scroll;
+    }
+}
