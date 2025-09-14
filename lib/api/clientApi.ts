@@ -63,6 +63,20 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   return data;
 };
 
+
+export const uploadImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("avatar", file); // "avatar" — ключ, який сервер очікує
+
+  const res = await nextServer.patch<User>("/users/current/avatars", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
+};
+
 export interface UserStats {
   currentWeek: number;
   daysUntilMeeting: number;
@@ -97,4 +111,5 @@ export const getEmotions = async (
     params,
   });
   return data;
+
 };
