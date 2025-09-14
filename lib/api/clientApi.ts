@@ -46,7 +46,7 @@ export interface DiaryListResponse {
 export interface DiaryListParams {
   page: number;
   limit?: number;
-  sortOrder: SortOrder;
+  sortOrder?: SortOrder;
 }
 
 export const getDiaryList = async (

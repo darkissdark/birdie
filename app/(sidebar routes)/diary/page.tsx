@@ -9,10 +9,12 @@ import { getDiaryListServer } from "@/lib/api/serverApi";
 
 const DiaryPage = async () => {
   const queryClient = new QueryClient();
-
+  const params: { page: number } = {
+    page: 1,
+  };
   await queryClient.prefetchQuery({
     queryKey: ["diary"],
-    queryFn: () => getDiaryListServer(),
+    queryFn: () => getDiaryListServer(params),
   });
 
   return (
