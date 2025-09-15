@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import css from "./AddTaskModal.module.css";
@@ -12,8 +11,6 @@ interface TaskModalProps {
 const AddTaskModal = ({ children, closeModal }: TaskModalProps) => {
   const elRef = useRef(document.createElement("div"));
   const el = elRef.current;
-  const router = useRouter();
-  const close = () => router.back();
 
   useEffect(() => {
     document.body.appendChild(el);
@@ -46,7 +43,7 @@ const AddTaskModal = ({ children, closeModal }: TaskModalProps) => {
       onClick={handleBackdropClick}
     >
       <div className={css.modal}>
-        <IoIosClose onClick={close} className={css.closeButton} />
+        <IoIosClose onClick={closeModal} className={css.closeButton} />
         <h2 className={css.taskTitle}>Нове завдання</h2>
         {children}
       </div>
