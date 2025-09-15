@@ -1,56 +1,73 @@
 .sidebar {
-  display: none;
-  width: 300px;
-  flex: 0 0 300px;
-  min-height: 100dvh;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 300px;
+  transform: translateX(-100%);
   background: #ffffff;
-  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 0 24px rgba(17, 24, 39, 0.1);
+  z-index: 51;
+  transition: transform 0.2s ease;
+}
+
+.open {
+  transform: translateX(0);
 }
 
 .inner {
-  padding: 20px 16px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 100%;
+  padding: 16px 16px 24px 16px;
+}
+
+.logoWrapper {
+  display: inline-flex;
+  align-items: center;
 }
 
 .brand {
   display: flex;
+  align-self: center;
   align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 20px;
+  justify-content: space-between;
+  width: 252px;
+  height: 45px;
+}
+
+.logoFull {
+  width: 105px;
+  height: 45px;
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #000000;
+  cursor: pointer;
 }
 
 .nav {
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
 }
 
-.link,
-.logoutBtn,
-.authLink {
-  display: inline-flex;
+.link {
+  display: flex;
   align-items: center;
-  gap: 10px;
-  height: 40px;
-  border-radius: 10px;
-  padding: 0 10px;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 12px;
   text-decoration: none;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: inherit;
-  text-align: left;
-}
-
-.link:hover,
-.authLink:hover,
-.logoutBtn:hover {
-  background: rgba(0, 0, 0, 0.04);
+  color: #000000;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .active {
@@ -59,109 +76,105 @@
 
 .footer {
   margin-top: auto;
-  display: grid;
-  gap: 6px;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #00000026;
+  padding-top: 16px;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.userName small {
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: 12px;
+}
+
+.logoutInline {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #000000;
+  cursor: pointer;
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: #00000080;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
   z-index: 50;
 }
+
 .overlayOpen {
   opacity: 1;
   pointer-events: auto;
 }
 
-.drawer {
-  position: fixed;
-  inset: 0 auto 0 0;
-  width: 300px;
-  transform: translateX(-100%);
-  background: #ffffff;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-  z-index: 51;
-  display: flex;
-  flex-direction: column;
-}
-.drawerOpen {
-  transform: translateX(0);
+@media (min-width: 768px) {
+  .overlay {
+    background: #00000026;
+  }
 }
 
-.drawerHeader {
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.closeBtn {
-  border: none;
-  background: rgba(0, 0, 0, 0.5);
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  color: #fff;
-}
-
-.userRow {
-  display: none;
-  align-items: center;
-  gap: 10px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #e5e5e5;
-  position: relative;
-}
-
-.userName {
-  font-weight: 600;
-}
-
-.logoutInline {
-  margin-left: auto;
-  border: none;
-  background: transparent;
-  height: 36px;
-  padding: 0 10px;
-  border-radius: 10px;
-}
-
-/* ≥1440: desktop */
 @media (min-width: 1440px) {
   .sidebar {
-    display: block;
+    position: sticky;
+    top: 0;
+    transform: none;
+    height: 100dvh;
     width: 312px;
-    flex-basis: 312px;
+    flex: 0 0 312px;
+    box-shadow: none;
+    border-right: 1px solid #00000026;
   }
 
-  .overlay,
-  .drawer {
+  .overlay {
     display: none;
   }
 
   .inner {
-    padding: 24px;
+    padding: 17.5px 16px 24px 16px;
+    gap: 24px;
   }
 
-  .logoFull {
-    width: 105px;
-    height: 45px;
+  .link {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   .userRow {
-    display: flex;
+    padding-top: 24px;
+  }
+
+  .closeBtn {
+    display: none;
+  }
+
+  .brand {
+    width: 264px;
   }
 }

@@ -13,7 +13,6 @@ export default async function Page({ params }: JourneyPageProps) {
   const weekParam = Number(weekNumber);
   const greeting = await fetchGreeting();
   const currentWeek = greeting.curWeekToPregnant;
-  console.log(currentWeek);
 
   return (
     <>
