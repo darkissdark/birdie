@@ -4,12 +4,13 @@ import WeekSelector from "@/components/WeekSelector/WeekSelector";
 import JourneyDetails from "@/components/JourneyDetails/JourneyDetails";
 import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
 
-export default async function Page({
-  params,
-}: {
-  params: { weekNumber: string };
-}) {
-  const weekParam = Number(params.weekNumber);
+type JourneyPageProps = {
+  params: Promise<{ weekNumber?: string[] }>;
+};
+
+export default async function Page({ params }: JourneyPageProps) {
+  const { weekNumber } = await params;
+  const weekParam = Number(weekNumber);
   const greeting = await fetchGreeting();
   const currentWeek = greeting.curWeekToPregnant;
   console.log(currentWeek);

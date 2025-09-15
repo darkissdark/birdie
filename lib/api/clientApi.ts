@@ -134,6 +134,9 @@ export const getBabyToday = async (): Promise<BabyToday> => {
   const isAuth = await checkSession();
 
   const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint);
+  return data.babyToday;
+};
 
 export async function fetchBaby(weekNumber: number): Promise<AboutBaby> {
   const { data } = await nextServer.get<AboutBaby>(`/weeks/${weekNumber}/baby`);
@@ -144,9 +147,6 @@ export async function fetchMom(weekNumber: number): Promise<AboutMom> {
   const { data } = await nextServer.get<AboutMom>(`/weeks/${weekNumber}/mom`);
   return data;
 }
-  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint);
-  return data.babyToday;
-};
 
 export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
   const { data } = await nextServer.get<FeelingsResponse>(
