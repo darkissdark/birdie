@@ -88,12 +88,12 @@ export const uploadImage = async (file: File) => {
 };
 
 export interface UserStats {
-  currentWeek: number;
-  daysUntilMeeting: number;
+  "curWeekToPregnant": number,
+  "daysBeforePregnant": number,
 }
 
 export const getUserStats = async (): Promise<UserStats> => {
-  const { data } = await nextServer.get<UserStats>("/user/stats");
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting");
   return data;
 };
 

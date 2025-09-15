@@ -12,6 +12,9 @@ import {
 import TasksReminderCard from "@/components/TasksReminderCard/TasksReminderCard";
 import BabyTodayCard from "@/components/BabyTodayCard/BabyTodayCard";
 import MomTipCard from "@/components/MomTipCard/MomTipCard";
+import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
+import StatusBlock from "@/components/StatusBlock/StatusBlock";
+import FeelingCheckCard from "@/components/FeelingCheckCard/FeelingCheckCard";
 import css from "./page.module.css";
 
 export default async function DashboardPage() {
@@ -46,11 +49,14 @@ export default async function DashboardPage() {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className={css.pageContainer}>
         <div className={css.cardsContainerLeft}>
+           <GreetingBlock />
+        <StatusBlock />
           <BabyTodayCard />
           <MomTipCard />
         </div>
         <div className={css.cardsContainer}>
           <TasksReminderCard />
+          <FeelingCheckCard />
         </div>
       </div>
     </HydrationBoundary>

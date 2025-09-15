@@ -38,6 +38,7 @@ export const getEmotionsServer = async (
 import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
+import { User } from "@/types/user";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -105,4 +106,29 @@ export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
   );
 
   return data.comfortTips[0];
+};
+
+export interface UserStats {
+  "curWeekToPregnant": number,
+  "daysBeforePregnant": number,
+}
+
+export const getUserStats = async (): Promise<UserStats> => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting",  {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+  return data;
+};
+
+export const getMe = async () => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<User>("/users/current",  {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+  return data;
 };

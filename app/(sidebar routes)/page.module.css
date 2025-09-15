@@ -37,4 +37,8 @@
     display: flex;
     flex-direction: row;
   }
+
+  .cardsContainerLeft {
+    width: 642px;
+  }
 }
