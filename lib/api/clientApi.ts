@@ -170,3 +170,15 @@ export const getComfortTips = async (
   );
   return data.comfortTips ?? [];
 };
+
+export interface UserToUpdate {
+  name?: string;
+  email?: string;
+  dueDate?: string;
+  babyGender?: string;
+}
+
+export const updateUser = async (updatedUser: UserToUpdate) => {
+  const { data } = await nextServer.patch<User>("/users/current", updatedUser);
+  return data;
+};
