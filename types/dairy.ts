@@ -8,7 +8,7 @@ export interface DiaryEntry {
   title: string;
   date: string;
   description: string;
-  emotions: string[];
+  emotions: Emotion[];
 }
 
 export type SortOrder = "asc" | "desc";

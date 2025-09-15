@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import OnboardingForm from "../../../components/OnboardingForm/OnboardingForm";
 import styles from "./OnboardingPage.module.css";
+import Link from "next/link";
 
 export default function EditProfilePage() {
   const router = useRouter();
@@ -18,27 +19,31 @@ export default function EditProfilePage() {
 
     setIsLoading(false);
     console.log("Form data submitted successfully!");
-    router.push("/my-day");
+    router.push("/");
   };
 
   return (
-    <div
-      className={styles.pageContainer}
-      style={{ display: "flex", justifyContent: "space-between" }}
-    >
-      <div className={styles.formColumn}>
-        <OnboardingForm onSubmit={handleFormSubmit} isLoading={isLoading} />
-      </div>
-      <div className={styles.illustrationColumn}>
-        <Image
-          src="/images/onboarding/tinySprout.jpg"
-          alt="Иллюстрация ростка"
-          width={720}
-          height={900}
-          // fill
-          objectFit="contain"
-          className={styles.treeImage}
-        />
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <Link href={"/"}>
+          <svg className={styles.logo} width={105} height={45}>
+            <use href="/auth/Logo.svg#logo" />
+          </svg>
+        </Link>
+      </header>
+
+      <div className={styles.pageContainer}>
+        <div className={styles.formColumn}>
+          <OnboardingForm onSubmit={handleFormSubmit} isLoading={isLoading} />
+        </div>
+        <div className={styles.illustrationColumn}>
+          <Image
+            src="/images/onboarding/tinySprout.jpg"
+            alt="Иллюстрация ростка"
+            width={720}
+            height={900}
+          />
+        </div>
       </div>
     </div>
   );
