@@ -20,28 +20,42 @@
   position: relative;
 }
 
-/* Tablet devices */
-@media only screen and (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
+.container {
+  max-width: 1440px;
 }
-/* Desktop devices */
-@media only screen and (min-width: 1440px) {
+
+.logo {
+  margin-top: 22px;
+}
+
+.header {
+  position: absolute;
+  height: 72px;
+}
+
+@media screen and (max-width: 1439px) {
   .container {
-    max-width: 1440px;
-  }
-
-  .logo {
-    margin-top: 22px;
-  }
-
-  .header {
-    position: absolute;
-    height: 72px;
+    max-width: 767px;
   }
 
   .illustrationColumn {
-    display: block;
+    display: none;
+  }
+
+  .pageContainer {
+    justify-content: center;
+  }
+
+  .header {
+    position: relative;
+  }
+}
+@media screen and (max-width: 767px) {
+  .container {
+    max-width: 375px;
+  }
+
+  .formColumn {
+    width: 335px;
   }
 }
