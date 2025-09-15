@@ -8,6 +8,7 @@ import css from "./Header.module.css";
 
 export default function Header() {
   const openSidebar = useUIStore((s) => s.openSidebar);
+  const isSidebarOpen = useUIStore((s) => s.isSidebarOpen);
 
   return (
     <header className={css.header}>
@@ -18,7 +19,9 @@ export default function Header() {
       <button
         type="button"
         className={css.burgerBtn}
-        aria-label="Відкрити меню"
+        aria-label={isSidebarOpen ? "Закрити меню" : "Відкрити меню"}
+        aria-expanded={isSidebarOpen}
+        aria-controls="sidebar-drawer"
         onClick={openSidebar}
       >
         <Icon id="burger_icon" size={32} />

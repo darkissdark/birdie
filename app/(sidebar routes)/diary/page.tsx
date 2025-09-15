@@ -5,14 +5,21 @@ import {
 } from "@tanstack/react-query";
 import css from "./DiaryPage.module.css";
 import DiaryPageClient from "./DiaryPageClient";
-import { getDiaryListServer } from "@/lib/api/serverApi";
+import { getDiaryListServer, getEmotionsServer } from "@/lib/api/serverApi";
 
 const DiaryPage = async () => {
   const queryClient = new QueryClient();
-
+  const params: { page: number } = {
+    page: 1,
+  };
   await queryClient.prefetchQuery({
     queryKey: ["diary"],
-    queryFn: () => getDiaryListServer(),
+    queryFn: () => getDiaryListServer(params),
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ["emotions"],
+    queryFn: () => getEmotionsServer({ limit: 100 }),
   });
 
   return (

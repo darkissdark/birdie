@@ -2,13 +2,15 @@ import { DiaryEntry } from "@/types/dairy";
 import css from "./DiaryEntryCard.module.css";
 import { useMediaQuery } from "react-responsive";
 import { useRouter } from "next/navigation";
+import { Emotion } from "@/lib/api/clientApi";
 
 interface DiaryEntryCardProps {
   entry: DiaryEntry;
+  emotions: Emotion[];
   onSelect?: (entry: DiaryEntry) => void;
 }
 
-const DiaryEntryCard = ({ entry, onSelect }: DiaryEntryCardProps) => {
+const DiaryEntryCard = ({ entry, emotions, onSelect }: DiaryEntryCardProps) => {
   const router = useRouter();
   const isDesktop = useMediaQuery({ minWidth: 1440 });
 
@@ -28,6 +30,11 @@ const DiaryEntryCard = ({ entry, onSelect }: DiaryEntryCardProps) => {
     day: "numeric",
   });
 
+  const getEmotionTitle = (emotionId: string) => {
+    const emotion = emotions.find((emo) => emo._id === emotionId);
+    return emotion?.title || "Невідома емоція";
+  };
+
   return (
     <li className={css.diaryCardListItem} onClick={handleItemListClick}>
       <div className={css.diaryCardListItemWrapper}>
@@ -36,8 +43,8 @@ const DiaryEntryCard = ({ entry, onSelect }: DiaryEntryCardProps) => {
       </div>
       <ul className={css.diaryCardListItemWrapperEmotions}>
         {entry.emotions.map((emo, index) => (
-          <li key={`${emo._id}-${index}`} className={css.emotionsItem}>
-            {emo.title}
+          <li key={`${emo}-${index}`} className={css.emotionsItem}>
+            {getEmotionTitle(emo)}
           </li>
         ))}
       </ul>

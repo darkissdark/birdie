@@ -102,7 +102,7 @@ const LoginForm = () => {
                 </button>
                 {error && <p className={css.apiError}>{error}</p>}
                 <p className={css.text}> Немає аккаунту?</p>
-                <Link href={"/auth/login"} className={css.link}>
+                <Link href={"/auth/register"} className={css.link}>
                   Зареєструватися
                 </Link>
               </Form>

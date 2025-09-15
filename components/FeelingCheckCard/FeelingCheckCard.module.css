@@ -1,0 +1,64 @@
+.wellbeingContainer {
+  background-color: #fdf2f8;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 384px;
+  margin: 0 auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.wellbeingTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 24px 0;
+  line-height: 1.3;
+}
+
+.recommendationsSection {
+  margin-bottom: 24px;
+}
+
+.recommendationsLabel {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+  font-weight: 400;
+}
+
+.recommendationsText {
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.journalButton {
+  width: 100%;
+  background-color: #fce7f3;
+  border: none;
+  color: #1f2937;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 9999px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.journalButton:hover {
+  background-color: #fbcfe8;
+}
+
+.journalButton:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #f9a8d4,
+    0 0 0 4px rgba(249, 168, 212, 0.5);
+}
+
+.journalButton:active {
+  background-color: #f9a8d4;
+}

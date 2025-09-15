@@ -25,7 +25,6 @@ export async function middleware(request: NextRequest) {
       // адже сесія може залишатися активною, і тоді потрібно заборонити доступ до публічного маршруту.
       const data = await checkServerSession();
       const setCookie = data.headers["set-cookie"];
-
       if (setCookie) {
         const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
         for (const cookieStr of cookieArray) {

@@ -6,18 +6,27 @@ import { useMediaQuery } from "react-responsive";
 import { useEffect, useState } from "react";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
 import { useQuery } from "@tanstack/react-query";
-import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
+import {
+  DiaryListResponse,
+  getDiaryList,
+  getEmotions,
+} from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { DiaryEntry, SortOrder } from "@/types/dairy";
+import { SortOrder } from "@/types/dairy";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
-  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-
+  const [page] = useState<number>(1);
+  const params = { page, sortOrder };
   const { data, isLoading, isError } = useQuery<DiaryListResponse>({
-    queryKey: ["diary", sortOrder],
-    queryFn: () => getDiaryList(sortOrder),
+    queryKey: ["diary", params],
+    queryFn: () => getDiaryList(params),
+  });
+
+  const { data: emotionsData, isLoading: emotionsLoading } = useQuery({
+    queryKey: ["emotions"],
+    queryFn: () => getEmotions({ limit: 100 }),
   });
 
   useEffect(() => {
@@ -26,17 +35,18 @@ const DiaryPageClient = () => {
     }
   }, [isError]);
 
-  if (isLoading) {
+  if (isLoading || emotionsLoading) {
     return <p>Loading...</p>;
   }
 
   const entries = data?.diaryNotes ?? [];
+  const emotions = emotionsData?.emotions ?? [];
 
   return isDesktop ? (
     <div className={css.diaryMainWrapper}>
       <DiaryList
         entries={entries}
-        onSelect={setSelectedEntry}
+        emotions={emotions}
         setSortOrder={setSortOrder}
         sortOrder={sortOrder}
       />
@@ -45,6 +55,7 @@ const DiaryPageClient = () => {
   ) : (
     <DiaryList
       entries={entries}
+      emotions={emotions}
       sortOrder={sortOrder}
       setSortOrder={setSortOrder}
     />
