@@ -1,43 +1,63 @@
 "use client";
-import {
-  IoIosAddCircleOutline,
-  IoIosArrowDropdown,
-  IoIosArrowDropup,
-} from "react-icons/io";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
-import { DiaryEntry } from "@/types/dairy";
-import { useState } from "react";
+import { DiaryEntry, SortOrder } from "@/types/dairy";
+import { useCallback, useRef, useState } from "react";
 import { AddDiaryEntryModal } from "../AddDiaryEntryForm";
 import { useQueryClient } from "@tanstack/react-query";
-import { Emotion } from "@/lib/api/clientApi";
+import { HiArrowsUpDown } from "react-icons/hi2";
 
 interface DiaryListProps {
   entries: DiaryEntry[];
-  emotions: Emotion[];
   onSelect?: (entry: DiaryEntry) => void;
-  sortOrder: "asc" | "desc";
-  setSortOrder: (order: "asc" | "desc") => void;
+  sortOrder: SortOrder;
+  setSortOrder: (order: SortOrder) => void;
+  fetchNextPage: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
 const DiaryList = ({
   entries,
-  emotions,
   onSelect,
   sortOrder,
   setSortOrder,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
 }: DiaryListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const hasValidDates = entries?.some((e) => e.date);
   const queryClient = useQueryClient();
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const lastEntryRef = useCallback(
+    (node: HTMLLIElement | null) => {
+      if (isFetchingNextPage) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
+  );
 
   const handleToggleSort = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    // На апі йдуть запроси нормальні, як у свагері описано, а у відповідь одне й теж сортування
   };
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const uniqueEntries = entries.filter(
+    (entry, index, self) => self.findIndex((e) => e._id === entry._id) === index
+  );
 
   return (
     <div className={css.diaryWrapper}>
@@ -47,11 +67,7 @@ const DiaryList = ({
         <div className={css.titlesort}>
           <h2 className={css.subtitle}>Ваші записи</h2>
           <button className={css.sortButton} onClick={handleToggleSort}>
-            {sortOrder === "asc" ? (
-              <IoIosArrowDropup className={css.sortLogo} />
-            ) : (
-              <IoIosArrowDropdown className={css.sortLogo} />
-            )}
+            <HiArrowsUpDown className={css.sortLogo} />
           </button>
         </div>
 
@@ -69,16 +85,29 @@ const DiaryList = ({
 
       <div className={css.wrapperList}>
         {hasValidDates ? (
-          <ul className={css.diaryCardList}>
-            {entries.map((entry) => (
-              <DiaryEntryCard
-                key={entry._id}
-                entry={entry}
-                emotions={emotions}
-                onSelect={onSelect}
-              />
-            ))}
-          </ul>
+          <>
+            <ul className={css.diaryCardList}>
+              {uniqueEntries.map((entry, index) => {
+                const isLast = index === entries.length - 1;
+                return (
+                  <DiaryEntryCard
+                    key={entry._id}
+                    entry={entry}
+                    onSelect={onSelect}
+                    ref={isLast ? lastEntryRef : null}
+                  />
+                );
+              })}
+            </ul>
+            {isFetchingNextPage && (
+              <div className={css.loadingMore}>
+                Завантаження додаткових записів...
+              </div>
+            )}
+            {hasNextPage && !isFetchingNextPage && (
+              <div className={css.endOfList}>📝 Всі записи завантажено</div>
+            )}
+          </>
         ) : (
           <p className={css.warningText}>Наразі записів немає</p>
         )}

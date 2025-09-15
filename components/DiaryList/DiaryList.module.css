@@ -98,11 +98,27 @@
 
 .warningText{
     text-align: center;
+    padding: 15px;
+    color: #666;
 }
 
 .wrapperList {
     width: 100%;
 }
+
+.endOfList{
+    text-align: center;
+    padding: 15px;
+    color: #666;
+}
+
+
+.loadingMore {
+    text-align: center;
+    padding: 15px;
+    color: #666;
+}
+
 
 @media (min-width: 1440px) {
     .diaryWrapper {

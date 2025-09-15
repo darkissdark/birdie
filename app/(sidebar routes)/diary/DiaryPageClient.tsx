@@ -5,28 +5,30 @@ import css from "./DiaryPageClient.module.css";
 import { useMediaQuery } from "react-responsive";
 import { useEffect, useState } from "react";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
-import { useQuery } from "@tanstack/react-query";
-import {
-  DiaryListResponse,
-  getDiaryList,
-  getEmotions,
-} from "@/lib/api/clientApi";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { SortOrder } from "@/types/dairy";
+import Greeting from "@/components/GreetingBlock/GreetingBlock";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-  const [page] = useState<number>(1);
-  const params = { page, sortOrder };
-  const { data, isLoading, isError } = useQuery<DiaryListResponse>({
-    queryKey: ["diary", params],
-    queryFn: () => getDiaryList(params),
-  });
 
-  const { data: emotionsData, isLoading: emotionsLoading } = useQuery({
-    queryKey: ["emotions"],
-    queryFn: () => getEmotions({ limit: 100 }),
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<DiaryListResponse>({
+    queryKey: ["diary", sortOrder],
+    queryFn: ({ pageParam = 1 }) =>
+      getDiaryList({ page: pageParam as number, sortOrder }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
   });
 
   useEffect(() => {
@@ -35,29 +37,35 @@ const DiaryPageClient = () => {
     }
   }, [isError]);
 
-  if (isLoading || emotionsLoading) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  const entries = data?.diaryNotes ?? [];
-  const emotions = emotionsData?.emotions ?? [];
+  const entries = data?.pages.flatMap((page) => page.diaryNotes) ?? [];
 
   return isDesktop ? (
-    <div className={css.diaryMainWrapper}>
-      <DiaryList
-        entries={entries}
-        emotions={emotions}
-        setSortOrder={setSortOrder}
-        sortOrder={sortOrder}
-      />
-      <DiaryEntryDetails />
-    </div>
+    <>
+      <Greeting />
+      <div className={css.diaryMainWrapper}>
+        <DiaryList
+          entries={entries}
+          setSortOrder={setSortOrder}
+          sortOrder={sortOrder}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        />
+        <DiaryEntryDetails />
+      </div>
+    </>
   ) : (
     <DiaryList
       entries={entries}
-      emotions={emotions}
       sortOrder={sortOrder}
       setSortOrder={setSortOrder}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
     />
   );
 };
