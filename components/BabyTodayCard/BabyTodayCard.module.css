@@ -1,0 +1,108 @@
+.card {
+  border-radius: 32px;
+  padding: 24px;
+  min-width: 335px;
+  width: 100%;
+  background: #fff4f6;
+}
+
+.title {
+  font-weight: 700;
+  color: #000;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  margin-bottom: 16px;
+}
+
+.imageContainer {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 24px;
+  width: 287px;
+  height: 216px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.statsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.statsList span {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.statsList p {
+  font-size: 14px;
+}
+
+.description {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+/* !TABLET */
+@media screen and (min-width: 768px) {
+  .boxImgAndStats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .imageContainer {
+    margin-bottom: 0px;
+  }
+
+  .imageContainer {
+    width: 257px;
+    height: 194px;
+  }
+
+  .statsList {
+    margin-bottom: 0px;
+  }
+}
+
+/* !DESKTOP */
+@media only screen and (min-width: 1440px) {
+  .card {
+    width: 642px;
+    height: 421px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .statsList p {
+    font-size: 16px;
+  }
+
+  .statsList span {
+    font-size: 16px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .descriptionBox {
+    max-height: 96px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+}

@@ -1,54 +1,58 @@
-"use client";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import {
+  getTasksServer,
+  getBabyToday,
+  getMomTip,
+  checkServerSession,
+} from "@/lib/api/serverApi";
+import TasksReminderCard from "@/components/TasksReminderCard/TasksReminderCard";
+import BabyTodayCard from "@/components/BabyTodayCard/BabyTodayCard";
+import MomTipCard from "@/components/MomTipCard/MomTipCard";
+import css from "./page.module.css";
 
-import { useState } from "react";
-import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
+export default async function DashboardPage() {
+  const queryClient = new QueryClient();
 
-export default function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const authResponse = await checkServerSession();
+  const isAuth = authResponse?.data?.success || false;
+
+  const prefetchPromises = [
+    queryClient.prefetchQuery({
+      queryKey: ["momTip", 1],
+      queryFn: () => getMomTip(1),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ["babyToday"],
+      queryFn: getBabyToday,
+    }),
+  ];
+
+  if (isAuth) {
+    prefetchPromises.push(
+      queryClient.prefetchQuery({
+        queryKey: ["tasks"],
+        queryFn: getTasksServer,
+      })
+    );
+  }
+
+  await Promise.all(prefetchPromises);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          padding: "12px 24px",
-          background: "linear-gradient(135deg, #fbb6ce 0%, #f687b3 100%)",
-          color: "white",
-          border: "none",
-          borderRadius: "25px",
-          fontSize: "16px",
-          fontWeight: "600",
-          cursor: "pointer",
-          boxShadow: "0 4px 12px rgba(251, 182, 206, 0.4)",
-          zIndex: 1000,
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-2px)";
-          e.currentTarget.style.boxShadow =
-            "0 6px 20px rgba(251, 182, 206, 0.6)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow =
-            "0 4px 12px rgba(251, 182, 206, 0.4)";
-        }}
-      >
-        + Додати запис
-      </button>
-
-      {isModalOpen && (
-        <AddDiaryEntryModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSuccess={() => {
-            setIsModalOpen(false);
-          }}
-        />
-      )}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className={css.pageContainer}>
+        <div className={css.cardsContainerLeft}>
+          <BabyTodayCard />
+          <MomTipCard />
+        </div>
+        <div className={css.cardsContainer}>
+          <TasksReminderCard />
+        </div>
+      </div>
+    </HydrationBoundary>
   );
 }
