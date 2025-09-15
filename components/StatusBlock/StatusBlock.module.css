@@ -1,15 +1,23 @@
+/* Mobile First - 375px base */
 .container {
   display: flex;
-  gap: 16px;
-  margin: 16px 0;
+  flex-direction: row;
+  gap: 12px;
+  width: 375px;
+  height: 121px;
 }
 
 .statItem {
-  background-color: #fdf2f8;
-  border-radius: 12px;
-  padding: 16px;
   flex: 1;
-  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 0px solid var(--color-scheme-border);
+  border-radius: 32px;
+  padding: 16px;
+  width: 159px;
+  height: 105px;
+  background: var(--color-scheme-foreground);
 }
 
 .errorItem {
@@ -17,19 +25,67 @@
 }
 
 .label {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  font-family: var(--font-family);
   font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--color-scheme-text);
 }
 
 .value {
-  font-size: 32px;
+  font-family: var(--second-family);
   font-weight: 700;
-  color: #111827;
-  line-height: 1;
+  font-size: 40px;
+  line-height: 120%;
+  letter-spacing: 0.01em;
+  color: var(--color-scheme-text);
 }
 
 .errorValue {
   color: #ef4444;
+}
+
+/* Tablet - 768px and up */
+@media screen and (min-width: 768px) {
+  .container {
+    gap: 16px;
+    width: 768px;
+    height: 121px;
+  }
+
+  .statItem {
+    border: 0px solid var(--color-scheme-border);
+    border-radius: 32px;
+    padding: 16px;
+    width: 336px;
+    height: 105px;
+  }
+
+  .label {
+    margin-bottom: 8px;
+  }
+}
+
+/* Desktop - 1440px and up */
+@media only screen and (min-width: 1440px) {
+  .container {
+    gap: 32px;
+    min-width: 642px;
+  }
+
+  .statItem {
+    padding: 20px;
+    max-width: 305px;
+    height: 127px;
+  }
+
+  .label {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .value {
+    font-size: 56px;
+  }
 }
