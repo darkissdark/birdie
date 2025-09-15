@@ -13,7 +13,6 @@
   font-weight: 500;
   color: #374151;
   font-size: 1rem;
-  margin-bottom: 4px;
 }
 
 /* === ІНПУТИ === */
@@ -55,7 +54,7 @@
 }
 
 .textarea {
-  min-height: 258px;
+  min-height: 294px;
   line-height: 1.5;
   resize: none;
 }
@@ -198,7 +197,7 @@
 }
 
 .selectDropdownInner {
-  max-height: 200px;
+  max-height: 220px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -275,6 +274,8 @@
 
 .checkbox svg {
   display: block;
+  stroke: white;
+  stroke-width: 3.6px;
 }
 
 /* === СТАНИ ТА ПОВІДОМЛЕННЯ === */
@@ -424,7 +425,7 @@
 /* === АДАПТИВНІСТЬ === */
 @media (max-width: 768px) {
   .selectDropdown {
-    max-height: 180px;
+    max-height: 220px;
     z-index: 10001;
   }
 
