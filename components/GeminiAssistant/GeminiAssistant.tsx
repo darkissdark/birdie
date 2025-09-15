@@ -126,7 +126,7 @@ export const GeminiAssistant: React.FC = () => {
 
     try {
       const context: UserContext = {
-        userId: user.id,
+        userId: user._id,
         name: user.name,
         email: user.email,
         dueDate: user.dueDate,
