@@ -66,23 +66,34 @@
   gap: 16px;
   margin-bottom: 16px;
 }
+/* xxxxxxxxxxxxxxxxxxxx */
 @media (min-width: 768px) {
   .babyImg {
     width: 656px;
-    height: 379px;
   }
 }
 @media (min-width: 1440px) {
   .contentList.baby {
+    height: 467px;
     display: flex;
     gap: 32px;
+    overflow-x: auto;
+  }
+  .contentList.feelings {
+    height: 194px;
+    overflow-x: auto;
+  }
+  .contentList.tips {
+    height: 322px;
+    overflow-x: auto;
   }
   .babyImage {
     margin-bottom: 0;
   }
   .babyImg {
     width: 461px;
-    height: 379px;
+    /* height: 100%; */
+    /* height: 379px; */
   }
 }
 /* @media (min-width: 768px) {}
@@ -159,11 +170,12 @@
   color: #000;
 }
 @media (min-width: 1440px) {
-  .contentList.tasks {
+  /* .contentList.tasks {
     width: 390px;
     height: 499px;
-    padding-bottom: 0;
-  }
+    padding: 0;
+    overflow-x: auto;
+  } */
   .mom {
     display: flex;
     gap: 24px;
