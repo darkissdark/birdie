@@ -65,8 +65,13 @@ export const getDiaryList = async (
 };
 
 export const createTask = async (newTask: CreateTask): Promise<Task> => {
-  const { data } = await nextServer.post<Task>("/tasks", newTask);
-  return data;
+  try {
+    const { data } = await nextServer.post<Task>("/tasks", newTask);
+    return data;
+  } catch (error) {
+    console.error("createTask - Error:", error);
+    throw error;
+  }
 };
 
 export const uploadImage = async (file: File) => {
@@ -120,9 +125,8 @@ export const getEmotions = async (
 
 export const getTasks = async (): Promise<Task[]> => {
   try {
-    const response = await nextServer.get<TasksResponse>("/tasks");
-    const tasks = response.data?.tasks;
-    return Array.isArray(tasks) ? tasks : [];
+    const response = await nextServer.get<Task[]>("/tasks");
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error fetching tasks:", error);
     return [];

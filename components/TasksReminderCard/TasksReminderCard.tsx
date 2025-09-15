@@ -3,7 +3,6 @@
 import css from "./TasksReminderCard.module.css";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { BiCheck } from "react-icons/bi";
-import Link from "next/link";
 import { Task } from "@/types/tasks";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTasks, updateTaskStatus } from "@/lib/api/clientApi";
@@ -20,10 +19,13 @@ const TasksReminderCard = () => {
     data: tasks = [],
     isLoading: tasksLoading,
     isError: tasksError,
+    // refetch: refetchTasks,
   } = useQuery<Task[]>({
     queryKey: ["tasks"],
     queryFn: getTasks,
     enabled: !!isAuthenticated,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 
   const queryClient = useQueryClient();
@@ -33,6 +35,9 @@ const TasksReminderCard = () => {
       updateTaskStatus(taskId, isDone),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
+      console.error("Error updating task status:", error);
     },
   });
 
@@ -72,9 +77,9 @@ const TasksReminderCard = () => {
             <p className={css.noTasksDescription}>
               Створіть мершій нове завдання!
             </p>
-            <Link className={css.addTaskButton} href="/auth/register">
+            <button onClick={openModal} className={css.addTaskButton}>
               Створити завдання
-            </Link>
+            </button>
           </div>
         ) : (
           <ul className={css.tasksList}>

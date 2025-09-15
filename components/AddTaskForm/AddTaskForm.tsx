@@ -32,6 +32,10 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
     mutationFn: createTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.refetchQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
+      console.error("Error creating task:", error);
     },
   });
 
@@ -43,6 +47,9 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
       onSuccess: () => {
         actions.resetForm();
         onClose();
+      },
+      onError: (error) => {
+        console.error("Error submitting task:", error);
       },
     });
   };
