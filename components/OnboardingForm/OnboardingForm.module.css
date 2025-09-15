@@ -1,116 +1,99 @@
-.titleContent {
-  margin: 57px 56px 32px;
-  font-family: "Comfortaa", sans-serif;
-  font-weight: 700;
-  font-size: 48px;
-  line-height: 120%;
-  letter-spacing: 0.01em;
-  text-align: center;
-  color: #000;
-}
-.titleContent span {
-  display: block;
+/* mobile */
+
+
+
+
+/* tablet */
+@media screen and (min-width: 768px) {
 }
 
-.avatarSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-}
+/* desktop */
 
-.uploadButton {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
+@media screen and (min-width: 1440px) {
+  .titleContent {
+    margin: 130px 56px 32px;
+    font-family: "Comfortaa", sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 120%;
+    letter-spacing: 0.01em;
+    text-align: center;
+    color: #000;
+  }
 
-  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
-  border-radius: 100px;
-  padding: 8px 20px;
-  width: 179px;
-  height: 42px;
-  background: rgba(0, 0, 0, 0.05);
+  .titleContent span {
+    display: block;
+  }
 
-  font-family: "Lato", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 160%;
-  color: #000;
+  .labelGender {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #000;
+  }
 
-  cursor: pointer;
-}
+  .form {
+    width: 480px;
+    margin: 0 auto;
+  }
 
-.labelGender {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #000;
-}
+  .formField {
+    /* margin: 32px 56px 0 56px; */
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
 
-.formField {
-  margin: 32px 56px 0 56px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
+  .selectGender {
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: 12px;
+    padding: 8px 12px;
+    width: 480px;
+    height: 40px;
+    background: #f2f2f2;
 
-.labelGender {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #000;
-}
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #7f7f7f;
+  }
 
-.selectGender {
-  border: 1px solid rgba(255, 255, 255, 0);
-  border-radius: 12px;
-  padding: 8px 12px;
-  width: 480px;
-  height: 40px;
-  background: #f2f2f2;
+  .labelbirthDate {
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #000;
+  }
 
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #7f7f7f;
-}
+  .input {
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: 12px;
+    padding: 8px 12px;
+    width: 100%;
+    height: 40px;
+    background: #f2f2f2;
 
-.labelbirthDate {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #000;
-}
-
-.input {
-  border: 1px solid rgba(255, 255, 255, 0);
-  border-radius: 12px;
-  padding: 8px 12px;
-  width: 480px;
-  height: 40px;
-  background: #f2f2f2;
-
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #7f7f7f;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #7f7f7f;
+  }
 }
 
 .submitButton {
-  margin: 32px 56px 0 56px;
+  /* margin: 32px 56px 0 56px; */
+  margin-top: 32px;
   border-bottom: 4px solid #ffcbd3;
   border-radius: 100px;
   padding: 10px 24px;
   width: 480px;
   height: 46px;
-  border: none;
 
   background: #ffdae0;
 
@@ -121,19 +104,44 @@
   color: #000;
 }
 
-/* .submitButton[data-gender="boy"] {
-  background-color: #4a90e2; 
-} */
+.submitButton[data-gender="boy"] {
+  background-color: #c4f2fe;
+  border-bottom: 4px solid #adeffe;
+}
 
 .submitButton[data-gender="girl"] {
   background-color: #ffdae0;
+  border-bottom: 4px solid #ffcbd3;
 }
 
-/* .submitButton[data-gender="unknown"] {
-  background-color: #f7c948;
-} */
+.submitButton[data-gender="unknown"] {
+  background-color: #fef1db;
+  border-bottom: 4px solid #feeccc;
+}
 
 .submitButton:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+}
+
+.selectWrapper {
+  position: relative;
+  width: 480px;
+}
+
+.selectGender {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.customArrow {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid #333;
+  border-bottom: 2px solid #333;
+  transform: translateY(-50%) rotate(-45deg);
+  pointer-events: none;
 }
