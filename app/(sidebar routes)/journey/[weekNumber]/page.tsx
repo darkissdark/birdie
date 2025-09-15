@@ -2,7 +2,7 @@ import { fetchGreeting } from "@/lib/api/serverApi";
 import css from "./JourneyPage.module.css";
 import WeekSelector from "@/components/WeekSelector/WeekSelector";
 import JourneyDetails from "@/components/JourneyDetails/JourneyDetails";
-import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
+// import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
 
 type JourneyPageProps = {
   params: Promise<{ weekNumber?: string[] }>;

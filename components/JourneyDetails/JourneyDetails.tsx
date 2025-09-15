@@ -67,7 +67,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
   //   ],
   // };
   // ============================
-  const categoryIcons: Record<string, JSX.Element> = {
+  const categoryIcons: Record<string, React.ReactElement> = {
     Харчування: <Icon id="tableware_icon" size={24} />,
     Активність: <Icon id="fitness_icon" size={24} />,
     Відпочинок: <Icon id="chair_icon" size={24} />,

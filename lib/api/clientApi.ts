@@ -5,6 +5,9 @@ import { DiaryEntry, SortOrder } from "@/types/dairy";
 import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
+import { AboutBaby, AboutMom } from "@/types/weeks";
+
+export type { AboutBaby, AboutMom };
 
 export interface Credentials {
   name?: string;

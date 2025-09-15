@@ -6,7 +6,7 @@ import { logErrorResponse } from "@/app/api/_utils/utils";
 import { AboutBaby } from "@/types/weeks";
 
 type Props = {
-  params: Promise<{ weekNumber: number }>;
+  params: Promise<{ weekNumber: string }>;
 };
 
 export async function GET(request: Request, { params }: Props) {
