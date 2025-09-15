@@ -4,6 +4,7 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/lib/api/clientApi";
 import type { CreateTask, Task } from "../../types/task";
+import Button from "../Button/Button";
 
 interface TaskFormProps {
   onClose: () => void;
@@ -17,15 +18,15 @@ const ValidationSchema = Yup.object().shape({
     .default(() => new Date())
     .typeError("Введіть коректну дату"),
 });
-const formatDate = (date: Date): string => {
+const formatDateISO = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
-  return `${day}.${month}.${year}`;
+  return `${year}-${month}-${day}`;
 };
 
 const AddTaskForm = ({ onClose }: TaskFormProps) => {
-  const today = formatDate(new Date());
+  const today = formatDateISO(new Date());
   const queryClient = useQueryClient();
   const mutation = useMutation<Task, Error, CreateTask>({
     mutationFn: createTask,
@@ -70,14 +71,10 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
             <Field type="date" id="date" name="date" className={css.data} />
             <ErrorMessage name="date" component="div" className={css.error} />
           </div>
-          <div className={css.formDiv}>
-            <button
-              type="submit"
-              disabled={!formik.isValid}
-              className={css.saveButton}
-            >
+          <div className={css.saveButton}>
+            <Button type="submit" variant="primary" disabled={!formik.isValid}>
               Зберегти
-            </button>
+            </Button>
           </div>
         </Form>
       )}

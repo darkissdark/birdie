@@ -8,8 +8,12 @@ import { Task } from "@/types/tasks";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTasks, updateTaskStatus } from "@/lib/api/clientApi";
 import useAuthStore from "@/lib/store/authStore";
+import { useState } from "react";
+import AddTaskModal from "../AddTaskModal/AddTaskModal";
+import AddTaskForm from "../AddTaskForm/AddTaskForm";
 
 const TasksReminderCard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { isAuthenticated } = useAuthStore();
 
   const {
@@ -43,15 +47,22 @@ const TasksReminderCard = () => {
       </div>
     );
   }
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className={css.tasksContainer}>
       <div className={css.tasksHeader}>
         <h2>Важливі завдання</h2>
         {isAuthenticated && (
-          <Link className={css.addTaskLink} href="/auth/register">
+          <button onClick={openModal} className={css.addTaskLink}>
             <IoIosAddCircleOutline className={css.addTask} />
-          </Link>
+          </button>
+        )}
+        {isModalOpen && (
+          <AddTaskModal closeModal={closeModal}>
+            <AddTaskForm onClose={closeModal} />
+          </AddTaskModal>
         )}
       </div>
       <div className={css.tasksList}>
