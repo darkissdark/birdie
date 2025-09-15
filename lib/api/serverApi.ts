@@ -1,6 +1,12 @@
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
-import { DiaryListResponse, DiaryListParams, EmotionsResponse, EmotionsParams } from "./clientApi";
+import {
+  DiaryListResponse,
+  DiaryListParams,
+  EmotionsResponse,
+  EmotionsParams,
+} from "./clientApi";
+import { WeeksGeneralInfo } from "@/types/weeks";
 
 export const getDiaryListServer = async (
   params: DiaryListParams
@@ -39,3 +45,13 @@ export const checkServerSession = async () => {
   });
   return res;
 };
+
+export async function fetchGreeting(): Promise<WeeksGeneralInfo> {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<WeeksGeneralInfo>("/weeks/greeting", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+}

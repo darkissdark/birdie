@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 8px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.weekButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 0px solid rgba(0, 0, 0, 0.15);
+  border-radius: 32px;
+  padding: 16px;
+  min-width: 97px;
+  height: 87px;
+  background: #fff4f6;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.weekButtonActive {
+  border: 4px solid rgba(0, 0, 0, 0.15);
+  border-radius: 32px;
+  padding: 16px;
+  width: 97px;
+  height: 87px;
+  background: #ffcbd3;
+  /* opacity: 1; */
+}
+
+.weekButtonDisabled {
+  background: #f2f2f2;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.weekNumber {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #000;
+}
+
+.weekLabel {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: #000;
+}

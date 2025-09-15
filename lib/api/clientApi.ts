@@ -63,7 +63,6 @@ export const createTask = async (newTask: CreateTask): Promise<Task> => {
   return data;
 };
 
-
 export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("avatar", file); // "avatar" — ключ, який сервер очікує
@@ -111,5 +110,14 @@ export const getEmotions = async (
     params,
   });
   return data;
-
 };
+
+export async function fetchBaby(weekNumber: number): Promise<AboutBaby> {
+  const { data } = await nextServer.get<AboutBaby>(`/weeks/${weekNumber}/baby`);
+  return data;
+}
+
+export async function fetchMom(weekNumber: number): Promise<AboutMom> {
+  const { data } = await nextServer.get<AboutMom>(`/weeks/${weekNumber}/mom`);
+  return data;
+}

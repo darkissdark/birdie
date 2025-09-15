@@ -1,23 +1,26 @@
-import { notFound } from "next/navigation";
+import { fetchGreeting } from "@/lib/api/serverApi";
+import css from "./JourneyPage.module.css";
+import WeekSelector from "@/components/WeekSelector/WeekSelector";
+import JourneyDetails from "@/components/JourneyDetails/JourneyDetails";
+import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
 
-type JourneyPageProps = {
+export default async function Page({
+  params,
+}: {
   params: { weekNumber: string };
-};
+}) {
+  const weekParam = Number(params.weekNumber);
+  const greeting = await fetchGreeting();
+  const currentWeek = greeting.curWeekToPregnant;
+  console.log(currentWeek);
 
-export default async function JourneyPage({ params }: JourneyPageProps) {
-  const { weekNumber } = await params;
-  const weekNum = Number(weekNumber);
-
-  const MAX_WEEKS_OF_PREGNANCY = 40;
-  const MIN_WEEKS_OF_PREGNANCY = 1;
-
-  if (
-    !Number.isInteger(weekNum) ||
-    weekNum < MIN_WEEKS_OF_PREGNANCY ||
-    weekNum > MAX_WEEKS_OF_PREGNANCY
-  ) {
-    notFound();
-  }
-
-  return <div>journeyPage week {weekNum}</div>;
+  return (
+    <>
+      <div className={css.container}>
+        {/* <GreetingBlock /> */}
+        <WeekSelector currentWeek={currentWeek} selectedWeek={weekParam} />
+        <JourneyDetails weekNumber={weekParam} />
+      </div>
+    </>
+  );
 }
