@@ -7,8 +7,8 @@ import { ApiError } from "next/dist/server/api-utils";
 import { useState } from "react";
 import * as Yup from "yup";
 import css from "./ProfileEditForm.module.css";
-// import Link from "next/link";
-// import Image from "next/image";
+import CustomSelect from "../CustomSelect/CustomSelect";
+import { updateUser } from "@/lib/api/clientApi";
 
 interface ProfileFormValues {
   name: string;
@@ -17,16 +17,33 @@ interface ProfileFormValues {
   dueDate: string;
 }
 
-// fix this section myself
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const minDate = new Date(today);
+minDate.setDate(today.getDate() + 7);
+
+const maxDate = new Date(today);
+maxDate.setDate(today.getDate() + 41 * 7);
+
 const Schema = Yup.object().shape({
-  email: Yup.string().email("Некоректний email").required("Обов'язкове поле"), //error message in return section
-  password: Yup.string()
-    .min(8, "Мінімум 8 символів")
-    .required("Обов'язкове поле"),
+  name: Yup.string()
+    .min(2, "Мінімальна довжина 2 символи")
+    .max(20, "Максимальна довжина 20 символів"),
+  email: Yup.string().email("Некоректний email"),
+  babyGender: Yup.string().oneOf(
+    ["boy", "girl", "unknown"],
+    "invalid category"
+  ),
+  dueDate: Yup.date()
+    .min(minDate, "Дата має бути не раніше ніж через 1 тиждень")
+    .max(maxDate, "Дата має бути не пізніше ніж через 41 тиждень"),
 });
 
 const ProfileEditForm = () => {
   const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
+
   const initialValues: ProfileFormValues = {
     name: user?.name || "",
     email: user?.email || "",
@@ -35,30 +52,33 @@ const ProfileEditForm = () => {
   };
 
   const [error, seterror] = useState("");
-  // do the ligc here, request for updating data, set new users and get user from backend and patch - to the backend, receive user, and wrire the user in state.(in store)
   const handleSubmit = async (
     values: ProfileFormValues,
     actions: FormikHelpers<ProfileFormValues>
   ) => {
     try {
-      // const user = await login(values);
-      // setUser(user);
+      const updatedUser = await updateUser(values);
+      setUser({
+        ...user,
+        ...updatedUser,
+      });
       actions.resetForm();
-      // router.push("/");
-      console.log(values);
-      console.log(useAuthStore.getState());
     } catch (error) {
       seterror((error as ApiError).message);
     }
   };
+
   return (
     <div className={css.container}>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
+        enableReinitialize
         validationSchema={Schema}
+        validateOnChange
+        validateOnBlur
       >
-        {({ isValid, dirty }) => (
+        {({ isValid, dirty, resetForm }) => (
           <Form className={css.formProfile}>
             <div className={css.formGroup}>
               <label htmlFor="name" className={css.label}>
@@ -77,43 +97,37 @@ const ProfileEditForm = () => {
             </div>
 
             <div className={css.formGroup}>
-              <label htmlFor="Email" className={css.label}>
+              <label htmlFor="email" className={css.label}>
                 Пошта
               </label>
               <Field
-                id="Email"
-                name="Email"
+                id="email"
+                name="email"
                 type="email"
                 className={css.inputField}
-                placeholder="Пошта"
+                placeholder="hanna@gmail.com"
               />
-              <ErrorMessage name="Email">
+              <ErrorMessage name="email">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
               </ErrorMessage>
             </div>
 
-            {/* change babygender */}
-
             <div className={css.formGroup}>
-              <label htmlFor="gender" className={css.labelGender}>
-                Стать дитини
-              </label>
-              <Field
-                as="select"
-                id="babyGender"
+              <CustomSelect
                 name="babyGender"
-                className={css.selectGender}
-              >
-                <option value="boy">Хлопчик</option>
-                <option value="girl">Дівчинка</option>
-                <option value="unknown">Ще не знаю</option>
-              </Field>
+                label="Стать дитини"
+                options={[
+                  { label: "Хлопчик", value: "boy" },
+                  { label: "Дівчинка", value: "girl" },
+                  { label: "Ще не знаю", value: "unknown" },
+                ]}
+                placeholder="Оберіть стать"
+              />
               <ErrorMessage name="babyGender">
                 {(msg) => <span className={css.errorMessage}>{msg}</span>}
               </ErrorMessage>
             </div>
 
-            {/* edit calendar section  */}
             <div className={css.formGroup}>
               <label htmlFor="dueDate" className={css.labelbirthDate}>
                 Планова дата пологів
@@ -130,11 +144,7 @@ const ProfileEditForm = () => {
             </div>
 
             <div className={css.formAction}>
-              <button
-                type="submit"
-                disabled={!isValid || !dirty}
-                className={css.actionBtn}
-              >
+              <button onClick={() => resetForm()} className={css.actionBtn}>
                 Відминити зміни
               </button>
               <button
