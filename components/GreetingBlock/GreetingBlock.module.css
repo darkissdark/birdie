@@ -1,12 +1,14 @@
-.greetingContainer {
+/* .greetingContainer {
   padding: 16px;
   margin-bottom: 16px;
-}
+} */
 
 .greetingText {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  /* color: #111827; */
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
 }

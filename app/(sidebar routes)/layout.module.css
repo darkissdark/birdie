@@ -23,6 +23,6 @@
 @media (min-width: 1440px) {
   .main {
     width: 1128px;
-    padding: 24px 32px 32px 32px;
+    padding: 24px 32px;
   }
 }

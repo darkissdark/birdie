@@ -1,5 +1,35 @@
 {
   "cSpell.words": [
+    "Активність",
+    "вашого",
+    "Відпочинок",
+    "даних",
+    "дитини",
+    "завантаження",
+    "комфорт",
+    "комфорту",
+    "малюка",
+    "мами",
+    "можете",
+    "Помилка",
+    "Поради",
+    "почуватись",
+    "Розвиток",
+    "сторінки",
+    "Тиждень",
+    "тижня",
+    "Тіло",
+    "факт",
+    "Харчування",
+    "Цікавий",
     "Descr"
-  ]
+  ],
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder:birdie}/.cspell/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  }
 }
