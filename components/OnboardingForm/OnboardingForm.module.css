@@ -1,8 +1,5 @@
 /* mobile */
 
-
-
-
 /* tablet */
 @media screen and (min-width: 768px) {
 }
@@ -45,6 +42,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 8px;
+    position: relative;
   }
 
   .selectGender {
@@ -133,15 +131,18 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
-.customArrow {
-  content: "";
+
+
+.errorMessage {
   position: absolute;
-  right: 16px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  border-left: 2px solid #333;
-  border-bottom: 2px solid #333;
-  transform: translateY(-50%) rotate(-45deg);
-  pointer-events: none;
+  bottom: -20px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #c60000;
+}
+
+.apiError {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #c60000;
 }
