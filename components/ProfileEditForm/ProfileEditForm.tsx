@@ -31,7 +31,10 @@ const Schema = Yup.object().shape({
     .min(2, "Мінімальна довжина 2 символи")
     .max(20, "Максимальна довжина 20 символів"),
   email: Yup.string().email("Некоректний email"),
-  babyGender: Yup.string().oneOf(["boy", "girl", "unkown"], "invalid category"),
+  babyGender: Yup.string().oneOf(
+    ["boy", "girl", "unknown"],
+    "invalid category"
+  ),
   dueDate: Yup.date()
     .min(minDate, "Дата має бути не раніше ніж через 1 тиждень")
     .max(maxDate, "Дата має бути не пізніше ніж через 41 тиждень"),
