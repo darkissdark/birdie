@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { api } from "../api";
 import { cookies } from "next/headers";
 import { isAxiosError } from "axios";
 import { logErrorResponse } from "../_utils/utils";
 import { TasksResponse } from "@/types/tasks";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
 

@@ -5,6 +5,9 @@ import { DiaryEntry, SortOrder } from "@/types/dairy";
 import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
+import { AboutBaby, AboutMom } from "@/types/weeks";
+
+export type { AboutBaby, AboutMom };
 
 export interface Credentials {
   name?: string;
@@ -134,10 +137,19 @@ export const getBabyToday = async (): Promise<BabyToday> => {
   const isAuth = await checkSession();
 
   const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
-
   const { data } = await nextServer.get<WeekGreetingResponse>(endpoint);
   return data.babyToday;
 };
+
+export async function fetchBaby(weekNumber: number): Promise<AboutBaby> {
+  const { data } = await nextServer.get<AboutBaby>(`/weeks/${weekNumber}/baby`);
+  return data;
+}
+
+export async function fetchMom(weekNumber: number): Promise<AboutMom> {
+  const { data } = await nextServer.get<AboutMom>(`/weeks/${weekNumber}/mom`);
+  return data;
+}
 
 export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
   const { data } = await nextServer.get<FeelingsResponse>(

@@ -22,6 +22,7 @@
 
 @media (min-width: 1440px) {
   .main {
-    padding: 24px 32px 32px 16px;
+    width: 1128px;
+    padding: 24px 32px 32px 32px;
   }
 }

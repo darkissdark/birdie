@@ -12,13 +12,12 @@ import {
   getEmotions,
 } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { DiaryEntry, SortOrder } from "@/types/dairy";
+import { SortOrder } from "@/types/dairy";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
-  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-  const [page, setPage] = useState<number>(1);
+  const [page] = useState<number>(1);
   const params = { page, sortOrder };
   const { data, isLoading, isError } = useQuery<DiaryListResponse>({
     queryKey: ["diary", params],
@@ -48,7 +47,6 @@ const DiaryPageClient = () => {
       <DiaryList
         entries={entries}
         emotions={emotions}
-        onSelect={setSelectedEntry}
         setSortOrder={setSortOrder}
         sortOrder={sortOrder}
       />
