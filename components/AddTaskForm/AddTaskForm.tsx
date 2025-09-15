@@ -69,13 +69,18 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
               type="text"
               name="name"
               placeholder="Прийняти вітаміни"
-              className={css.name}
+              className={`${css.name} ${css.inputField}  ${formik.touched.name && formik.errors.name ? css.error : ""}`}
             />
             <ErrorMessage name="name" component="div" className={css.error} />
           </div>
           <div className={css.formDiv}>
             <label htmlFor="date">Дата</label>
-            <Field type="date" id="date" name="date" className={css.data} />
+            <Field
+              type="date"
+              id="date"
+              name="date"
+              className={`${css.date} ${css.inputField}  ${formik.touched.date && formik.errors.name ? css.error : ""}`}
+            />
             <ErrorMessage name="date" component="div" className={css.error} />
           </div>
           <div className={css.saveButton}>
