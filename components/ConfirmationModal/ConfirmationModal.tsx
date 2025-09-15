@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import React from "react";
-import css from "./Confirmation.module.css";
+import css from "./ConfirmationModal.module.css";
 import { IoIosClose } from "react-icons/io";
 
 type ConfirmationModalProps = {

@@ -11,6 +11,7 @@ import { getWeekFromDueDate } from "@/lib/pregnancy/week";
 import BrandLogo from "@/components/Logo/BrandLogo";
 import css from "./SideBar.module.css";
 import { User } from "@/types/user";
+import { ConfirmationModal } from "@/components/ConfirmationModal/ConfirmationModal";
 
 function isUser(v: unknown): v is User {
   return (
@@ -22,8 +23,24 @@ export default function SideBar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isSidebarOpen, closeSidebar } = useUIStore();
+
+  useEffect(() => {
+    const body = document.body;
+    const prev = body.style.overflow;
+    if (isSidebarOpen) {
+      body.style.overflow = "hidden";
+    } else {
+      body.style.overflow = prev || "";
+    }
+    return () => {
+      body.style.overflow = prev || "";
+    };
+  }, [isSidebarOpen]);
+
   const [me, setMe] = useState<User | null>(null);
   const isAuthed = !!me;
+
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     let canceled = false;
@@ -82,13 +99,15 @@ export default function SideBar() {
         },
       ] as const);
 
-  const onLogout = async () => {
+  const confirmLogout = async () => {
     try {
       await api.post("/auth/logout");
+      setShowConfirm(false);
       setMe(null);
+      closeSidebar();
       router.push("/auth/login");
     } catch {
-      //   ConfirmationModal
+      setShowConfirm(false);
     }
   };
 
@@ -134,7 +153,7 @@ export default function SideBar() {
       <button
         type="button"
         className={css.logoutInline}
-        onClick={onLogout}
+        onClick={() => setShowConfirm(true)}
         aria-label="Вийти"
       >
         <Icon id="logout_icon" size={24} aria-hidden />
@@ -167,12 +186,13 @@ export default function SideBar() {
         </div>
       </aside>
 
-      {/* Overlay + Drawer for mobile/tablet */}
+      {/* Overlay + Drawer for mobile/tablet*/}
       <div
         className={`${css.overlay} ${isSidebarOpen ? css.overlayOpen : ""}`}
         onClick={closeSidebar}
       />
       <aside
+        id="sidebar-drawer"
         className={`${css.drawer} ${isSidebarOpen ? css.drawerOpen : ""}`}
         aria-hidden={!isSidebarOpen}
       >
@@ -193,6 +213,16 @@ export default function SideBar() {
         {NavList}
         <div className={css.footer}>{FooterArea}</div>
       </aside>
+
+      {showConfirm && (
+        <ConfirmationModal
+          title="Ви впевнені, що хочете вийти?"
+          confirmButtonText="Так"
+          cancelButtonText="Скасувати"
+          onConfirm={confirmLogout}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </>
   );
 }

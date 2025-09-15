@@ -35,6 +35,9 @@ export const getEmotionsServer = async (
   });
   return data;
 };
+import { TasksResponse, Task } from "@/types/tasks";
+import { BabyToday, WeekGreetingResponse } from "@/types/baby";
+import { ComfortTip, FeelingsResponse } from "@/types/tip";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -55,3 +58,51 @@ export async function fetchGreeting(): Promise<WeeksGeneralInfo> {
   });
   return data;
 }
+
+export const getTasksServer = async (): Promise<Task[]> => {
+  try {
+    const cookieStore = await cookies();
+
+    const { data } = await nextServer.get<TasksResponse>("/tasks", {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+
+    const tasks = data?.tasks;
+    return Array.isArray(tasks) ? tasks : [];
+  } catch (error) {
+    console.error("Error fetching tasks server:", error);
+    return [];
+  }
+};
+
+export const getBabyToday = async (): Promise<BabyToday> => {
+  const cookieStore = await cookies();
+  const isAuth = await checkServerSession();
+
+  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+
+  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+
+  return data.babyToday;
+};
+
+export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.get<FeelingsResponse>(
+    `/weeks/${weekNumber}/mom`,
+    {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    }
+  );
+
+  return data.comfortTips[0];
+};

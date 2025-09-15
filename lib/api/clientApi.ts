@@ -1,7 +1,10 @@
 import { User } from "@/types/user";
-import { CreateTask, Task } from "@/types/task";
+import { CreateTask } from "@/types/task";
 import { nextServer } from "./api";
 import { DiaryEntry, SortOrder } from "@/types/dairy";
+import { TasksResponse, Task } from "@/types/tasks";
+import { BabyToday, WeekGreetingResponse } from "@/types/baby";
+import { ComfortTip, FeelingsResponse } from "@/types/tip";
 
 export interface Credentials {
   name?: string;
@@ -112,6 +115,26 @@ export const getEmotions = async (
   return data;
 };
 
+export const getTasks = async (): Promise<Task[]> => {
+  try {
+    const response = await nextServer.get<TasksResponse>("/tasks");
+    const tasks = response.data?.tasks;
+    return Array.isArray(tasks) ? tasks : [];
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    return [];
+  }
+};
+
+export const updateTaskStatus = async (taskId: string, isDone: boolean) => {
+  return nextServer.patch(`/tasks/status/${taskId}`, { isDone });
+};
+
+export const getBabyToday = async (): Promise<BabyToday> => {
+  const isAuth = await checkSession();
+
+  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+
 export async function fetchBaby(weekNumber: number): Promise<AboutBaby> {
   const { data } = await nextServer.get<AboutBaby>(`/weeks/${weekNumber}/baby`);
   return data;
@@ -121,3 +144,22 @@ export async function fetchMom(weekNumber: number): Promise<AboutMom> {
   const { data } = await nextServer.get<AboutMom>(`/weeks/${weekNumber}/mom`);
   return data;
 }
+  const { data } = await nextServer.get<WeekGreetingResponse>(endpoint);
+  return data.babyToday;
+};
+
+export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
+  const { data } = await nextServer.get<FeelingsResponse>(
+    `/weeks/${weekNumber}/mom`
+  );
+  return data.comfortTips[0];
+};
+
+export const getComfortTips = async (
+  weekNumber: number
+): Promise<ComfortTip[]> => {
+  const { data } = await nextServer.get<FeelingsResponse>(
+    `/weeks/${weekNumber}/mom`
+  );
+  return data.comfortTips ?? [];
+};
