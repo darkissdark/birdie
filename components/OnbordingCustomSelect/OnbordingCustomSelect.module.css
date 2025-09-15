@@ -1,13 +1,15 @@
 .wrapper {
   position: relative;
-  /* width: 220px; */
 }
 
 .label {
+  font-family: "Lato", sans-serif;
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+  font-weight: 400;
+  line-height: 150%;
+  font-size: 16px;
+  color: #000;
 }
 
 .control {
@@ -17,15 +19,24 @@
   justify-content: space-between;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.05);
-  /* width: 704px;
-  height: 37px; */
   border: 2px solid rgba(255, 255, 255, 0);
   border-radius: 12px;
   padding: 8px 12px;
+  height: 40px;
+
+  outline: none;
+  transition: border 0.2s ease;
+
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7f7f7f;
 }
 
-.control:hover {
-  border-color: #4a90e2;
+.control:hover,
+.control:focus {
+  border-color: #e9708d;
 }
 
 .errorInput {
@@ -45,7 +56,6 @@
   padding: 6px 0;
   list-style: none;
   z-index: 10;
-  /* width: 704px; */
   background: #f2f2f2;
 }
 
