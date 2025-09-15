@@ -16,12 +16,10 @@ import {
   RiEmotionHappyFill,
   RiParagraph,
 } from "react-icons/ri";
-import axiosInstance from "@/lib/axios";
 import { TbBook2 } from "react-icons/tb";
 import { BsCalendar2Event } from "react-icons/bs";
 import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
 import AddTaskModal from "@/components/AddTaskModal/AddTaskModal";
-// import { AddTaskForm } from "@/components/AddTaskForm/AddTaskForm";
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
 
@@ -417,8 +415,10 @@ ${weekInfo.momHint}
             <p>Записуйте своє відчуття, емоції та важливі моменти</p>
             <button
               className={styles.quickReplyButton}
-              onClick={() => setShowDiaryModal(true)}
-              style={{ marginTop: "16px" }}
+              onClick={() => {
+                console.log("Кнопка натиснута");
+                setShowDiaryModal(true);
+              }}
             >
               <RiAddLine /> Додати новий запис
             </button>
