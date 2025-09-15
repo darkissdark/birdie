@@ -111,7 +111,8 @@
 @media only screen and (min-width: 1440px) {
   .wellbeingContainer {
     padding: 24px;
-    max-width: 384px;
+    width: 390px;
+    height: 210px;
   }
 
   .wellbeingTitle {
@@ -129,5 +130,6 @@
   }
 
   .journalButton {
+    margin-bottom: 24px;
   }
 }

@@ -109,26 +109,44 @@ export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
 };
 
 export interface UserStats {
-  "curWeekToPregnant": number,
-  "daysBeforePregnant": number,
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
 }
 
 export const getUserStats = async (): Promise<UserStats> => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<UserStats>("/weeks/greeting",  {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data;
 };
 
 export const getMe = async () => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<User>("/users/current",  {
+  const { data } = await nextServer.get<User>("/users/current", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+};
+
+export const updateTaskStatusServer = async (
+  taskId: string,
+  isDone: boolean
+): Promise<Task> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.patch<Task>(
+    `/tasks/status/${taskId}`,
+    { isDone },
+    {
       headers: {
         Cookie: cookieStore.toString(),
       },
-    });
+    }
+  );
   return data;
 };
