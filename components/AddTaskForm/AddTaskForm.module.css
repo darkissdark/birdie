@@ -12,9 +12,9 @@
   flex-direction: column;
   width: 295px;
   height: 66px;
-  font-family: "Comfortaa", sans-serif;
+  font-family: "Lato", sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 150%;
 }
 
@@ -22,7 +22,6 @@
 .date {
   margin-top: 4px;
   padding: 8px 12px;
-  font-size: 14px;
   border: 2px solid #fff;
   background: rgba(0, 0, 0, 0.05);
   height: 37px;
