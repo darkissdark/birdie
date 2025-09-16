@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "/share/ogImage.jpg",
+        url: "https://st2.depositphotos.com/3827765/5416/v/600/depositphotos_54165269-stock-illustration-stork-carrying-a-baby.jpg",
         width: 600,
         height: 446,
         alt: "Лелека - Твій помічник під час вагітності",
