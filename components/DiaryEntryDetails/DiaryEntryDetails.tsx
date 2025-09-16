@@ -1,6 +1,6 @@
 "use client";
 
-import { DiaryEntry } from "@/types/dairy";
+import { DiaryEntry } from "@/types/diary";
 import Icon from "../Icon/Icon";
 import css from "./DiaryEntryDetails.module.css";
 import { useState } from "react";
@@ -34,7 +34,7 @@ const DiaryEntryDetails = ({
   if (!entry) return <p>Запис не знайдено</p>;
 
   const date = entry
-    ? new Date(entry.date).toLocaleDateString("uk-UA", {
+    ? new Date(entry.createdAt || new Date()).toLocaleDateString("uk-UA", {
         year: "numeric",
         month: "long",
         day: "numeric",

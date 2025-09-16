@@ -3,7 +3,7 @@
 // import { useEffect, useState } from "react";
 // import { useParams, useRouter } from "next/navigation";
 // import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
-// import { DiaryEntry } from "@/types/dairy";
+// import { DiaryEntry } from "@/types/diary";
 
 // export default function DiaryEntryPage() {
 //   const { entryId } = useParams(); // дістаємо id з URL
@@ -89,7 +89,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
-import { DiaryEntry } from "@/types/dairy";
+import { DiaryEntry } from "@/types/diary";
 
 export default function DiaryEntryPage() {
   const params = useParams();

@@ -6,7 +6,7 @@ import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { AboutBaby, AboutMom } from "@/types/weeks";
-import { DiaryEntryData, SortOrder } from "@/types/diary";
+import { DiaryEntry, DiaryEntryData, SortOrder } from "@/types/diary";
 
 export type { AboutBaby, AboutMom };
 

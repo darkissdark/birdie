@@ -39,7 +39,7 @@ import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { User } from "@/types/user";
-import { DiaryEntry } from "@/types/dairy";
+import { DiaryEntry } from "@/types/diary";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();

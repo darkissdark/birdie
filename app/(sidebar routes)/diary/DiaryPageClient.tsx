@@ -8,9 +8,8 @@ import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails"
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { DiaryEntry, SortOrder } from "@/types/dairy";
+import { DiaryEntry, SortOrder } from "@/types/diary";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
-import { SortOrder } from "@/types/diary";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
