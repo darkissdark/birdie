@@ -42,6 +42,7 @@ export default function EditProfilePage() {
             alt="Иллюстрация ростка"
             width={720}
             height={900}
+            priority
           />
         </div>
       </div>

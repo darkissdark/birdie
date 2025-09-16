@@ -1,6 +1,6 @@
 "use client";
 
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Form, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import styles from "./OnboardingForm.module.css";
 import OnboardingAvatar from "../OnboardingAvatar/OnboardingAvatar";
@@ -10,13 +10,14 @@ import { updateUser } from "@/lib/api/clientApi";
 import { useState } from "react";
 import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
+import OnboardingCustomDatePicker from "../OnboardingCustomDatePicker/OnboardingCustomDatePicker";
 
 interface OnboardingFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
   isLoading: boolean;
 }
 
-interface OnborgindFormValues {
+interface OnboardingFormValues {
   babyGender: string;
   dueDate: string;
 }
@@ -48,8 +49,8 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
   const [error, seterror] = useState("");
   const router = useRouter();
   const handleSubmit = async (
-    values: OnborgindFormValues,
-    actions: FormikHelpers<OnborgindFormValues>
+    values: OnboardingFormValues,
+    actions: FormikHelpers<OnboardingFormValues>
   ) => {
     try {
       const updatedUser = await updateUser(values);
@@ -63,6 +64,7 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
       seterror((error as ApiError).message);
     }
   };
+
   return (
     <>
       {/* Page title */}
@@ -76,7 +78,7 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
         validateOnChange
         validateOnBlur
       >
-        {({ isSubmitting, isValid, dirty, values }) => (
+        {({ isSubmitting, values, setFieldValue }) => (
           <Form className={styles.form}>
             <div className={styles.formOnboarding}>
               {/* --- Gender field --- */}
@@ -103,11 +105,10 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
                 <label htmlFor="dueDate" className={styles.labelbirthDate}>
                   Планова дата пологів
                 </label>
-                <Field
-                  id="dueDate"
-                  name="dueDate"
-                  type="date"
-                  className={styles.input}
+                <OnboardingCustomDatePicker
+                  value={values.dueDate}
+                  onChange={(date) => setFieldValue("dueDate", date)}
+
                 />
                 <ErrorMessage name="dueDate">
                   {(msg) => <span className={styles.errorMessage}>{msg}</span>}
@@ -118,8 +119,8 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
               <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={!isValid || !dirty}
                 data-gender={values.babyGender}
+                disabled={!values.babyGender || !values.dueDate || isSubmitting || isLoading}
               >
                 {isSubmitting || isLoading ? "Збереження..." : "Зберегти"}
               </button>
