@@ -3,17 +3,22 @@
 import DiaryList from "@/components/DiaryList/DiaryList";
 import css from "./DiaryPageClient.module.css";
 import { useMediaQuery } from "react-responsive";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { SortOrder } from "@/types/dairy";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
+import { SortOrder } from "@/types/diary";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const {
     data,
@@ -23,13 +28,17 @@ const DiaryPageClient = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<DiaryListResponse>({
-    queryKey: ["diary", sortOrder],
+    queryKey: ["diary", { sortOrder }],
     queryFn: ({ pageParam = 1 }) =>
       getDiaryList({ page: pageParam as number, sortOrder }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
   });
+
+  const entries = useMemo(() => {
+    return data?.pages.flatMap((page) => page.diaryNotes) ?? [];
+  }, [data?.pages]);
 
   useEffect(() => {
     if (isError) {
@@ -41,7 +50,9 @@ const DiaryPageClient = () => {
     return <p>Loading...</p>;
   }
 
-  const entries = data?.pages.flatMap((page) => page.diaryNotes) ?? [];
+  if (!isClient) {
+    return <div style={{ minHeight: "100vh" }}>Loading...</div>;
+  }
 
   return isDesktop ? (
     <>

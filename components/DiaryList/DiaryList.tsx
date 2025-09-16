@@ -2,15 +2,15 @@
 import { IoIosAddCircleOutline } from "react-icons/io";
 import css from "./DiaryList.module.css";
 import DiaryEntryCard from "../DiaryEntryCard/DiaryEntryCard";
-import { DiaryEntry, SortOrder } from "@/types/dairy";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { AddDiaryEntryModal } from "../AddDiaryEntryForm";
 import { useQueryClient } from "@tanstack/react-query";
 import { HiArrowsUpDown } from "react-icons/hi2";
+import { DiaryEntryData, SortOrder } from "@/types/diary";
 
 interface DiaryListProps {
-  entries: DiaryEntry[];
-  onSelect?: (entry: DiaryEntry) => void;
+  entries: DiaryEntryData[];
+  onSelect?: (entry: DiaryEntryData) => void;
   sortOrder: SortOrder;
   setSortOrder: (order: SortOrder) => void;
   fetchNextPage: () => void;
@@ -55,8 +55,13 @@ const DiaryList = ({
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const uniqueEntries = entries.filter(
-    (entry, index, self) => self.findIndex((e) => e._id === entry._id) === index
+  const uniqueEntries = useMemo(
+    () =>
+      entries.filter(
+        (entry, index, self) =>
+          self.findIndex((e) => e._id === entry._id) === index
+      ),
+    [entries]
   );
 
   return (
@@ -88,7 +93,7 @@ const DiaryList = ({
           <>
             <ul className={css.diaryCardList}>
               {uniqueEntries.map((entry, index) => {
-                const isLast = index === entries.length - 1;
+                const isLast = index === uniqueEntries.length - 1;
                 return (
                   <DiaryEntryCard
                     key={entry._id}
@@ -104,9 +109,11 @@ const DiaryList = ({
                 Завантаження додаткових записів...
               </div>
             )}
-            {hasNextPage && !isFetchingNextPage && (
-              <div className={css.endOfList}>📝 Всі записи завантажено</div>
-            )}
+            {!hasNextPage &&
+              !isFetchingNextPage &&
+              uniqueEntries.length > 0 && (
+                <div className={css.endOfList}>Всі записи завантажено</div>
+              )}
           </>
         ) : (
           <p className={css.warningText}>Наразі записів немає</p>

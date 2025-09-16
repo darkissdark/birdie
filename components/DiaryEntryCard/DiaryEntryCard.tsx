@@ -1,12 +1,12 @@
-import { DiaryEntry } from "@/types/dairy";
 import css from "./DiaryEntryCard.module.css";
 import { useMediaQuery } from "react-responsive";
 import { useRouter } from "next/navigation";
 import { forwardRef } from "react";
+import { DiaryEntryData } from "@/types/diary";
 
 interface DiaryEntryCardProps {
-  entry: DiaryEntry;
-  onSelect?: (entry: DiaryEntry) => void;
+  entry: DiaryEntryData;
+  onSelect?: (entry: DiaryEntryData) => void;
 }
 
 const DiaryEntryCard = forwardRef<HTMLLIElement, DiaryEntryCardProps>(
