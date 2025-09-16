@@ -79,6 +79,9 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
               type="date"
               id="date"
               name="date"
+              onFocus={(e: React.FocusEvent<HTMLInputElement>) =>
+                (e.target as HTMLInputElement).showPicker?.()
+              }
               className={`${css.date} ${css.inputField}  ${formik.touched.date && formik.errors.name ? css.error : ""}`}
             />
             <ErrorMessage name="date" component="div" className={css.error} />
