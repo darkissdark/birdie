@@ -275,6 +275,8 @@
 
 .checkbox svg {
   display: block;
+  stroke-width: 3.5px;
+  stroke: rgb(255, 255, 255);
 }
 
 /* === СТАНИ ТА ПОВІДОМЛЕННЯ === */
