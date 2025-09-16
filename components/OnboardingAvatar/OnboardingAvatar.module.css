@@ -1,5 +1,4 @@
 /* mobile */
-
 .avatarSection {
   display: flex;
   flex-direction: column;
@@ -34,9 +33,32 @@
 
 /* tablet */
 @media screen and (min-width: 768px) {
+  .profileSection {
+    padding: 24px 32px 0px;
+    justify-content: flex-start;
+  }
+
+  .profileInfo {
+    padding: 0px 0px 0px 4px;
+    align-items: flex-start;
+  }
+  .uploadBtn {
+    width: 218px;
+  }
 }
 
 /* desktop */
 
 @media screen and (min-width: 1440px) {
+  .profileSection {
+    align-items: center;
+    gap: 24px;
+  }
+
+  .uploadBtn {
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 218px;
+    height: 42px;
+  }
 }

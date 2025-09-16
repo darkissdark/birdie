@@ -6,9 +6,6 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import css from "./OnboardingAvatar.module.css";
 
-const defaultAvatarPath = "/images/icons/avatarImg.svg";
-
-
 
 export default function ProfileAvatar() {
   const [error, setError] = useState("");
@@ -39,7 +36,10 @@ export default function ProfileAvatar() {
     <div className={css.avatarSection}>
       <>
         <Image
-          src={user?.avatarUrl ?? defaultAvatarPath}
+          src={
+            user?.avatarUrl ??
+            `https://ftp.goit.study/img/common/women-default-avatar.jpg`
+          }
           height={132}
           width={132}
           alt="user avatar"
