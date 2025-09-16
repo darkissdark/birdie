@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lato, Comfortaa } from "next/font/google";
+import { Roboto_Condensed, Comfortaa } from "next/font/google";
 import "modern-normalize/modern-normalize.css";
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import "./globals.css";
@@ -7,18 +7,18 @@ import LogoSprite from "@/components/Logo/LogoSprite";
 import UiSprite from "@/components/Icon/UiSprite";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 
-const lato = Lato({
+const lato = Roboto_Condensed({
   variable: "--font-lato",
   display: "swap",
-  weight: ["400", "700"],
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin", "cyrillic"],
 });
 
 const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
   display: "swap",
   weight: ["700"],
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
