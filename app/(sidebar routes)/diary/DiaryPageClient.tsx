@@ -6,7 +6,11 @@ import { useMediaQuery } from "react-responsive";
 import { useEffect, useMemo, useState } from "react";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
+import {
+  DiaryListResponse,
+  getDiaryList,
+  deleteDiaryEntry,
+} from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { DiaryEntry, SortOrder } from "@/types/diary";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
@@ -29,6 +33,7 @@ const DiaryPageClient = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch,
   } = useInfiniteQuery<DiaryListResponse>({
     queryKey: ["diary", { sortOrder }],
     queryFn: ({ pageParam = 1 }) =>
@@ -41,6 +46,40 @@ const DiaryPageClient = () => {
   const entries = useMemo(() => {
     return data?.pages.flatMap((page) => page.diaryNotes) ?? [];
   }, [data?.pages]);
+
+  useEffect(() => {
+    if (entries.length > 0 && !selectedEntry && isDesktop) {
+      setSelectedEntry(entries[0]);
+    }
+  }, [entries, selectedEntry, isDesktop]);
+
+  const handleUpdateEntry = async () => {
+    try {
+      await refetch();
+      toast.success("Запис успішно оновлено!");
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      toast.error("Помилка при оновленні запису");
+    }
+  };
+
+  const handleDeleteEntry = async (id: string) => {
+    try {
+      await deleteDiaryEntry(id);
+
+      if (selectedEntry?._id === id) {
+        const remainingEntries = entries.filter((entry) => entry._id !== id);
+        setSelectedEntry(
+          remainingEntries.length > 0 ? remainingEntries[0] : null
+        );
+      }
+      await refetch();
+      toast.success("Запис успішно видалено!");
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      toast.error("Помилка при видаленні запису");
+    }
+  };
 
   useEffect(() => {
     if (isError) {
@@ -74,8 +113,8 @@ const DiaryPageClient = () => {
         {selectedEntry && (
           <DiaryEntryDetails
             entry={selectedEntry}
-            onDelete={(id) => console.log("Delete", id)}
-            onUpdate={() => console.log("Update")}
+            onDelete={handleDeleteEntry}
+            onUpdate={handleUpdateEntry}
           />
         )}
       </div>

@@ -15,12 +15,6 @@ interface AddDiaryEntryFormProps {
   onCancel?: () => void;
 }
 
-interface DiarySubmitValues {
-  title: string;
-  description: string;
-  emotions: string[];
-}
-
 const validationSchema = Yup.object({
   title: Yup.string()
     .min(2, "Заголовок повинен містити принаймні 2 символи")
@@ -82,14 +76,14 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     { setSubmitting }: FormikHelpers<DiaryFormValues>
   ) => {
     try {
-      const submitData: DiarySubmitValues = {
+      const submitData = {
         title: values.title,
         description: values.description,
         emotions: values.emotions,
       };
 
       if (entry) {
-        await api.put(`/diary/${entry._id}`, submitData);
+        await api.patch(`/diary/${entry._id}`, submitData);
       } else {
         await api.post("/diary", submitData);
       }
