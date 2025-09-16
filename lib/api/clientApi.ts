@@ -66,8 +66,13 @@ export const getDiaryList = async (
 };
 
 export const createTask = async (newTask: CreateTask): Promise<Task> => {
-  const { data } = await nextServer.post<Task>("/tasks", newTask);
-  return data;
+  try {
+    const { data } = await nextServer.post<Task>("/tasks", newTask);
+    return data;
+  } catch (error) {
+    console.error("createTask - Error:", error);
+    throw error;
+  }
 };
 
 export const uploadImage = async (file: File) => {
@@ -84,12 +89,12 @@ export const uploadImage = async (file: File) => {
 };
 
 export interface UserStats {
-  currentWeek: number;
-  daysUntilMeeting: number;
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
 }
 
 export const getUserStats = async (): Promise<UserStats> => {
-  const { data } = await nextServer.get<UserStats>("/user/stats");
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting");
   return data;
 };
 
@@ -121,9 +126,8 @@ export const getEmotions = async (
 
 export const getTasks = async (): Promise<Task[]> => {
   try {
-    const response = await nextServer.get<TasksResponse>("/tasks");
-    const tasks = response.data?.tasks;
-    return Array.isArray(tasks) ? tasks : [];
+    const response = await nextServer.get<Task[]>("/tasks");
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error fetching tasks:", error);
     return [];
@@ -166,4 +170,23 @@ export const getComfortTips = async (
     `/weeks/${weekNumber}/mom`
   );
   return data.comfortTips ?? [];
+};
+
+export interface UserToUpdate {
+  name?: string;
+  email?: string;
+  dueDate?: string;
+  babyGender?: string;
+}
+
+export const updateUser = async (updatedUser: UserToUpdate) => {
+  const { data } = await nextServer.patch<User>("/users/current", updatedUser);
+  return data;
+};
+
+export const fetchNoteByIdClient = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`);
+  return data;
 };

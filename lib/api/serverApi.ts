@@ -38,6 +38,8 @@ export const getEmotionsServer = async (
 import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
+import { User } from "@/types/user";
+import { DiaryEntry } from "@/types/dairy";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -60,6 +62,10 @@ export async function fetchGreeting(): Promise<WeeksGeneralInfo> {
 }
 
 export const getTasksServer = async (): Promise<Task[]> => {
+  const isAuth = await checkServerSession();
+  if (!isAuth?.data?.success) {
+    return [];
+  }
   try {
     const cookieStore = await cookies();
 
@@ -81,7 +87,9 @@ export const getBabyToday = async (): Promise<BabyToday> => {
   const cookieStore = await cookies();
   const isAuth = await checkServerSession();
 
-  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+  const endpoint = isAuth?.data?.success
+    ? "/weeks/greeting"
+    : "/weeks/greeting/public";
 
   const { data } = await nextServer.get<WeekGreetingResponse>(endpoint, {
     headers: {
@@ -105,4 +113,59 @@ export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
   );
 
   return data.comfortTips[0];
+};
+
+export interface UserStats {
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
+}
+
+export const getUserStats = async (): Promise<UserStats> => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+};
+
+export const getMe = async () => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<User>("/users/current", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+};
+
+export const fetchNoteByIdServer = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+};
+
+export const updateTaskStatusServer = async (
+  taskId: string,
+  isDone: boolean
+): Promise<Task> => {
+  const cookieStore = await cookies();
+
+  const { data } = await nextServer.patch<Task>(
+    `/tasks/status/${taskId}`,
+    { isDone },
+    {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    }
+  );
+  return data;
 };

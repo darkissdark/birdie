@@ -1,62 +1,85 @@
-import { useQuery } from '@tanstack/react-query';
-import { getUserStats } from '@/lib/api/clientApi';
-import React from 'react';
-import css from './StatusBlock.module.css';
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import css from "./StatusBlock.module.css";
+import { getMe, getUserStats, checkServerSession } from "@/lib/api/serverApi";
 
-const useUserStats = () => {
-  return useQuery({
-    queryKey: ['userStats'],
-    queryFn: getUserStats,
-    staleTime: 5 * 60 * 1000,
-    retry: 2,
-  });
-};
+// const useUserStats = () => {
+//   return
+//   useQuery({
+//     queryKey: ['userStats'],
+//     queryFn: getUserStats,
+//     staleTime: 5 * 60 * 1000,
+//     retry: 2,
+//   });
+// };
 
-const WeekStats = () => {
-  const { data: stats, isLoading, error } = useUserStats();
+const WeekStats = async () => {
+  try {
+    const isAuth = await checkServerSession();
+    const user = isAuth?.data?.success ? await getMe() : null;
 
-  if (isLoading) {
+    if (!user) {
+      // Якщо користувач не залогінений
+      return (
+        <div className={css.container}>
+          <div className={css.statItem}>
+            <div className={css.label}>Тиждень</div>
+            <div className={css.value}>---</div>
+          </div>
+          <div className={css.statItem}>
+            <div className={css.label}>Днів до зустрічі</div>
+            <div className={css.value}>---</div>
+          </div>
+        </div>
+      );
+    }
+
+    // Якщо юзер є – тягнемо статистику
+    const data = await getUserStats();
+
+    if (!data) {
+      // fallback якщо з бекенду вернеться null
+      return (
+        <div className={css.container}>
+          <div className={css.statItem}>
+            <div className={css.label}>Тиждень</div>
+            <div className={css.value}>---</div>
+          </div>
+          <div className={css.statItem}>
+            <div className={css.label}>Днів до зустрічі</div>
+            <div className={css.value}>---</div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={css.container}>
         <div className={css.statItem}>
           <div className={css.label}>Тиждень</div>
-          <div className={css.value}>...</div>
+          <div className={css.value}>{data.curWeekToPregnant}</div>
         </div>
         <div className={css.statItem}>
           <div className={css.label}>Днів до зустрічі</div>
-          <div className={css.value}>...</div>
+          <div className={css.value}>{data.daysBeforePregnant}</div>
         </div>
       </div>
     );
-  }
-
-  if (error) {
+  } catch (err) {
+    console.error("Помилка завантаження статистики:", err);
     return (
       <div className={css.container}>
-        <div className={`${css.statItem} ${css.errorItem}`}>
+        <div className={css.statItem}>
           <div className={css.label}>Тиждень</div>
-          <div className={`${css.value} ${css.errorValue}`}>--</div>
+          <div className={css.value}>---</div>
         </div>
-        <div className={`${css.statItem} ${css.errorItem}`}>
+        <div className={css.statItem}>
           <div className={css.label}>Днів до зустрічі</div>
-          <div className={`${css.value} ${css.errorValue}`}>--</div>
+          <div className={css.value}>---</div>
         </div>
       </div>
     );
   }
-
-  return (
-    <div className={css.container}>
-      <div className={css.statItem}>
-        <div className={css.label}>Тиждень</div>
-        <div className={css.value}>{stats?.currentWeek || 0}</div>
-      </div>
-      <div className={css.statItem}>
-        <div className={css.label}>Днів до зустрічі</div>
-        <div className={css.value}>~{stats?.daysUntilMeeting || 0}</div>
-      </div>
-    </div>
-  );
 };
 
 export default WeekStats;

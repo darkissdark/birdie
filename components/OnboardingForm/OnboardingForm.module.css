@@ -1,5 +1,5 @@
 .titleContent {
-  margin: 57px 56px 32px;
+  margin: 130px auto 32px;
   font-family: "Comfortaa", sans-serif;
   font-weight: 700;
   font-size: 48px;
@@ -7,69 +7,28 @@
   letter-spacing: 0.01em;
   text-align: center;
   color: #000;
-}
-.titleContent span {
-  display: block;
+  width: 480px;
 }
 
-.avatarSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-}
-
-.uploadButton {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-
-  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
-  border-radius: 100px;
-  padding: 8px 20px;
-  width: 179px;
-  height: 42px;
-  background: rgba(0, 0, 0, 0.05);
-
-  font-family: "Lato", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 160%;
-  color: #000;
-
-  cursor: pointer;
-}
-
-.labelGender {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #000;
+.form {
+  width: 480px;
+  margin: 0 auto;
 }
 
 .formField {
-  margin: 32px 56px 0 56px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-}
-
-.labelGender {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #000;
+  position: relative;
 }
 
 .selectGender {
   border: 1px solid rgba(255, 255, 255, 0);
   border-radius: 12px;
   padding: 8px 12px;
-  width: 480px;
+  /* width: 480px; */
   height: 40px;
   background: #f2f2f2;
 
@@ -89,10 +48,10 @@
 }
 
 .input {
-  border: 1px solid rgba(255, 255, 255, 0);
+  border: 2px solid rgba(255, 255, 255, 0);
   border-radius: 12px;
   padding: 8px 12px;
-  width: 480px;
+  width: 100%;
   height: 40px;
   background: #f2f2f2;
 
@@ -101,16 +60,25 @@
   font-size: 16px;
   line-height: 150%;
   color: #7f7f7f;
+
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input:hover,
+.input:focus {
+  border-color: #e9708d;
 }
 
 .submitButton {
-  margin: 32px 56px 0 56px;
+  margin-top: 32px;
   border-bottom: 4px solid #ffcbd3;
   border-radius: 100px;
   padding: 10px 24px;
   width: 480px;
   height: 46px;
-  border: none;
 
   background: #ffdae0;
 
@@ -121,19 +89,69 @@
   color: #000;
 }
 
-/* .submitButton[data-gender="boy"] {
-  background-color: #4a90e2; 
-} */
+.submitButton[data-gender="boy"] {
+  background-color: #c4f2fe;
+  border-bottom: 4px solid #adeffe;
+}
 
 .submitButton[data-gender="girl"] {
   background-color: #ffdae0;
+  border-bottom: 4px solid #ffcbd3;
 }
 
-/* .submitButton[data-gender="unknown"] {
-  background-color: #f7c948;
-} */
+.submitButton[data-gender="unknown"] {
+  background-color: #fef1db;
+  border-bottom: 4px solid #feeccc;
+}
 
 .submitButton:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectGender {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: -20px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #c60000;
+}
+
+.apiError {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #c60000;
+}
+
+@media screen and (max-width: 1439px) {
+  .titleContent {
+    font-size: 36px;
+    line-height: 120%;
+    letter-spacing: 0.01em;
+    margin-top: 110px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .titleContent {
+    width: 335px;
+    margin-top: 30px;
+  }
+
+  .form {
+    width: 335px;
+  }
+
+  .submitButton {
+    width: 335px;
+  }
 }

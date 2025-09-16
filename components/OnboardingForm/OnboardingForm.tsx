@@ -1,152 +1,134 @@
 "use client";
 
-import {
-  useState,
-  useRef,
-  useEffect,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
-import Image from "next/image";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import * as Yup from "yup";
 import styles from "./OnboardingForm.module.css";
+import OnboardingAvatar from "../OnboardingAvatar/OnboardingAvatar";
+import OnbordingCustomSelect from "../OnbordingCustomSelect/OnbordingCustomSelect";
+import useAuthStore from "@/lib/store/authStore";
+import { updateUser } from "@/lib/api/clientApi";
+import { useState } from "react";
+import { ApiError } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 interface OnboardingFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
   isLoading: boolean;
 }
 
-// Path to the default SVG avatar icon
-const defaultAvatarPath = "/images/icons/avatarImg.svg";
+interface OnborgindFormValues {
+  babyGender: string;
+  dueDate: string;
+}
 
-export default function OnboardingForm({
-  onSubmit,
-  isLoading,
-}: OnboardingFormProps) {
-  // --- 1. State for form fields ---
-  const [gender, setGender] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState(defaultAvatarPath);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-  // --- 2. Handler for avatar upload and preview ---
-  const handleAvatarChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setAvatarFile(file);
-      setAvatarPreviewUrl(URL.createObjectURL(file));
-    } else {
-      setAvatarFile(null);
-      setAvatarPreviewUrl(defaultAvatarPath);
+const minDate = new Date(today);
+minDate.setDate(today.getDate() + 7);
+
+const maxDate = new Date(today);
+maxDate.setDate(today.getDate() + 41 * 7);
+
+// --- Validation schema ---
+const validationSchema = Yup.object({
+  babyGender: Yup.string().oneOf(
+    ["boy", "girl", "unknown"],
+    "invalid category"
+  ),
+  dueDate: Yup.date()
+    .min(minDate, "Дата має бути не раніше ніж через 1 тиждень")
+    .max(maxDate, "Дата має бути не пізніше ніж через 41 тиждень"),
+});
+const initialValues = { babyGender: "", dueDate: "" };
+
+export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
+  const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
+  const [error, seterror] = useState("");
+  const router = useRouter();
+  const handleSubmit = async (
+    values: OnborgindFormValues,
+    actions: FormikHelpers<OnborgindFormValues>
+  ) => {
+    try {
+      const updatedUser = await updateUser(values);
+      setUser({
+        ...user,
+        ...updatedUser,
+      });
+      actions.resetForm();
+      router.push("/");
+    } catch (error) {
+      seterror((error as ApiError).message);
     }
   };
-
-  // --- 3. Cleanup of the temporary preview URL ---
-  useEffect(() => {
-    return () => {
-      if (avatarPreviewUrl && avatarPreviewUrl !== defaultAvatarPath) {
-        URL.revokeObjectURL(avatarPreviewUrl);
-      }
-    };
-  }, [avatarPreviewUrl]);
-
-  // --- 4. Form submission handler ---
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("birthDate", birthDate);
-    formData.append("gender", gender);
-    if (avatarFile) {
-      formData.append("avatar", avatarFile);
-    }
-
-    onSubmit(formData);
-  };
-
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <>
       {/* Page title */}
-      <h2 className={styles.titleContent}>
-        <span>Давайте</span>
-        <span>познайомимось</span>
-        <span>ближче</span>
-      </h2>
+      <h2 className={styles.titleContent}>Давайте познайомимось ближче</h2>
+      <OnboardingAvatar />
 
-      {/* --- Avatar section --- */}
-      <div className={styles.avatarSection}>
-        <div>
-          <Image
-            src={avatarPreviewUrl}
-            alt="User avatar"
-            width={164}
-            height={164}
-            objectFit="cover"
-            className={styles.avatarImage}
-          />
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleAvatarChange}
-          style={{ display: "none" }}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            if (fileInputRef.current) {
-              fileInputRef.current.click();
-            }
-          }}
-          className={styles.uploadButton}
-        >
-          Завантажити фото
-        </button>
-      </div>
-
-      {/* --- Form fields --- */}
-      <div className={styles.formField}>
-        <label htmlFor="gender" className={styles.labelGender}>
-          Стать дитини
-        </label>
-        <select
-          id="gender"
-          value={gender}
-          onChange={(e) => setGender(e.target.value)}
-          className={styles.selectGender}
-        >
-          <option value="" disabled hidden>
-            Оберіть стать
-          </option>
-          <option value="boy">Хлопчик</option>
-          <option value="girl">Дівчинка</option>
-          <option value="unknown">Ще не знаю</option>
-        </select>
-      </div>
-
-      <div className={styles.formField}>
-        <label htmlFor="birthDate" className={styles.labelbirthDate}>
-          Планова дата пологів
-        </label>
-        <input
-          id="birthDate"
-          type="date"
-          value={birthDate}
-          onChange={(e) => setBirthDate(e.target.value)}
-          className={styles.input}
-        />
-      </div>
-
-      {/* --- Submit button with conditional styles --- */}
-      <button
-        type="submit"
-        className={styles.submitButton}
-        data-gender={gender} 
-        disabled={!gender || isLoading}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        validateOnChange
+        validateOnBlur
       >
-        {isLoading ? "Збереження..." : "Зберегти"}
-      </button>
-    </form>
+        {({ isSubmitting, isValid, dirty, values }) => (
+          <Form className={styles.form}>
+            <div className={styles.formOnboarding}>
+              {/* --- Gender field --- */}
+              <div className={styles.formField}>
+                <div className={styles.selectWrapper}>
+                  <OnbordingCustomSelect
+                    name="babyGender"
+                    label="Стать дитини"
+                    options={[
+                      { label: "Хлопчик", value: "boy" },
+                      { label: "Дівчинка", value: "girl" },
+                      { label: "Ще не знаю", value: "unknown" },
+                    ]}
+                    placeholder="Оберіть стать"
+                  />
+                </div>
+                <ErrorMessage name="babyGender">
+                  {(msg) => <span className={styles.errorMessage}>{msg}</span>}
+                </ErrorMessage>
+              </div>
+
+              {/* --- Birth date field --- */}
+              <div className={styles.formField}>
+                <label htmlFor="dueDate" className={styles.labelbirthDate}>
+                  Планова дата пологів
+                </label>
+                <Field
+                  id="dueDate"
+                  name="dueDate"
+                  type="date"
+                  className={styles.input}
+                />
+                <ErrorMessage name="dueDate">
+                  {(msg) => <span className={styles.errorMessage}>{msg}</span>}
+                </ErrorMessage>
+              </div>
+
+              {/* --- Submit button --- */}
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={!isValid || !dirty}
+                data-gender={values.babyGender}
+              >
+                {isSubmitting || isLoading ? "Збереження..." : "Зберегти"}
+              </button>
+            </div>
+
+            {error && <p className={styles.apiError}>{error}</p>}
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 }

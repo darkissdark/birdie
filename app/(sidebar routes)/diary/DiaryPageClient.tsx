@@ -8,6 +8,7 @@ import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails"
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
+import { DiaryEntry, SortOrder } from "@/types/dairy";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
 import { SortOrder } from "@/types/diary";
 
@@ -19,6 +20,8 @@ const DiaryPageClient = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
 
   const {
     data,
@@ -54,6 +57,8 @@ const DiaryPageClient = () => {
     return <div style={{ minHeight: "100vh" }}>Loading...</div>;
   }
 
+  console.log("entries:", entries);
+
   return isDesktop ? (
     <>
       <Greeting />
@@ -65,8 +70,15 @@ const DiaryPageClient = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
+          onSelect={(entry) => setSelectedEntry(entry)}
         />
-        <DiaryEntryDetails />
+        {selectedEntry && (
+          <DiaryEntryDetails
+            entry={selectedEntry}
+            onDelete={(id) => console.log("Delete", id)}
+            onUpdate={() => console.log("Update")}
+          />
+        )}
       </div>
     </>
   ) : (

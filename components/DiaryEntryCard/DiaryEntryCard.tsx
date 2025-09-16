@@ -15,13 +15,22 @@ const DiaryEntryCard = forwardRef<HTMLLIElement, DiaryEntryCardProps>(
     const isDesktop = useMediaQuery({ minWidth: 1440 });
 
     const handleItemListClick = () => {
-      if (!isDesktop) {
+      if (isDesktop) {
+        if (onSelect) {
+          onSelect(entry);
+        }
+      } else {
+        sessionStorage.setItem("selectedEntry", JSON.stringify(entry));
         router.push(`/diary/${entry._id}`);
       }
 
-      if (onSelect) {
-        onSelect(entry);
-      }
+      // if (!isDesktop) {
+      //   router.push(`/diary/${entry._id}`);
+      // }
+
+      // if (onSelect) {
+      //   onSelect(entry);
+      // }
     };
 
     const date = new Date(entry.date).toLocaleDateString("uk-UA", {

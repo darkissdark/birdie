@@ -1,18 +1,20 @@
 "use client";
-import { DiaryEntry, ApiEmotion, DiaryFormValues } from "@/types/diary";
-import { useState, useEffect, useRef } from "react";
+import { DiaryEntry, DiaryFormValues } from "@/types/diary";
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import api from "@/lib/axios";
 import toast from "react-hot-toast";
 import styles from "./AddDiaryEntryForm.module.css";
 import Button from "@/components/Button/Button";
+import { MultiSelectDropdown } from "./MultiSelectDropdown";
+import { useEmotions } from "@/lib/hooks/useEmotions";
 
 interface AddDiaryEntryFormProps {
   entry?: DiaryEntry;
   onSuccess: () => void;
   onCancel?: () => void;
 }
+
 interface DiarySubmitValues {
   title: string;
   description: string;
@@ -55,11 +57,15 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
   entry,
   onSuccess,
 }) => {
-  const [emotions, setEmotions] = useState<ApiEmotion[]>([]);
-  const [emotionsLoading, setEmotionsLoading] = useState(true);
-  const [emotionsError, setEmotionsError] = useState<string | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const {
+    emotions,
+    loading: emotionsLoading,
+    error: emotionsError,
+    hasMore,
+    loadingMore,
+    loadMore,
+    retry: retryLoadEmotions,
+  } = useEmotions(10);
 
   const initialValues: DiaryFormValues = {
     title: entry?.title || "",
@@ -70,93 +76,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
         )
       : [],
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isDropdownOpen]);
-
-  useEffect(() => {
-    const fetchEmotions = async () => {
-      try {
-        setEmotionsLoading(true);
-        setEmotionsError(null);
-
-        const response = await api.get("/emotions?page=1&limit=18");
-
-        let emotionsData: ApiEmotion[] = [];
-
-        if (Array.isArray(response.data)) {
-          emotionsData = response.data;
-        } else if (response.data.data && Array.isArray(response.data.data)) {
-          emotionsData = response.data.data;
-        } else if (
-          response.data.emotions &&
-          Array.isArray(response.data.emotions)
-        ) {
-          emotionsData = response.data.emotions;
-        } else if (
-          response.data.results &&
-          Array.isArray(response.data.results)
-        ) {
-          emotionsData = response.data.results;
-        }
-
-        const validEmotions = emotionsData.filter(
-          (emotion): emotion is ApiEmotion => {
-            return (
-              emotion &&
-              typeof emotion._id === "string" &&
-              emotion._id.length > 0 &&
-              (typeof emotion.name === "string" ||
-                typeof emotion.title === "string")
-            );
-          }
-        );
-
-        if (validEmotions.length === 0) {
-          throw new Error("Отримано некоректні дані емоцій");
-        }
-
-        setEmotions(validEmotions);
-      } catch (error: unknown) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Помилка завантаження емоцій";
-
-        setEmotionsError(errorMessage);
-
-        const fallbackEmotions: ApiEmotion[] = [
-          { _id: "1", name: "Натхнення" },
-          { _id: "2", name: "Вдячність" },
-          { _id: "3", name: "Тривога" },
-          { _id: "4", name: "Дивні бажання" },
-          { _id: "5", name: "Нудота" },
-        ];
-
-        setEmotions(fallbackEmotions);
-      } finally {
-        setEmotionsLoading(false);
-      }
-    };
-
-    fetchEmotions();
-  }, []);
 
   const handleSubmit = async (
     values: DiaryFormValues,
@@ -205,80 +124,6 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
     }
   };
 
-  const retryLoadEmotions = async () => {
-    setEmotionsError(null);
-    setEmotionsLoading(true);
-
-    try {
-      const response = await api.get("/emotions?page=1&limit=18");
-      let emotionsData: ApiEmotion[] = [];
-
-      if (Array.isArray(response.data)) {
-        emotionsData = response.data;
-      } else if (response.data.data && Array.isArray(response.data.data)) {
-        emotionsData = response.data.data;
-      } else if (
-        response.data.emotions &&
-        Array.isArray(response.data.emotions)
-      ) {
-        emotionsData = response.data.emotions;
-      } else if (
-        response.data.results &&
-        Array.isArray(response.data.results)
-      ) {
-        emotionsData = response.data.results;
-      }
-
-      const validEmotions = emotionsData.filter(
-        (emotion): emotion is ApiEmotion => {
-          return (
-            emotion &&
-            typeof emotion._id === "string" &&
-            emotion._id.length > 0 &&
-            (typeof emotion.name === "string" ||
-              typeof emotion.title === "string")
-          );
-        }
-      );
-
-      setEmotions(validEmotions);
-    } catch (retryError: unknown) {
-      console.error("Помилка повторного завантаження:", retryError);
-      setEmotionsError("Помилка завантаження");
-
-      const fallbackEmotions: ApiEmotion[] = [
-        { _id: "1", name: "Натхнення" },
-        { _id: "2", name: "Вдячність" },
-        { _id: "3", name: "Тривога" },
-        { _id: "4", name: "Дивні бажання" },
-        { _id: "5", name: "Нудота" },
-      ];
-
-      setEmotions(fallbackEmotions);
-    } finally {
-      setEmotionsLoading(false);
-    }
-  };
-
-  const getSelectedEmotionsDisplay = (selectedIds: string[]) => {
-    if (selectedIds.length === 0)
-      return { text: "Оберіть категорію", tags: [] };
-
-    const selectedEmotions = selectedIds
-      .map((id) => {
-        const emotion = emotions.find((e) => e._id === id);
-        return emotion
-          ? { id, name: emotion.name || emotion.title || "Без назви" }
-          : null;
-      })
-      .filter(Boolean) as { id: string; name: string }[];
-
-    return {
-      text: selectedEmotions.map((e) => e.name).join(", "),
-      tags: selectedEmotions,
-    };
-  };
-
   return (
     <div className={styles.container}>
       <Formik
@@ -311,12 +156,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Категорії</label>
 
-              {emotionsLoading ? (
-                <div className={styles.loadingContainer}>
-                  <div className={styles.spinner}></div>
-                  <span>Завантаження категорій...</span>
-                </div>
-              ) : emotionsError ? (
+              {emotionsError ? (
                 <div className={styles.errorContainer}>
                   <div className={styles.errorMessage}>
                     Помилка: {emotionsError}
@@ -329,7 +169,7 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                     Спробувати знову
                   </button>
                 </div>
-              ) : emotions.length === 0 ? (
+              ) : emotions.length === 0 && !emotionsLoading ? (
                 <div className={styles.noDataContainer}>
                   <span>Категорії не знайдено</span>
                   <button
@@ -341,105 +181,19 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
                   </button>
                 </div>
               ) : (
-                <div className={styles.customSelect} ref={dropdownRef}>
-                  <div
-                    className={`${styles.selectTrigger} ${
-                      isDropdownOpen ? styles.selectTriggerOpen : ""
-                    } ${
-                      errors.emotions && touched.emotions ? styles.error : ""
-                    }`}
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  >
-                    <div className={styles.selectContent}>
-                      {values.emotions.length === 0 ? (
-                        <span className={styles.selectPlaceholder}>
-                          Оберіть категорію
-                        </span>
-                      ) : (
-                        <div className={styles.selectedTags}>
-                          {getSelectedEmotionsDisplay(values.emotions).tags.map(
-                            (tag) => (
-                              <span key={tag.id} className={styles.selectedTag}>
-                                {tag.name}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <span
-                      className={`${styles.selectArrow} ${
-                        isDropdownOpen ? styles.selectArrowOpen : ""
-                      }`}
-                    >
-                      <svg
-                        width="12"
-                        height="8"
-                        viewBox="0 0 12 8"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5.99989 5.20762L1.67164 0.87937C1.50164 0.70937 1.30273 0.62854 1.07489 0.63687C0.847061 0.64521 0.648145 0.73437 0.478145 0.90437C0.308145 1.07437 0.223145 1.27746 0.223145 1.51362C0.223145 1.74979 0.308145 1.95287 0.478145 2.12287L5.39715 7.04187C5.56715 7.21187 5.76806 7.29687 5.99989 7.29687C6.23173 7.29687 6.43264 7.21187 6.60264 7.04187L11.5466 2.09787C11.7166 1.92787 11.8016 1.72896 11.8016 1.50112C11.8016 1.27329 11.7166 1.07437 11.5466 0.90437C11.3766 0.73437 11.1736 0.64937 10.9374 0.64937C10.7012 0.64937 10.4981 0.73437 10.3281 0.90437L5.99989 5.20762Z"
-                          fill="black"
-                          fillOpacity="0.6"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-
-                  {isDropdownOpen && (
-                    <div className={styles.selectDropdown}>
-                      <div className={styles.selectDropdownInner}>
-                        {emotions.map((emotion) => {
-                          const isSelected = values.emotions.includes(
-                            emotion._id
-                          );
-                          return (
-                            <button
-                              key={emotion._id}
-                              type="button"
-                              className={`${styles.selectOption} ${
-                                isSelected ? styles.selectOptionSelected : ""
-                              }`}
-                              onClick={() => {
-                                const newEmotions = isSelected
-                                  ? values.emotions.filter(
-                                      (id) => id !== emotion._id
-                                    )
-                                  : [...values.emotions, emotion._id];
-                                setFieldValue("emotions", newEmotions);
-                              }}
-                            >
-                              <div className={styles.checkbox}>
-                                {isSelected && (
-                                  <svg
-                                    width="12"
-                                    height="10"
-                                    viewBox="0 0 12 10"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M1 5L4.5 8.5L11 1"
-                                      stroke="white"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                )}
-                              </div>
-                              <span>
-                                {emotion.name || emotion.title || "Без назви"}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <MultiSelectDropdown
+                  options={emotions}
+                  selectedValues={values.emotions}
+                  onSelectionChange={(selectedIds) =>
+                    setFieldValue("emotions", selectedIds)
+                  }
+                  placeholder="Оберіть категорію"
+                  error={Boolean(errors.emotions && touched.emotions)}
+                  loading={emotionsLoading}
+                  hasMore={hasMore}
+                  onLoadMore={loadMore}
+                  loadingMore={loadingMore}
+                />
               )}
 
               <CustomErrorMessage

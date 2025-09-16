@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 640px;
+  width: 295px;
   height: 222px;
   margin-top: 48px;
 }
@@ -10,55 +10,62 @@
 .formDiv {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  font-weight: 400;
-  width: 640px;
+  width: 295px;
   height: 66px;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
 }
 
 .name,
-.data {
+.date {
   margin-top: 4px;
   padding: 8px 12px;
-  font-size: 14px;
-  border: 2px solid var(--opacity-transparent);
-  border-radius: 12px;
-  width: 640px;
+  border: 2px solid #fff;
+  background: rgba(0, 0, 0, 0.05);
   height: 37px;
 }
 
+.inputField {
+  padding: 8px;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.inputField.date {
+  cursor: pointer;
+}
+.inputField:focus {
+  border-color: #ffcbd3;
+}
+
+.inputField.error {
+  border-color: #c60000;
+}
 .saveButton {
-  border-bottom: 4px solid #ffcbd3;
-  border-radius: 100px;
-  padding: 10px 24px;
-  width: 268px;
-  height: 42px;
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 160%;
-  background-color: #ffdae0;
-  color: #000;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
-
-.saveButton:hover {
-  border-bottom: 4px solid rgb(0, 0, 0, 0.15);
-  border-radius: 100px;
-  padding: 10px 24px;
-  width: 97px;
-  height: 46px;
-  background-color: #fff;
-}
-
-.saveButton:disabled {
-  border-bottom: 4px solid #ffcbd3;
-  background-color: #ffdae0;
-  cursor: not-allowed;
-}
-
 .error {
-  color: #dc3545;
+  color: #c60000;
   font-size: 12px;
   margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .form {
+    width: 640px;
+    height: 222px;
+  }
+
+  .formDiv {
+    width: 640px;
+  }
+
+  .name,
+  .data {
+    width: 640px;
+  }
 }

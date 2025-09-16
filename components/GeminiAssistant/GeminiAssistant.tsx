@@ -1,32 +1,27 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   GeminiAIService,
   AIResponse,
   UserContext,
 } from "@/services/gemini-ai.service";
 import useAuthStore from "@/lib/store/authStore";
-import axiosInstance from "@/lib/axios";
 import styles from "./GeminiAssistant.module.css";
-import { RiAiGenerate, RiAddLine, RiCloseLine } from "react-icons/ri";
+import {
+  RiAiGenerate,
+  RiCloseLine,
+  RiAdvertisementFill,
+  RiEmotionHappyFill,
+  RiParagraph,
+} from "react-icons/ri";
+import { TbBook2 } from "react-icons/tb";
+import { BsCalendar2Event } from "react-icons/bs";
+import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
+import AddTaskModal from "@/components/AddTaskModal/AddTaskModal";
+import AddTaskForm from "@/components/AddTaskForm/AddTaskForm";
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-
-interface DiaryEntry {
-  _id?: string;
-  title: string;
-  description: string;
-  emotions: string[];
-  date: string;
-}
-
-interface Task {
-  _id?: string;
-  name: string;
-  date: string;
-  isDone: boolean;
-}
 
 interface WeekInfo {
   curWeekToPregnant: number;
@@ -41,6 +36,14 @@ interface WeekInfo {
   momHint: string;
 }
 
+interface DragState {
+  isDragging: boolean;
+  startX: number;
+  startY: number;
+  initialX: number;
+  initialY: number;
+}
+
 export const GeminiAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<AIResponse[]>([]);
@@ -51,31 +54,26 @@ export const GeminiAssistant: React.FC = () => {
   >("chat");
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Diary form state
-  const [showDiaryForm, setShowDiaryForm] = useState(false);
-  const [diaryForm, setDiaryForm] = useState({
-    title: "",
-    description: "",
-    emotions: [] as string[],
-  });
+  const [showDiaryModal, setShowDiaryModal] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
-  // Task form state
-  const [showTaskForm, setShowTaskForm] = useState(false);
-  const [taskForm, setTaskForm] = useState({
-    name: "",
-    date: new Date().toISOString().split("T")[0],
-  });
-
-  // User data
   const [weekInfo, setWeekInfo] = useState<WeekInfo | null>(null);
-  const [emotions, setEmotions] = useState<
-    Array<{ _id: string; name: string }>
-  >([]);
+
+  // Dragging state
+  const [position, setPosition] = useState({ x: 24, y: 80 });
+  const [dragState, setDragState] = useState<DragState>({
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    initialX: 0,
+    initialY: 0,
+  });
 
   const geminiService = useRef<GeminiAIService | null>(null);
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!geminiService.current && GEMINI_API_KEY) {
@@ -89,7 +87,6 @@ export const GeminiAssistant: React.FC = () => {
       if (user && isAuthenticated) {
         fetchUserContext();
         fetchWeekInfo();
-        fetchEmotions();
       } else {
         geminiService.current.updateUserContext(null);
         if (isInitialized && messages.length === 0) {
@@ -103,8 +100,120 @@ export const GeminiAssistant: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Drag functionality
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    setDragState({
+      isDragging: true,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialX: rect.left,
+      initialY: rect.top,
+    });
+  }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect || !touch) return;
+
+    setDragState({
+      isDragging: true,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      initialX: rect.left,
+      initialY: rect.top,
+    });
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!dragState.isDragging) return;
+
+      const deltaX = e.clientX - dragState.startX;
+      const deltaY = e.clientY - dragState.startY;
+
+      const newX = Math.max(
+        0,
+        Math.min(window.innerWidth - 80, dragState.initialX + deltaX)
+      );
+      const newY = Math.max(
+        0,
+        Math.min(window.innerHeight - 80, dragState.initialY + deltaY)
+      );
+
+      setPosition({
+        x: window.innerWidth - newX - 80, // Convert to right position for CSS
+        y: window.innerHeight - newY - 80, // Convert to bottom position for CSS
+      });
+    },
+    [dragState]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (!dragState.isDragging) return;
+
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - dragState.startX;
+      const deltaY = touch.clientY - dragState.startY;
+
+      const newX = Math.max(
+        0,
+        Math.min(window.innerWidth - 80, dragState.initialX + deltaX)
+      );
+      const newY = Math.max(
+        0,
+        Math.min(window.innerHeight - 80, dragState.initialY + deltaY)
+      );
+
+      setPosition({
+        x: window.innerWidth - newX - 80,
+        y: window.innerHeight - newY - 80,
+      });
+    },
+    [dragState]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setDragState((prev) => ({ ...prev, isDragging: false }));
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setDragState((prev) => ({ ...prev, isDragging: false }));
+  }, []);
+
+  useEffect(() => {
+    if (dragState.isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+    }
+  }, [
+    dragState.isDragging,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchMove,
+    handleTouchEnd,
+  ]);
+
   const fetchWeekInfo = async () => {
     try {
+      const axiosInstance = (await import("@/lib/axios")).default;
       const response = await axiosInstance.get("/weeks/greeting");
       setWeekInfo(response.data);
     } catch (error) {
@@ -112,21 +221,13 @@ export const GeminiAssistant: React.FC = () => {
     }
   };
 
-  const fetchEmotions = async () => {
-    try {
-      const response = await axiosInstance.get("/emotions?limit=100");
-      setEmotions(response.data.emotions || []);
-    } catch (error) {
-      console.log("Помилка завантаження емоцій:", error);
-    }
-  };
-
   const fetchUserContext = async () => {
     if (!user || !geminiService.current) return;
 
     try {
+      const axiosInstance = (await import("@/lib/axios")).default;
       const context: UserContext = {
-        userId: user._id,
+        userId: user.id,
         name: user.name,
         email: user.email,
         dueDate: user.dueDate,
@@ -143,12 +244,13 @@ export const GeminiAssistant: React.FC = () => {
             .catch(() => ({ data: { tasks: [] } })),
           axiosInstance
             .get("/diary?limit=10")
-            .catch(() => ({ data: { tasks: [] } })),
+            .catch(() => ({ data: { entries: [] } })),
         ]);
 
         context.emotions = emotionsRes.data.emotions || [];
         context.tasks = tasksRes.data.tasks || [];
-        context.diaryEntries = diaryRes.data.tasks || [];
+        context.diaryEntries =
+          diaryRes.data.entries || diaryRes.data.tasks || [];
       } catch (error) {
         console.log("Додаткові дані недоступні, працюємо з базовим контекстом");
       }
@@ -173,7 +275,7 @@ export const GeminiAssistant: React.FC = () => {
       if (isAuthenticated && weekInfo) {
         welcomeContent = `Привіт, ${user?.name || "мамо"}! 
 
-Ти на ${weekInfo.curWeekToPregnant} тижні вагітності 🤱
+Ти на ${weekInfo.curWeekToPregnant} тижні вагітності
 До зустрічі з малюком залишилось ${weekInfo.daysBeforePregnant} днів!
 
 ${weekInfo.momHint}
@@ -230,77 +332,30 @@ ${weekInfo.momHint}
     }
   };
 
-  const handleCreateDiaryEntry = async () => {
-    if (!diaryForm.title.trim() || !diaryForm.description.trim()) return;
-
-    try {
-      await axiosInstance.post("/diary", {
-        title: diaryForm.title,
-        description: diaryForm.description,
-        emotions: diaryForm.emotions,
-      });
-
-      setShowDiaryForm(false);
-      setDiaryForm({ title: "", description: "", emotions: [] });
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: `✅ Запис "${diaryForm.title}" успішно додано до щоденника!`,
-          timestamp: new Date(),
-          type: "general",
-        },
-      ]);
-
-      // Оновлюємо контекст
-      fetchUserContext();
-    } catch (error) {
-      console.error("Помилка створення запису:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: "Помилка створення запису в щоденнику. Спробуйте ще раз.",
-          timestamp: new Date(),
-          type: "general",
-        },
-      ]);
-    }
+  const handleDiarySuccess = () => {
+    setShowDiaryModal(false);
+    setMessages((prev) => [
+      ...prev,
+      {
+        content: "Запис успішно додано до щоденника!",
+        timestamp: new Date(),
+        type: "general",
+      },
+    ]);
+    fetchUserContext();
   };
 
-  const handleCreateTask = async () => {
-    if (!taskForm.name.trim()) return;
-
-    try {
-      await axiosInstance.post("/tasks", {
-        name: taskForm.name,
-        date: taskForm.date,
-      });
-
-      setShowTaskForm(false);
-      setTaskForm({ name: "", date: new Date().toISOString().split("T")[0] });
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: `✅ Завдання "${taskForm.name}" успішно додано!`,
-          timestamp: new Date(),
-          type: "general",
-        },
-      ]);
-
-      // Оновлюємо контекст
-      fetchUserContext();
-    } catch (error) {
-      console.error("Помилка створення завдання:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: "Помилка створення завдання. Спробуйте ще раз.",
-          timestamp: new Date(),
-          type: "general",
-        },
-      ]);
-    }
+  const handleTaskSuccess = () => {
+    setShowTaskModal(false);
+    setMessages((prev) => [
+      ...prev,
+      {
+        content: "Завдання успішно створено!",
+        timestamp: new Date(),
+        type: "general",
+      },
+    ]);
+    fetchUserContext();
   };
 
   const handleGenerateInsights = async () => {
@@ -315,7 +370,7 @@ ${weekInfo.momHint}
       console.error("Помилка генерації інсайтів:", error);
       const fallbackResponse = {
         content:
-          "📊 Для аналізу ваших інсайтів потрібно більше записів у щоденнику. Спробуйте додати кілька записів про ваші відчуття та емоції, а потім поверніться сюди!",
+          "Для аналізу ваших інсайтів потрібно більше записів у щоденнику. Спробуйте додати кілька записів про ваші відчуття та емоції, а потім поверніться сюди!",
         timestamp: new Date(),
         type: "insight" as const,
         suggestions: [
@@ -342,7 +397,7 @@ ${weekInfo.momHint}
       console.error("Помилка генерації нагадувань:", error);
       const fallbackResponse = {
         content:
-          "🌸 Щоденні нагадування:\n\n• Не забувайте пити достатньо води\n• Приділіть 15 хвилин легким вправам\n• З'їжте порцію свіжих фруктів\n• Зробіть дихальні вправи для релаксації\n\nПам'ятайте: кожен день - це крок до зустрічі з малюком!",
+          "Щоденні нагадування:\n\n• Не забувайте пити достатньо води\n• Приділіть 15 хвилин легким вправам\n• З'їжте порцію свіжих фруктів\n• Зробіть дихальні вправи для релаксації\n\nПам'ятайте: кожен день - це крок до зустрічі з малюком!",
         timestamp: new Date(),
         type: "reminder" as const,
       };
@@ -366,17 +421,17 @@ ${weekInfo.momHint}
   const renderMessageIcon = (type: AIResponse["type"]) => {
     switch (type) {
       case "advice":
-        return "💡";
+        return <RiAdvertisementFill />;
       case "reminder":
-        return "⏰";
+        return <BsCalendar2Event />;
       case "insight":
-        return "📊";
+        return <RiParagraph />;
       case "motivation":
-        return "✨";
+        return <RiEmotionHappyFill />;
       case "general":
-        return "💬";
+        return <RiAiGenerate />;
       default:
-        return "💬";
+        return <RiAiGenerate />;
     }
   };
 
@@ -385,14 +440,15 @@ ${weekInfo.momHint}
       return (
         <div className={styles.messagesArea}>
           <div className={styles.emptyState}>
-            <p>📖 Щоденник вагітності</p>
-            <p>Записуйте свої відчуття, емоції та важливі моменти</p>
+            <p>
+              <TbBook2 /> Щоденник вагітності
+            </p>
+            <p>Записуйте своє відчуття, емоції та важливі моменти</p>
             <button
               className={styles.quickReplyButton}
-              onClick={() => setShowDiaryForm(true)}
-              style={{ marginTop: "16px" }}
+              onClick={() => setShowDiaryModal(true)}
             >
-              <RiAddLine /> Додати новий запис
+              Додати новий запис
             </button>
           </div>
         </div>
@@ -403,14 +459,14 @@ ${weekInfo.momHint}
       return (
         <div className={styles.messagesArea}>
           <div className={styles.emptyState}>
-            <p>📋 Завдання</p>
+            <p>Завдання</p>
             <p>Плануйте та відстежуйте важливі справи</p>
             <button
               className={styles.quickReplyButton}
-              onClick={() => setShowTaskForm(true)}
+              onClick={() => setShowTaskModal(true)}
               style={{ marginTop: "16px" }}
             >
-              <RiAddLine /> Додати нове завдання
+              Додати нове завдання
             </button>
           </div>
         </div>
@@ -424,11 +480,25 @@ ${weekInfo.momHint}
     return null;
   }
 
+  const handleButtonClick = () => {
+    if (!dragState.isDragging) {
+      setIsOpen(true);
+    }
+  };
+
   return (
     <>
       <button
-        className={styles.floatingButton}
-        onClick={() => setIsOpen(true)}
+        ref={buttonRef}
+        className={`${styles.floatingButton} ${dragState.isDragging ? styles.dragging : ""}`}
+        style={{
+          right: `${position.x}px`,
+          bottom: `${position.y}px`,
+          cursor: dragState.isDragging ? "grabbing" : "grab",
+        }}
+        onClick={handleButtonClick}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
         aria-label="Відкрити AI асистента"
       >
         <span className={styles.buttonIcon}>
@@ -441,11 +511,20 @@ ${weekInfo.momHint}
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <div className={styles.header}>
-              <h2 className={styles.title}>
-                {isAuthenticated
-                  ? `AI Помічник для ${user?.name || "майбутньої мами"}`
-                  : "AI Помічник з питань материнства"}
-              </h2>
+              <div className={styles.titleContainer}>
+                <h2 className={styles.title}>
+                  {isAuthenticated
+                    ? `AI Помічник для ${user?.name || "майбутньої мами"}`
+                    : "AI Помічник з питань материнства"}
+                </h2>
+                <div
+                  className={styles.betaBadge}
+                  title="Функція в розробці та постійно покращується. Ваші відгуки допомагають нам стати кращими!"
+                >
+                  <span className={styles.betaText}>BETA</span>
+                  <div className={styles.betaGlow}></div>
+                </div>
+              </div>
               <button
                 className={styles.closeButton}
                 onClick={() => setIsOpen(false)}
@@ -456,40 +535,33 @@ ${weekInfo.momHint}
             </div>
 
             <div className={styles.tabs}>
-              <button
-                className={`${styles.tab} ${activeTab === "chat" ? styles.activeTab : ""}`}
-                onClick={() => setActiveTab("chat")}
-              >
-                Чат
-              </button>
-              <button
-                className={`${styles.tab} ${activeTab === "insights" ? styles.activeTab : ""}`}
-                onClick={handleGenerateInsights}
-              >
-                Інсайти
-              </button>
-              <button
-                className={`${styles.tab} ${activeTab === "reminders" ? styles.activeTab : ""}`}
-                onClick={handleGenerateReminders}
-              >
-                Нагадування
-              </button>
-              {isAuthenticated && (
-                <>
-                  <button
-                    className={`${styles.tab} ${activeTab === "diary" ? styles.activeTab : ""}`}
-                    onClick={() => setActiveTab("diary")}
-                  >
-                    Щоденник
-                  </button>
-                  <button
-                    className={`${styles.tab} ${activeTab === "tasks" ? styles.activeTab : ""}`}
-                    onClick={() => setActiveTab("tasks")}
-                  >
-                    Завдання
-                  </button>
-                </>
-              )}
+              {[
+                { key: "chat", label: "Чат" },
+                { key: "insights", label: "Інсайти" },
+                { key: "reminders", label: "Нагадування" },
+                ...(isAuthenticated
+                  ? [
+                      { key: "diary", label: "Щоденник" },
+                      { key: "tasks", label: "Завдання" },
+                    ]
+                  : []),
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  className={`${styles.tab} ${activeTab === tab.key ? styles.activeTab : ""}`}
+                  onClick={() => {
+                    if (tab.key === "insights") {
+                      handleGenerateInsights();
+                    } else if (tab.key === "reminders") {
+                      handleGenerateReminders();
+                    } else {
+                      setActiveTab(tab.key as typeof activeTab);
+                    }
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
             {(activeTab === "diary" || activeTab === "tasks") &&
@@ -614,196 +686,16 @@ ${weekInfo.momHint}
         </div>
       )}
 
-      {/* Diary Form Modal */}
-      {showDiaryForm && (
-        <div className={styles.modal}>
-          <div
-            className={styles.modalContent}
-            style={{ maxWidth: "500px", height: "auto" }}
-          >
-            <div className={styles.header}>
-              <h2 className={styles.title}>Новий запис у щоденнику</h2>
-              <button
-                className={styles.closeButton}
-                onClick={() => setShowDiaryForm(false)}
-              >
-                <RiCloseLine />
-              </button>
-            </div>
-            <div style={{ padding: "20px" }}>
-              <div style={{ marginBottom: "16px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Заголовок:
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={diaryForm.title}
-                  onChange={(e) =>
-                    setDiaryForm({ ...diaryForm, title: e.target.value })
-                  }
-                  placeholder="Введіть заголовок запису"
-                />
-              </div>
-              <div style={{ marginBottom: "16px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Опис:
-                </label>
-                <textarea
-                  className={styles.input}
-                  value={diaryForm.description}
-                  onChange={(e) =>
-                    setDiaryForm({ ...diaryForm, description: e.target.value })
-                  }
-                  placeholder="Опишіть ваші відчуття, думки або події дня..."
-                  rows={4}
-                  style={{ resize: "vertical", minHeight: "100px" }}
-                />
-              </div>
-              <div style={{ marginBottom: "20px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Емоції:
-                </label>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                  {emotions.map((emotion) => (
-                    <button
-                      key={emotion._id}
-                      className={`${styles.quickReplyButton} ${
-                        diaryForm.emotions.includes(emotion._id)
-                          ? styles.activeTab
-                          : ""
-                      }`}
-                      onClick={() => {
-                        const newEmotions = diaryForm.emotions.includes(
-                          emotion._id
-                        )
-                          ? diaryForm.emotions.filter(
-                              (id) => id !== emotion._id
-                            )
-                          : [...diaryForm.emotions, emotion._id];
-                        setDiaryForm({ ...diaryForm, emotions: newEmotions });
-                      }}
-                      style={{ fontSize: "12px" }}
-                    >
-                      {emotion.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "12px" }}>
-                <button
-                  className={styles.sendButton}
-                  onClick={handleCreateDiaryEntry}
-                  disabled={
-                    !diaryForm.title.trim() || !diaryForm.description.trim()
-                  }
-                >
-                  Зберегти запис
-                </button>
-                <button
-                  className={styles.quickReplyButton}
-                  onClick={() => setShowDiaryForm(false)}
-                >
-                  Скасувати
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <AddDiaryEntryModal
+        isOpen={showDiaryModal}
+        onClose={() => setShowDiaryModal(false)}
+        onSuccess={handleDiarySuccess}
+      />
 
-      {/* Task Form Modal */}
-      {showTaskForm && (
-        <div className={styles.modal}>
-          <div
-            className={styles.modalContent}
-            style={{ maxWidth: "400px", height: "auto" }}
-          >
-            <div className={styles.header}>
-              <h2 className={styles.title}>Нове завдання</h2>
-              <button
-                className={styles.closeButton}
-                onClick={() => setShowTaskForm(false)}
-              >
-                <RiCloseLine />
-              </button>
-            </div>
-            <div style={{ padding: "20px" }}>
-              <div style={{ marginBottom: "16px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Назва завдання:
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={taskForm.name}
-                  onChange={(e) =>
-                    setTaskForm({ ...taskForm, name: e.target.value })
-                  }
-                  placeholder="Введіть назву завдання"
-                />
-              </div>
-              <div style={{ marginBottom: "20px" }}>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "8px",
-                    fontWeight: "600",
-                  }}
-                >
-                  Дата:
-                </label>
-                <input
-                  type="date"
-                  className={styles.input}
-                  value={taskForm.date}
-                  onChange={(e) =>
-                    setTaskForm({ ...taskForm, date: e.target.value })
-                  }
-                />
-              </div>
-              <div style={{ display: "flex", gap: "12px" }}>
-                <button
-                  className={styles.sendButton}
-                  onClick={handleCreateTask}
-                  disabled={!taskForm.name.trim()}
-                >
-                  Створити завдання
-                </button>
-                <button
-                  className={styles.quickReplyButton}
-                  onClick={() => setShowTaskForm(false)}
-                >
-                  Скасувати
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {showTaskModal && (
+        <AddTaskModal closeModal={() => setShowTaskModal(false)}>
+          <AddTaskForm onClose={handleTaskSuccess} />
+        </AddTaskModal>
       )}
     </>
   );

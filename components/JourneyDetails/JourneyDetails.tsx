@@ -7,6 +7,7 @@ import { AboutBaby, AboutMom, fetchBaby, fetchMom } from "@/lib/api/clientApi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { TbNorthStar } from "react-icons/tb";
 import Icon from "../Icon/Icon";
+import { useJourneyStore } from "@/lib/store/useJourneyStore";
 import TasksReminderCard from "../TasksReminderCard/TasksReminderCard";
 
 interface JourneyDetailsProps {
@@ -21,61 +22,38 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
   const [baby, setBaby] = useState<AboutBaby | null>(null);
   const [mom, setMom] = useState<AboutMom | null>(null);
 
+  const activeTab = useJourneyStore((s) => s.activeTab);
+  const setActiveTab = useJourneyStore((s) => s.setActiveTab);
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [babyData, momData] = await Promise.all([
-          fetchBaby(weekNumber),
-          fetchMom(weekNumber),
-        ]);
-        setBaby(babyData);
-        setMom(momData);
+        if (activeTab === "tab1") {
+          const babyData = await fetchBaby(weekNumber);
+          setBaby(babyData);
+        } else if (activeTab === "tab2") {
+          const momData = await fetchMom(weekNumber);
+          setMom(momData);
+        }
       } catch (err) {
-        console.error("Ошибка загрузки данных:", err);
+        console.error("Помилка завантаження даних:", err);
       }
     };
-
     loadData();
-  }, [weekNumber]);
-  // ============================================
-  // const baby: AboutBaby = {
-  //   analogy: "Ваш малюк зараз розміом з Голівку шпильки.",
-  //   image: "https://ftp.goit.study/img/lehlehka",
-  //   description: ["Крихітна групка клітин, яка називається бластоцистою"],
-  //   interestingFact:
-  //     "Хоча зародок ще мікроскопічний, він вже містить повний набір ДНК",
-  // };
-  // const mom: AboutMom = {
-  //   feelings: {
-  //     states: ["Незмінний стан"],
-  //     sensationDescr:
-  //       "Запліднена яйцеклітина подорожує до матки. Ви, швидше за все, нічого не відчуєте, хоча деякі жінки стверджують, що інтуїтивно 'знали' про зачаття. Наприкінці тижня ...",
-  //   },
-  //   comfortTips: [
-  //     {
-  //       category: "Харчування",
-  //       tip: "Дійте так, ніби ви вже вагітні...",
-  //     },
-  //     {
-  //       category: "Відпочинок",
-  //       tip: "loren10",
-  //     },
-  //     {
-  //       category: "Активність",
-  //       tip: "активность проверка работы иконок",
-  //     },
-  //   ],
-  // };
-  // ============================
+  }, [weekNumber, activeTab]);
+
   const categoryIcons: Record<string, React.ReactElement> = {
     Харчування: <Icon id="tableware_icon" size={24} />,
     Активність: <Icon id="fitness_icon" size={24} />,
-    Відпочинок: <Icon id="chair_icon" size={24} />,
+    "Відпочинок та комфорт": <Icon id="chair_icon" size={24} />,
   };
   // ========================================
   return (
     <div className={css.journeyDetails}>
-      <Tabs defaultValue="tab1">
+      <Tabs
+        value={activeTab}
+        onValueChange={(val) => setActiveTab(val as "tab1" | "tab2")}
+      >
         <TabsList className={css.tabSelector}>
           <TabsTrigger className={css.tabItem} value="tab1">
             Розвиток малюка
@@ -84,7 +62,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
             Тіло мами
           </TabsTrigger>
         </TabsList>
-        {/* <div className={css.contentList}> */}
+
         <TabsContent value="tab1">
           {baby ? (
             <div className={`${css.contentList} ${css.baby}`}>
@@ -135,7 +113,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
                   </ul>
                   <p className={css.item}>{mom.feelings.sensationDescr}</p>
                 </div>
-                <div className={css.contentList}>
+                <div className={`${css.contentList} ${css.tips}`}>
                   <h3 className={css.title}>Поради для вашого комфорту</h3>
                   <ul className={css.tipsList}>
                     {mom.comfortTips.map(
@@ -156,7 +134,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
                   </ul>
                 </div>
               </div>
-              <div className={`${css.contentList} ${css.tasks}`}>
+              <div className={`${css.contentListTasks} ${css.tasks}`}>
                 <TasksReminderCard />
               </div>
             </div>
@@ -164,29 +142,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
             <p>Завантаження сторінки мами...</p>
           )}
         </TabsContent>
-        {/* </div> */}
       </Tabs>
     </div>
   );
 }
-
-// 'use client';
-
-// import { useEffect, useState } from 'react';
-// import css from './JourneyDetails.module.css';
-// import Image from 'next/image';
-// import { AboutBaby, AboutMom, fetchBaby, fetchMom } from '@/lib/api/clientApi';
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
-
-// interface JourneyDetailsProps {
-//   weekNumber: number;
-// }
-
-// export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
-//   const [baby, setBaby] = useState<AboutBaby | null>(null);
-//   const [mom, setMom] = useState<AboutMom | null>(null);
-
-//   useEffect(() => {
-//     fetchBaby(weekNumber).then(setBaby).catch(console.error);
-//     fetchMom(weekNumber).then(setMom).catch(console.error);
-//   }, [weekNumber]);

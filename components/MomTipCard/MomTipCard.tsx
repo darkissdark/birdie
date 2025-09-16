@@ -1,65 +1,57 @@
-"use client";
-
 import css from "./MomTipCard.module.css";
-import { useQuery } from "@tanstack/react-query";
-import { getMomTip } from "@/lib/api/clientApi";
+import {
+  getMomTip,
+  getUserStats,
+  checkServerSession,
+} from "@/lib/api/serverApi";
 
-interface ComfortTip {
-  category: string;
-  tip: string;
-}
-
-const MomTipCard = () => {
-  const {
-    data: momTip,
-    isLoading,
-    isError,
-  } = useQuery<ComfortTip>({
-    queryKey: ["momTip", 1],
-    queryFn: () => getMomTip(1),
-  });
-
-  if (isLoading) {
-    return <div className={css.card}>Завантаження...</div>;
-  }
-
-  if (isError || !momTip) {
-    return <div className={css.card}>Помилка завантаження даних</div>;
-  }
-  return (
-    <div className={css.card}>
-      <h2>Порада для мами</h2>
-      <div className={css.descriptionBox}>
-        <p>
-          <span>{momTip.category}:&nbsp;</span>
-          {momTip.tip}
-        </p>
+const MomTipCard = async () => {
+  try {
+    const isAuth = await checkServerSession();
+    if (!isAuth?.data?.success) {
+      throw new Error("Не авторизований");
+    }
+  } catch {
+    return (
+      <div className={css.card}>
+        <h2>Порада для мами</h2>
+        <div className={css.descriptionBox}>
+          <p>
+            регулярно відвідувати лікаря-гінеколога та дбати про своє фізичне та
+            психологічне здоров&rsquo;я протягом усієї вагітності.! Щоб
+            отримувати персональні поради для майбутніх мам,
+            <span className={css.highlight}>авторизуйтесь</span> на платформі!
+          </p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  try {
+    const { curWeekToPregnant } = await getUserStats();
+    const { category, tip } = await getMomTip(curWeekToPregnant);
+
+    return (
+      <div className={css.card}>
+        <h2>Порада для мами</h2>
+        <div className={css.descriptionBox}>
+          <p>
+            <span>{category}:&nbsp;</span>
+            {tip}
+          </p>
+        </div>
+      </div>
+    );
+  } catch {
+    return (
+      <div className={css.card}>
+        <h2>Порада для мами</h2>
+        <div className={css.descriptionBox}>
+          <p>Не вдалося завантажити пораду. Спробуйте пізніше.</p>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default MomTipCard;
-
-// import css from "./MomTipCard.module.css";
-
-// const MomTipCard = () => {
-//   return (
-//     <div className={css.card}>
-//       <h2>Порада для мами</h2>
-//       <div className={css.descriptionBox}>
-//         <p>
-//           <span>Харчування:&nbsp;</span>
-//           Пийте більше води щодня, щоб підтримувати гідратацію та здоровя під
-//           час вагітності. Lorem ipsum dolor sit amet consectetur adipisicing
-//           elit. Quasi deleniti ullam necessitatibus, porro omnis eveniet
-//           molestiae, consequuntur, alias consequatur adipisci assumenda! Fugiat
-//           animi repellat accusamus ratione sequi exercitationem in
-//           necessitatibus!
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MomTipCard;
