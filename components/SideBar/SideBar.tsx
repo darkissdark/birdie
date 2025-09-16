@@ -5,66 +5,37 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
-import { useUIStore } from "@/lib/store/uiStore";
-import api from "@/lib/axios";
-import { getWeekFromDueDate } from "@/lib/pregnancy/week";
 import BrandLogo from "@/components/Logo/BrandLogo";
-import css from "./SideBar.module.css";
-import { User } from "@/types/user";
+import { useUIStore } from "@/lib/store/uiStore";
+import useAuthStore from "@/lib/store/authStore";
+import { getWeekFromDueDate } from "@/lib/pregnancy/week";
+import api from "@/lib/axios";
 import { ConfirmationModal } from "@/components/ConfirmationModal/ConfirmationModal";
-
-function isUser(v: unknown): v is User {
-  return (
-    !!v && typeof v === "object" && "_id" in v && "email" in v && "name" in v
-  );
-}
+import css from "./SideBar.module.css";
 
 export default function SideBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { isSidebarOpen, closeSidebar } = useUIStore();
-
-  useEffect(() => {
-    const body = document.body;
-    const prev = body.style.overflow;
-    if (isSidebarOpen) {
-      body.style.overflow = "hidden";
-    } else {
-      body.style.overflow = prev || "";
-    }
-    return () => {
-      body.style.overflow = prev || "";
-    };
-  }, [isSidebarOpen]);
-
-  const [me, setMe] = useState<User | null>(null);
+  const isOpen = useUIStore((s) => s.isSidebarOpen);
+  const close = useUIStore((s) => s.closeSidebar);
+  const me = useAuthStore((s) => s.user);
+  const clearIsAuthenticated = useAuthStore((s) => s.clearIsAuthenticated);
   const isAuthed = !!me;
-
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
-    let canceled = false;
-
-    (async () => {
-      try {
-        const res = await api.get("/users/current");
-        if (!canceled && res.status === 200 && isUser(res.data)) {
-          setMe(res.data);
-        } else if (!canceled) {
-          setMe(null);
-        }
-      } catch {
-        if (!canceled) setMe(null);
-      }
-    })();
-
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    document.addEventListener("keydown", onKey);
     return () => {
-      canceled = true;
+      document.body.style.overflow = prev || "";
+      document.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [isOpen, close]);
 
-  const week = useMemo(() => getWeekFromDueDate(me), [me]);
-
+  const week = useMemo(() => getWeekFromDueDate(me) ?? 1, [me]);
   const nav = isAuthed
     ? ([
         { href: "/", text: "Мій день", icon: "myDay_icon" as const },
@@ -99,53 +70,53 @@ export default function SideBar() {
         },
       ] as const);
 
-  const confirmLogout = async () => {
+  const onLogoutConfirm = async () => {
     try {
       await api.post("/auth/logout");
-      setShowConfirm(false);
-      setMe(null);
-      closeSidebar();
-      router.push("/auth/login");
     } catch {
+    } finally {
       setShowConfirm(false);
+      clearIsAuthenticated();
+      close();
+      router.push("/auth/login");
     }
   };
 
-  const NavList = (
+  const Nav = (
     <nav aria-label="Головна навігація" className={css.nav}>
       {nav.map((l) => {
         const isActive =
           (pathname === "/" && l.href === "/") ||
-          (l.href !== "/" && pathname?.startsWith(l.href.split("?")[0]));
+          (l.href !== "/" &&
+            (pathname?.startsWith(l.href.split("?")[0]) ?? false));
+
         return (
           <Link
             key={l.text}
             href={l.href}
+            onClick={close}
             className={`${css.link} ${isActive ? css.active : ""}`}
-            onClick={closeSidebar}
           >
-            <Icon id={l.icon} size={24} aria-hidden />
-            <span>{l.text}</span>
+            <Icon id={l.icon} size={24} className={css.linkIcon} aria-hidden />
+            <span className={css.linkText}>{l.text}</span>
           </Link>
         );
       })}
     </nav>
   );
 
-  const FooterArea = isAuthed ? (
+  const Footer = isAuthed ? (
     <div className={css.userRow}>
-      <div className={css.avatar}>
-        <Image
-          src={
-            me?.avatarUrl ||
-            "https://ftp.goit.study/img/common/women-default-avatar.jpg"
-          }
-          alt="Аватар користувача"
-          fill
-          sizes="48px"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
+      <Image
+        src={
+          me?.avatarUrl ||
+          "https://ftp.goit.study/img/common/women-default-avatar.jpg"
+        }
+        alt={me?.name || "User avatar"}
+        width={40}
+        height={40}
+        className={css.avatar}
+      />
       <div className={css.userName}>
         <span>{me?.name}</span>
         <small>{me?.email}</small>
@@ -161,10 +132,10 @@ export default function SideBar() {
     </div>
   ) : (
     <div className={css.userRow} role="navigation" aria-label="Авторизація">
-      <Link href="/auth/login" className={css.link} onClick={closeSidebar}>
+      <Link href="/auth/login" className={css.link} onClick={close}>
         <span>Увійти</span>
       </Link>
-      <Link href="/auth/register" className={css.link} onClick={closeSidebar}>
+      <Link href="/auth/register" className={css.link} onClick={close}>
         <span>Зареєструватися</span>
       </Link>
     </div>
@@ -172,46 +143,35 @@ export default function SideBar() {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className={css.sidebar}>
+      <div
+        className={`${css.overlay} ${isOpen ? css.overlayOpen : ""}`}
+        onClick={close}
+      />
+
+      <aside
+        id="sidebar-drawer"
+        className={`${css.sidebar} ${isOpen ? css.open : ""}`}
+        aria-hidden={!isOpen}
+      >
         <div className={css.inner}>
           <div className={css.brand}>
             <Link href="/" className={css.logoWrapper} aria-label="На головну">
               <BrandLogo className={css.logoFull} variant="white" />
             </Link>
+            <button
+              type="button"
+              className={css.closeBtn}
+              onClick={close}
+              aria-label="Закрити меню"
+            >
+              <Icon id="close_icon" size={32} aria-hidden />
+            </button>
           </div>
 
-          {NavList}
-          <div className={css.footer}>{FooterArea}</div>
-        </div>
-      </aside>
+          {Nav}
 
-      {/* Overlay + Drawer for mobile/tablet*/}
-      <div
-        className={`${css.overlay} ${isSidebarOpen ? css.overlayOpen : ""}`}
-        onClick={closeSidebar}
-      />
-      <aside
-        id="sidebar-drawer"
-        className={`${css.drawer} ${isSidebarOpen ? css.drawerOpen : ""}`}
-        aria-hidden={!isSidebarOpen}
-      >
-        <div className={css.drawerHeader}>
-          <button
-            type="button"
-            className={css.closeBtn}
-            onClick={closeSidebar}
-            aria-label="Закрити меню"
-          >
-            <Icon id="close_icon" size={24} aria-hidden />
-          </button>
-          <Link href="/" className={css.logoWrapper} aria-label="На головну">
-            <BrandLogo className={css.logoFull} variant="white" />
-          </Link>
+          <div className={css.footer}>{Footer}</div>
         </div>
-
-        {NavList}
-        <div className={css.footer}>{FooterArea}</div>
       </aside>
 
       {showConfirm && (
@@ -219,7 +179,7 @@ export default function SideBar() {
           title="Ви впевнені, що хочете вийти?"
           confirmButtonText="Так"
           cancelButtonText="Скасувати"
-          onConfirm={confirmLogout}
+          onConfirm={onLogoutConfirm}
           onCancel={() => setShowConfirm(false)}
         />
       )}

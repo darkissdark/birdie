@@ -325,17 +325,22 @@
 .input {
   width: 100%;
   flex: 1;
-  padding: 12px 16px;
-  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: inherit;
 }
 
 .input:focus {
-  box-shadow: 0 0 0 2px rgba(255, 218, 224, 0.5);
-  border-color: #ffdae0;
+  outline: none;
+  border-color: #ffcbd3;
+  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
 }
 
 .sendButton {
@@ -369,6 +374,356 @@
   border-top: 1px solid #f0f0f0;
 }
 
+/* === ФОРМА ЕЛЕМЕНТИ === */
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  font-weight: 500;
+  color: #374151;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.textarea {
+  width: 100%;
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+  min-height: 100px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #ffcbd3;
+  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
+}
+
+/* === СЕЛЕКТ ЕМОЦІЙ (стиль з AddDiaryEntryForm) === */
+.customSelect {
+  position: relative;
+  z-index: 100;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 101;
+  min-height: 44px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.selectTrigger:hover {
+  border-color: #d1d5db;
+}
+
+.selectTriggerOpen {
+  border-radius: 12px 12px 0px 0px;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.selectTrigger:focus {
+  outline: none;
+  border-color: #ffcbd3;
+  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
+}
+
+.selectContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.selectPlaceholder {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.selectArrow {
+  color: #9ca3af;
+  transition: transform 0.2s;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.selectArrowOpen {
+  transform: rotate(180deg);
+}
+
+/* === ТЕГИ === */
+.selectedTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.selectedTag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgb(0, 0, 0);
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* === DROPDOWN === */
+.selectDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgb(242, 242, 242);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-top: none;
+  border-radius: 0px 0px 12px 12px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  max-height: 220px;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.selectDropdownInner {
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 203, 211, 0.8) transparent;
+}
+
+.selectDropdownInner::-webkit-scrollbar {
+  width: 8px;
+}
+
+.selectDropdownInner::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.selectDropdownInner::-webkit-scrollbar-thumb {
+  background: rgba(255, 203, 211, 0.8);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s;
+}
+
+.selectDropdownInner::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 203, 211, 1);
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  color: #374151;
+}
+
+.selectOption:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.selectOption:focus {
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.selectOptionSelected {
+  color: #000000;
+  font-weight: 500;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.selectOptionSelected .checkbox {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+.checkbox svg {
+  display: block;
+}
+
+/* === СТАНИ ЗАВАНТАЖЕННЯ === */
+.loadingContainer,
+.errorContainer,
+.noDataContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+}
+
+.errorContainer {
+  border-color: #fecaca;
+  background-color: #fef2f2;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+.spinner,
+.loadingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #ffdae0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.retryButton {
+  padding: 6px 12px;
+  background-color: #ffdae0;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #ffcbd3;
+}
+
+/* === ПОМИЛКИ === */
+.errorMessageContainer {
+  min-height: 24px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.25;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  transform: translateY(-2px);
+}
+
+.errorMessage.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === АНІМАЦІЇ === */
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* === ДОДАТКОВІ СТИЛІ === */
+.formModal {
+  max-width: 500px;
+  height: auto;
+}
+
+.taskModal {
+  max-width: 400px;
+  height: auto;
+}
+
+.formButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.input[type="date"] {
+  color: #333;
+}
+
+.input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #ffdae0;
+  cursor: pointer;
+}
+
+/* === МОДАЛЬНІ СТИЛІ === */
+.modal .customSelect {
+  z-index: 1050;
+}
+
+.modal .selectDropdown {
+  z-index: 10000;
+  position: fixed;
+}
+
+/* === АДАПТИВНІСТЬ === */
 @media (max-width: 768px) {
   .modalContent {
     width: 100%;
@@ -389,216 +744,42 @@
   .quickReplyButton {
     width: 100%;
   }
-}
-/* Додайте ці стилі до існуючого GeminiAssistant.module.css */
 
-/* Form elements styling */
-.formGroup {
-  margin-bottom: 16px;
-}
+  .selectDropdown {
+    max-height: 180px;
+    z-index: 10001;
+  }
 
-.formLabel {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #333;
-}
+  .selectOption {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
 
-.textarea {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  resize: vertical;
-  min-height: 100px;
-  font-family: inherit;
-}
+  .checkbox {
+    width: 22px;
+    height: 22px;
+  }
 
-.textarea:focus {
-  box-shadow: 0 0 0 2px rgba(255, 218, 224, 0.5);
-  border-color: #ffdae0;
-}
-
-/* Enhanced modal styling */
-.formModal {
-  max-width: 500px;
-  height: auto;
-}
-
-.taskModal {
-  max-width: 400px;
-  height: auto;
-}
-
-/* Form buttons container */
-.formButtons {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-/* Emotion selector */
-.emotionSelector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.emotionChip {
-  padding: 6px 12px;
-  background: #f8f9fa;
-  color: #333;
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.emotionChip:hover {
-  background: #ffdae0;
-  border-color: #ffcbd3;
-}
-
-.emotionChip.selected {
-  background: #ffdae0;
-  border-color: #ffcbd3;
-  color: #000;
-  font-weight: 600;
-}
-
-/* Enhanced tab styling for new tabs */
-.tabs {
-  display: flex;
-  background: rgba(0, 0, 0, 0);
-  padding: 8px;
-  gap: 4px;
-  overflow-x: auto;
-  border-radius: 100px;
-}
-
-.tab {
-  flex: 1;
-  min-width: fit-content;
-  padding: 10px 16px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
-  color: #000000;
-  white-space: nowrap;
-}
-
-.activeTab {
-  background: #ffdae0;
-  border: 1px solid rgba(255, 255, 255, 0);
-  border-radius: 100px;
-  padding: 10px 20px;
-  color: #000000;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-/* Action buttons for tab content */
-.actionButton {
-  background: #ffdae0;
-  color: #000;
-  border: 1px solid #ffcbd3;
-  border-radius: 20px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.actionButton:hover {
-  background: #ffcbd3;
-  border-color: #ffb3bd;
-  transform: translateY(-1px);
-}
-
-/* Icon styling */
-.buttonIcon {
-  font-size: 16px;
-}
-
-/* Cancel button variant */
-.cancelButton {
-  background: #f8f9fa;
-  color: #666;
-  border: 1px solid #e0e0e0;
-}
-
-.cancelButton:hover {
-  background: #e9ecef;
-  border-color: #ced4da;
-}
-
-/* Enhanced empty state */
-.emptyState {
-  text-align: center;
-  padding: 40px 20px;
-  color: #666;
-}
-
-.emptyState h3 {
-  margin: 0 0 12px 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.emptyState p {
-  margin: 8px 0;
-  line-height: 1.5;
-}
-
-/* Date input styling */
-.input[type="date"] {
-  color: #333;
-}
-
-.input[type="date"]::-webkit-calendar-picker-indicator {
-  color: #ffdae0;
-  cursor: pointer;
-}
-
-/* Responsive improvements */
-@media (max-width: 768px) {
   .tabs {
-    gap: 2px;
+    gap: 4px;
     padding: 6px;
+    overflow-x: auto;
   }
 
   .tab {
     font-size: 12px;
     padding: 8px 12px;
+    min-width: fit-content;
+    white-space: nowrap;
   }
 
   .activeTab {
     padding: 8px 16px;
+    width: auto;
+    height: auto;
   }
 
   .formButtons {
     flex-direction: column;
-  }
-
-  .emotionSelector {
-    gap: 6px;
-  }
-
-  .emotionChip {
-    font-size: 11px;
-    padding: 4px 8px;
   }
 }

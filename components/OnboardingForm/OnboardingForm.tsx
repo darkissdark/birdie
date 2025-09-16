@@ -66,11 +66,7 @@ export default function OnboardingForm({ isLoading }: OnboardingFormProps) {
   return (
     <>
       {/* Page title */}
-      <h2 className={styles.titleContent}>
-        <span>Давайте</span>
-        <span>познайомимось</span>
-        <span>ближче</span>
-      </h2>
+      <h2 className={styles.titleContent}>Давайте познайомимось ближче</h2>
       <OnboardingAvatar />
 
       <Formik
