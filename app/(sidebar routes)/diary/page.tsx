@@ -6,18 +6,18 @@ import {
 import css from "./DiaryPage.module.css";
 import DiaryPageClient from "./DiaryPageClient";
 import { getDiaryListServer } from "@/lib/api/serverApi";
-import { DiaryListParams } from "@/lib/api/clientApi";
+import { DiaryListResponse } from "@/lib/api/clientApi";
 
 const DiaryPage = async () => {
   const queryClient = new QueryClient();
-  const params: DiaryListParams = {
-    page: 1,
-    sortOrder: "asc",
-  };
 
-  await queryClient.prefetchQuery({
-    queryKey: ["diary", params],
-    queryFn: () => getDiaryListServer(params),
+  await queryClient.prefetchInfiniteQuery<DiaryListResponse>({
+    queryKey: ["diary", { sortOrder: "desc" }],
+    queryFn: ({ pageParam = 1 }) =>
+      getDiaryListServer({ page: pageParam as number, sortOrder: "desc" }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: DiaryListResponse) =>
+      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
   });
 
   return (

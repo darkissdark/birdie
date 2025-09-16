@@ -1,11 +1,12 @@
 import { User } from "@/types/user";
 import { CreateTask } from "@/types/task";
 import { nextServer } from "./api";
-import { DiaryEntry, SortOrder } from "@/types/dairy";
+
 import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { AboutBaby, AboutMom } from "@/types/weeks";
+import { DiaryEntry, DiaryEntryData, SortOrder } from "@/types/diary";
 
 export type { AboutBaby, AboutMom };
 
@@ -43,7 +44,7 @@ export const getMe = async () => {
 };
 
 export interface DiaryListResponse {
-  diaryNotes: DiaryEntry[];
+  diaryNotes: DiaryEntryData[];
   totalCount: number;
   totalPages: number;
   page: number;
