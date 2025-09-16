@@ -107,20 +107,28 @@ export default function SideBar() {
 
   const Footer = isAuthed ? (
     <div className={css.userRow}>
-      <Image
-        src={
-          me?.avatarUrl ||
-          "https://ftp.goit.study/img/common/women-default-avatar.jpg"
-        }
-        alt={me?.name || "User avatar"}
-        width={40}
-        height={40}
-        className={css.avatar}
-      />
-      <div className={css.userName}>
-        <span>{me?.name}</span>
-        <small>{me?.email}</small>
-      </div>
+      <Link
+        href="/profile"
+        className={css.link}
+        onClick={close}
+        aria-label="Відкрити Профіль"
+        style={{ gap: 8, padding: 0 }}
+      >
+        <Image
+          src={
+            me?.avatarUrl ||
+            "https://ftp.goit.study/img/common/women-default-avatar.jpg"
+          }
+          alt={me?.name || "User avatar"}
+          width={40}
+          height={40}
+          className={css.avatar}
+        />
+        <div className={css.userName}>
+          <span>{me?.name}</span>
+          <small>{me?.email}</small>
+        </div>
+      </Link>
       <button
         type="button"
         className={css.logoutInline}
