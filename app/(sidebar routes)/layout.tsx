@@ -5,6 +5,21 @@ import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import Header from "@/components/Header/Header";
 import { GeminiAssistant } from "@/components/GeminiAssistant/GeminiAssistant";
 import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
+import { Lato, Comfortaa } from "next/font/google";
+
+const lato = Lato({
+  variable: "--font-lato",
+  display: "swap",
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
+
+const comfortaa = Comfortaa({
+  variable: "--font-comfortaa",
+  display: "swap",
+  weight: ["700"],
+  subsets: ["latin", "cyrillic"],
+});
 
 interface NotesLayoutProps {
   children: ReactNode;
@@ -12,7 +27,7 @@ interface NotesLayoutProps {
 
 export default function NotesLayout({ children }: NotesLayoutProps) {
   return (
-    <div className={css.pageLayout}>
+    <div className={`${css.pageLayout} ${lato.variable} ${comfortaa.variable}`}>
       <SideBar />
       <div className={css.pageWrapper}>
         <Header />

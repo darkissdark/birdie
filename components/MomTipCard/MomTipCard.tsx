@@ -1,34 +1,26 @@
 import css from "./MomTipCard.module.css";
-import { getMomTip, getMe, getUserStats } from "@/lib/api/serverApi";
+import {
+  getMomTip,
+  getUserStats,
+  checkServerSession,
+} from "@/lib/api/serverApi";
 
 const MomTipCard = async () => {
-  let isAuthenticated = false;
   try {
-    const user = await getMe();
-    isAuthenticated = !!user?._id;
+    const isAuth = await checkServerSession();
+    if (!isAuth?.data?.success) {
+      throw new Error("Не авторизований");
+    }
   } catch {
     return (
       <div className={css.card}>
         <h2>Порада для мами</h2>
         <div className={css.descriptionBox}>
           <p>
-            Не вдалося перевірити авторизацію. Спробуйте перезавантажити
-            сторінку.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className={css.card}>
-        <h2>Порада для мами</h2>
-        <div className={css.descriptionBox}>
-          <p>
-            Підтримуйте гарний настрій, це важливо! Щоб отримувати персональні
-            поради для майбутніх мам,
-            <span className={css.highlight}>зареєструйтесь</span> на платформі!
+            регулярно відвідувати лікаря-гінеколога та дбати про своє фізичне та
+            психологічне здоров&rsquo;я протягом усієї вагітності.! Щоб
+            отримувати персональні поради для майбутніх мам,
+            <span className={css.highlight}>авторизуйтесь</span> на платформі!
           </p>
         </div>
       </div>

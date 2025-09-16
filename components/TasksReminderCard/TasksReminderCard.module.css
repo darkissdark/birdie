@@ -200,6 +200,7 @@
 
   .tasksHeader h2 {
     font-size: 24px;
+    font-family: inherit;
   }
 
   .tasksList {
@@ -210,6 +211,8 @@
 
   .data {
     font-size: 12px;
+    width: 100px;
+    height: 20px;
   }
 
   .taskDescription {

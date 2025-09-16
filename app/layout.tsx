@@ -18,7 +18,7 @@ const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
   display: "swap",
   weight: ["700"],
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
