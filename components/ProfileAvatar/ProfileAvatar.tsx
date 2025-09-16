@@ -22,8 +22,8 @@ export default function ProfileAvatar() {
       try {
         const updatedUser = await uploadImage(file);
         setUser({
-          ...user, // keep old name & email
-          ...updatedUser, // overwrite avatarUrl
+          ...user,
+          ...updatedUser,
         });
       } catch (error) {
         setError((error as ApiError).message);

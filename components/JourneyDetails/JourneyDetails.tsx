@@ -35,12 +35,6 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
           const momData = await fetchMom(weekNumber);
           setMom(momData);
         }
-        // const [babyData, momData] = await Promise.all([
-        //   fetchBaby(weekNumber),
-        //   fetchMom(weekNumber),
-        // ]);
-        // setBaby(babyData);
-        // setMom(momData);
       } catch (err) {
         console.error("Помилка завантаження даних:", err);
       }
@@ -140,7 +134,7 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
                   </ul>
                 </div>
               </div>
-              <div className={`${css.contentList} ${css.tasks}`}>
+              <div className={`${css.contentListTasks} ${css.tasks}`}>
                 <TasksReminderCard />
               </div>
             </div>

@@ -35,10 +35,23 @@
 @media only screen and (min-width: 1440px) {
   .pageContainer {
     display: flex;
+    flex-direction: column;
+  }
+
+  .cardsMainContainer {
+    display: flex;
     flex-direction: row;
+    gap: 32px;
   }
 
   .cardsContainerLeft {
     width: 642px;
+  }
+
+  .cardsContainerRight {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
   }
 }

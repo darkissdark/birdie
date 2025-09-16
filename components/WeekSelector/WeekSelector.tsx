@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import css from "./WeekSelector.module.css";
@@ -29,20 +29,20 @@ export default function WeekSelector({
     }
   };
 
-  // useEffect(() => {
-  //   const index = weeks.findIndex((w) => w === selectedWeek);
-  //   const buttonEl = buttonRefs.current[index];
-  //   const containerEl = containerRef.current;
-  //   if (buttonEl && containerEl) {
-  //     const buttonLeft = buttonEl.offsetLeft;
-  //     const buttonWidth = buttonEl.offsetWidth;
-  //     const containerWidth = containerEl.offsetWidth;
-  //     containerEl.scrollTo({
-  //       left: buttonLeft - containerWidth / 2 + buttonWidth / 2,
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // }, [selectedWeek, weeks]);
+  useEffect(() => {
+    const index = weeks.findIndex((w) => w === selectedWeek);
+    const buttonEl = buttonRefs.current[index];
+    const containerEl = containerRef.current;
+    if (buttonEl && containerEl) {
+      const buttonLeft = buttonEl.offsetLeft;
+      const buttonWidth = buttonEl.offsetWidth;
+      const containerWidth = containerEl.offsetWidth;
+      containerEl.scrollTo({
+        left: buttonLeft - containerWidth / 2 + buttonWidth / 2,
+        behavior: "smooth",
+      });
+    }
+  }, [selectedWeek, weeks]);
 
   return (
     <div className={css.container} ref={containerRef}>

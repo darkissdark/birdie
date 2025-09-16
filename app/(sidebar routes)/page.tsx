@@ -48,15 +48,19 @@ export default async function DashboardPage() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className={css.pageContainer}>
-        <div className={css.cardsContainerLeft}>
-           <GreetingBlock />
-        <StatusBlock />
-          <BabyTodayCard />
-          <MomTipCard />
+        <div>
+          <GreetingBlock />
         </div>
-        <div className={css.cardsContainer}>
-          <TasksReminderCard />
-          <FeelingCheckCard />
+        <div className={css.cardsMainContainer}>
+          <div className={css.cardsContainerLeft}>
+            <StatusBlock />
+            <BabyTodayCard />
+            <MomTipCard />
+          </div>
+          <div className={css.cardsContainerRight}>
+            <TasksReminderCard />
+            <FeelingCheckCard />
+          </div>
         </div>
       </div>
     </HydrationBoundary>

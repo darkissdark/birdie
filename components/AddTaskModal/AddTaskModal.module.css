@@ -38,9 +38,10 @@
   top: 22.5px;
   right: 32px;
   fill: #000;
+  cursor: pointer;
 }
 .closeButton:hover {
-  color: #374151;
+  fill: #b2b2b2;
 }
 
 @media (min-width: 768px) {

@@ -1,91 +1,78 @@
-/* mobile */
-
-/* tablet */
-@media screen and (min-width: 768px) {
+.titleContent {
+  margin: 130px auto 32px;
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 120%;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #000;
+  width: 480px;
 }
 
-/* desktop */
+.form {
+  width: 480px;
+  margin: 0 auto;
+}
 
-@media screen and (min-width: 1440px) {
-  .titleContent {
-    margin: 130px 56px 32px;
-    font-family: "Comfortaa", sans-serif;
-    font-weight: 700;
-    font-size: 48px;
-    line-height: 120%;
-    letter-spacing: 0.01em;
-    text-align: center;
-    color: #000;
-  }
+.formField {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
 
-  .titleContent span {
-    display: block;
-  }
+.selectGender {
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  /* width: 480px; */
+  height: 40px;
+  background: #f2f2f2;
 
-  .labelGender {
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: #000;
-  }
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7f7f7f;
+}
 
-  .form {
-    width: 480px;
-    margin: 0 auto;
-  }
+.labelbirthDate {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #000;
+}
 
-  .formField {
-    /* margin: 32px 56px 0 56px; */
-    margin-top: 32px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-    position: relative;
-  }
+.input {
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 8px 12px;
+  width: 100%;
+  height: 40px;
+  background: #f2f2f2;
 
-  .selectGender {
-    border: 1px solid rgba(255, 255, 255, 0);
-    border-radius: 12px;
-    padding: 8px 12px;
-    width: 480px;
-    height: 40px;
-    background: #f2f2f2;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #7f7f7f;
 
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: #7f7f7f;
-  }
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
 
-  .labelbirthDate {
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: #000;
-  }
-
-  .input {
-    border: 1px solid rgba(255, 255, 255, 0);
-    border-radius: 12px;
-    padding: 8px 12px;
-    width: 100%;
-    height: 40px;
-    background: #f2f2f2;
-
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 150%;
-    color: #7f7f7f;
-  }
+.input:hover,
+.input:focus {
+  border-color: #e9708d;
 }
 
 .submitButton {
-  /* margin: 32px 56px 0 56px; */
   margin-top: 32px;
   border-bottom: 4px solid #ffcbd3;
   border-radius: 100px;
@@ -123,7 +110,6 @@
 
 .selectWrapper {
   position: relative;
-  width: 480px;
 }
 
 .selectGender {
@@ -131,7 +117,6 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
-
 
 .errorMessage {
   position: absolute;
@@ -145,4 +130,28 @@
   font-size: 12px;
   line-height: 1.6;
   color: #c60000;
+}
+
+@media screen and (max-width: 1439px) {
+  .titleContent {
+    font-size: 36px;
+    line-height: 120%;
+    letter-spacing: 0.01em;
+    margin-top: 110px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .titleContent {
+    width: 335px;
+    margin-top: 30px;
+  }
+
+  .form {
+    width: 335px;
+  }
+
+  .submitButton {
+    width: 335px;
+  }
 }
