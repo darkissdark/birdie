@@ -49,7 +49,7 @@ export default function SideBar() {
       ] as const)
     : ([
         {
-          href: "/auth/register",
+          href: "/",
           text: "Мій день",
           icon: "myDay_icon" as const,
         },
