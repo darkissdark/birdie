@@ -53,10 +53,16 @@ const DiaryPageClient = () => {
     }
   }, [entries, selectedEntry, isDesktop]);
 
-  const handleUpdateEntry = async () => {
+  const handleUpdateEntry = async (updatedEntry?: DiaryEntry) => {
     try {
-      await refetch();
-      toast.success("Запис успішно оновлено!");
+      if (updatedEntry) {
+        setSelectedEntry(updatedEntry);
+        await refetch();
+        toast.success("Запис успішно оновлено!");
+      } else {
+        await refetch();
+        toast.success("Запис успішно оновлено!");
+      }
     } catch (error) {
       console.error("Error updating entry:", error);
       toast.error("Помилка при оновленні запису");

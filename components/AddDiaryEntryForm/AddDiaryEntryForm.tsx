@@ -11,7 +11,7 @@ import { useEmotions } from "@/lib/hooks/useEmotions";
 
 interface AddDiaryEntryFormProps {
   entry?: DiaryEntry;
-  onSuccess: () => void;
+  onSuccess: (updatedEntry?: DiaryEntry) => void;
   onCancel?: () => void;
 }
 
@@ -83,16 +83,18 @@ export const AddDiaryEntryForm: React.FC<AddDiaryEntryFormProps> = ({
       };
 
       if (entry) {
-        await api.patch(`/diary/${entry._id}`, submitData);
+        const response = await api.patch(`/diary/${entry._id}`, submitData);
+        const updatedEntry = response.data;
+        
+        toast.success("Запис успішно оновлено!");
+        onSuccess(updatedEntry);
       } else {
-        await api.post("/diary", submitData);
+        const response = await api.post("/diary", submitData);
+        const newEntry = response.data;
+        
+        toast.success("Запис успішно створено!");
+        onSuccess(newEntry);
       }
-
-      toast.success(
-        entry ? "Запис успішно оновлено!" : "Запис успішно створено!"
-      );
-
-      onSuccess();
     } catch (error: unknown) {
       let errorMessage = "Сталася помилка при збереженні запису";
 
