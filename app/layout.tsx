@@ -6,6 +6,23 @@ import "./globals.css";
 import LogoSprite from "@/components/Logo/LogoSprite";
 import UiSprite from "@/components/Icon/UiSprite";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+import { Toaster } from "react-hot-toast";
+
+const toastConfig = {
+  position: "top-right" as const,
+  toastOptions: {
+    duration: 4000,
+    style: { background: "#363636", color: "#fff" },
+    success: {
+      duration: 3000,
+      iconTheme: { primary: "#4ade80", secondary: "#fff" },
+    },
+    error: {
+      duration: 4000,
+      iconTheme: { primary: "#ef4444", secondary: "#fff" },
+    },
+  },
+};
 
 const lato = Roboto_Condensed({
   variable: "--font-lato",
@@ -22,9 +39,6 @@ const comfortaa = Comfortaa({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-  ),
   title: "Лелека - Твій помічник під час вагітності",
   description:
     "Отримуй щоденні поради, відстежуй розвиток малюка та плануй свій день разом з нами.",
@@ -56,6 +70,7 @@ export default function RootLayout({
             <LogoSprite />
             <UiSprite />
             {children}
+            <Toaster {...toastConfig} />
           </body>
         </AuthProvider>
       </TanStackProvider>

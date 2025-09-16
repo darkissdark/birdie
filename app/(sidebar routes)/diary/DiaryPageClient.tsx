@@ -58,10 +58,8 @@ const DiaryPageClient = () => {
       if (updatedEntry) {
         setSelectedEntry(updatedEntry);
         await refetch();
-        toast.success("Запис успішно оновлено!");
       } else {
         await refetch();
-        toast.success("Запис успішно оновлено!");
       }
     } catch (error) {
       console.error("Error updating entry:", error);
