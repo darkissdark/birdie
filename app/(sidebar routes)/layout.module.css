@@ -12,19 +12,20 @@
 
 .main {
   flex: 1;
-  padding: 16px;
+  min-width: 375px;
+  padding: 4px 20px 0;
 }
 
 @media (min-width: 768px) {
   .main {
-    padding: 20px;
+    width: 768px;
+    padding: 4px 32px 0;
   }
 }
 
 @media (min-width: 1440px) {
   .main {
     width: 1128px;
-    padding: 24px 32px;
   }
   .pageLayout {
     max-width: 1440px;
