@@ -1,7 +1,6 @@
 /* Mobile First - 375px base */
 .wellbeingContainer {
   max-width: 100%;
-  margin: 0 12px;
   border-radius: 32px;
   padding: 24px;
   width: 335px;
@@ -10,7 +9,7 @@
 }
 
 .wellbeingTitle {
-  margin: 0 0 16px 0;
+  margin: 0 0 8px 0;
   line-height: 1.3;
   font-family: var(--second-family);
   font-weight: 700;
@@ -25,7 +24,6 @@
 }
 
 .recommendationsLabel {
-  margin: 0 0 6px 0;
   font-family: var(--font-family);
   font-weight: 600;
   font-size: 14px;
@@ -74,7 +72,6 @@
 /* Tablet - 768px and up */
 @media screen and (min-width: 768px) {
   .wellbeingContainer {
-    border-radius: 16px;
     padding: 20px;
     width: 100%;
     max-width: none;
@@ -83,7 +80,7 @@
 
   .wellbeingTitle {
     font-size: 20px;
-    margin: 0 0 20px 0;
+    margin: 0 0 8px 0;
   }
 
   .recommendationsSection {
@@ -92,7 +89,6 @@
 
   .recommendationsLabel {
     font-size: 14px;
-    margin: 0 0 8px 0;
   }
 
   .journalButton {

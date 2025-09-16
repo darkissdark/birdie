@@ -9,10 +9,22 @@
   gap: 16px;
 }
 
+.cardsMainContainer {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 32px;
+}
+
 .cardsContainerLeft {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.cardsContainerRight {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* !TABLET */
@@ -21,7 +33,13 @@
     display: flex;
     flex-direction: column;
     /* padding: 16px 32px 16px 32px; */
+  }
+
+  .cardsMainContainer {
+    display: flex;
+    flex-direction: column;
     gap: 32px;
+    padding-bottom: 0px;
   }
 
   .cardsContainerLeft {
@@ -51,7 +69,6 @@
   .cardsContainerRight {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 32px;
   }
 }

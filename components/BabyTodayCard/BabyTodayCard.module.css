@@ -4,6 +4,7 @@
   min-width: 335px;
   width: 100%;
   background: #fff4f6;
+  margin-bottom: 8px;
 }
 
 .title {
@@ -55,6 +56,10 @@
 
 /* !TABLET */
 @media screen and (min-width: 768px) {
+  .card {
+    margin-bottom: 0px;
+  }
+
   .boxImgAndStats {
     display: flex;
     flex-direction: row;

@@ -2,9 +2,9 @@
 .container {
   display: flex;
   flex-direction: row;
-  gap: 12px;
-  width: 375px;
-  height: 121px;
+  gap: 16px;
+  width: 335px;
+  height: 105px;
 }
 
 .statItem {
@@ -50,8 +50,8 @@
 @media screen and (min-width: 768px) {
   .container {
     gap: 16px;
-    width: 768px;
-    height: 121px;
+    width: 704px;
+    height: 105px;
   }
 
   .statItem {
@@ -72,6 +72,7 @@
   .container {
     gap: 32px;
     min-width: 642px;
+    height: 127px;
   }
 
   .statItem {
