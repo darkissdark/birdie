@@ -4,8 +4,9 @@ import SideBar from "@/components/SideBar/SideBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import Header from "@/components/Header/Header";
 import { GeminiAssistant } from "@/components/GeminiAssistant/GeminiAssistant";
-import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
 import { Lato, Comfortaa } from "next/font/google";
+import ThemeController from "@/components/Theme/ThemeController";
+import "@/styles/theme-tokens.css";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -28,6 +29,7 @@ interface NotesLayoutProps {
 export default function NotesLayout({ children }: NotesLayoutProps) {
   return (
     <div className={`${css.pageLayout} ${lato.variable} ${comfortaa.variable}`}>
+      <ThemeController />
       <SideBar />
       <div className={css.pageWrapper}>
         <Header />

@@ -6,6 +6,7 @@ import "./globals.css";
 import LogoSprite from "@/components/Logo/LogoSprite";
 import UiSprite from "@/components/Icon/UiSprite";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+import "@/styles/theme-tokens.css";
 
 const lato = Roboto_Condensed({
   variable: "--font-lato",
