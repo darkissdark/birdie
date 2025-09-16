@@ -149,7 +149,9 @@ export const fetchNoteByIdServer = async (
       Cookie: cookieStore.toString(),
     },
   });
-  
+  return data;
+};
+
 export const updateTaskStatusServer = async (
   taskId: string,
   isDone: boolean
