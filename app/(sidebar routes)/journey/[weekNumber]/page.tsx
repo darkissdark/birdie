@@ -4,6 +4,7 @@ import WeekSelector from "@/components/WeekSelector/WeekSelector";
 import JourneyDetails from "@/components/JourneyDetails/JourneyDetails";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Вагітність. Цікаве.",
@@ -24,24 +25,22 @@ export const metadata: Metadata = {
 };
 
 type JourneyPageProps = {
-  params: Promise<{ weekNumber?: number[] }>;
+  params: Promise<{ weekNumber: number }>;
 };
 
 export default async function Page({ params }: JourneyPageProps) {
-  const { weekNumber } = await params;
+  let { weekNumber } = await params;
+  console.log(weekNumber);
   const weekParam = Number(weekNumber);
   const greeting = await fetchGreeting();
   const currentWeek = greeting.curWeekToPregnant;
-  // const cookieStore = cookies();
-  // const token = cookieStore.get("refreshToken");
 
-  // let greeting = null;
-  // let currentWeek = 0;
-
-  // if (token) {
-  //   greeting = await fetchGreeting();
-  //   currentWeek = greeting.curWeekToPregnant;
-  // }
+  console.log("weekNumber: ", weekNumber);
+  console.log("currentWeek: ", currentWeek);
+  if (currentWeek < weekNumber) {
+    weekNumber = currentWeek;
+    redirect(`/journey/${weekNumber}`);
+  }
 
   return (
     <>
