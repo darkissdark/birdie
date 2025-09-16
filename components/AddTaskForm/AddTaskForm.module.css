@@ -34,6 +34,9 @@
   transition: border-color 0.3s ease;
 }
 
+.inputField.date {
+  cursor: pointer;
+}
 .inputField:focus {
   border-color: #ffcbd3;
 }
