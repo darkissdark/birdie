@@ -61,6 +61,10 @@ export async function fetchGreeting(): Promise<WeeksGeneralInfo> {
 }
 
 export const getTasksServer = async (): Promise<Task[]> => {
+  const isAuth = await checkServerSession();
+  if (!isAuth?.data?.success) {
+    return [];
+  }
   try {
     const cookieStore = await cookies();
 
@@ -82,7 +86,9 @@ export const getBabyToday = async (): Promise<BabyToday> => {
   const cookieStore = await cookies();
   const isAuth = await checkServerSession();
 
-  const endpoint = isAuth ? "/weeks/greeting" : "/weeks/greeting/public";
+  const endpoint = isAuth?.data?.success
+    ? "/weeks/greeting"
+    : "/weeks/greeting/public";
 
   const { data } = await nextServer.get<WeekGreetingResponse>(endpoint, {
     headers: {

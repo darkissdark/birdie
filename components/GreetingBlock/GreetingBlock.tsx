@@ -2,8 +2,10 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "@/lib/api/clientApi";
+import { getMe, checkSession } from "@/lib/api/clientApi";
 import css from "./GreetingBlock.module.css";
+
+const isAuthenticated = await checkSession();
 
 const useCurrentUser = () => {
   return useQuery({
@@ -11,6 +13,7 @@ const useCurrentUser = () => {
     queryFn: getMe,
     staleTime: 10 * 60 * 1000,
     retry: 1,
+    enabled: isAuthenticated,
   });
 };
 

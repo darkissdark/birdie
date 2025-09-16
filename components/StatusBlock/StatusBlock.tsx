@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import css from './StatusBlock.module.css';
-import { getMe, getUserStats } from '@/lib/api/serverApi';
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import css from "./StatusBlock.module.css";
+import { getMe, getUserStats, checkServerSession } from "@/lib/api/serverApi";
 
 // const useUserStats = () => {
 //   return
@@ -13,11 +13,10 @@ import { getMe, getUserStats } from '@/lib/api/serverApi';
 //   });
 // };
 
-
-  
 const WeekStats = async () => {
   try {
-    const user = await getMe();
+    const isAuth = await checkServerSession();
+    const user = isAuth?.data?.success ? await getMe() : null;
 
     if (!user) {
       // Якщо користувач не залогінений
