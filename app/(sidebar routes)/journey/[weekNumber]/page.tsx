@@ -11,15 +11,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Вагітність. Цікаве.",
     description: "Подорож майбутньої матусі впродовж усього періоду вагітності",
-    url: "https://birdie-kohl.vercel.app/journey/[weekNumber]",
-    images: [
-      {
-        url: "/public/auth/regFoto.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Create Note",
-      },
-    ],
+    // url: "https://birdie-kohl.vercel.app/journey/[weekNumber]",
+    // images: [
+    //   {
+    //     url: "/auth/regFoto.jpg",
+    //     width: 1200,
+    //     height: 630,
+    //     alt: "Create Note",
+    //   },
+    // ],
   },
 };
 

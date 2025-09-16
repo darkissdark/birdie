@@ -31,6 +31,16 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.svg",
   },
+  openGraph: {
+    images: [
+      {
+        url: "/share/ogImage.jpg",
+        width: 600,
+        height: 446,
+        alt: "Лелека - Твій помічник під час вагітності",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
