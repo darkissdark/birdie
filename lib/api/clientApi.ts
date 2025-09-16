@@ -88,8 +88,8 @@ export const uploadImage = async (file: File) => {
 };
 
 export interface UserStats {
-  "curWeekToPregnant": number,
-  "daysBeforePregnant": number,
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
 }
 
 export const getUserStats = async (): Promise<UserStats> => {
@@ -180,5 +180,12 @@ export interface UserToUpdate {
 
 export const updateUser = async (updatedUser: UserToUpdate) => {
   const { data } = await nextServer.patch<User>("/users/current", updatedUser);
+  return data;
+};
+
+export const fetchNoteByIdClient = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`);
   return data;
 };

@@ -8,12 +8,14 @@ import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails"
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { DiaryListResponse, getDiaryList } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
-import { SortOrder } from "@/types/dairy";
+import { DiaryEntry, SortOrder } from "@/types/dairy";
 import Greeting from "@/components/GreetingBlock/GreetingBlock";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+
+  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
 
   const {
     data,
@@ -43,6 +45,8 @@ const DiaryPageClient = () => {
 
   const entries = data?.pages.flatMap((page) => page.diaryNotes) ?? [];
 
+  console.log("entries:", entries);
+
   return isDesktop ? (
     <>
       <Greeting />
@@ -54,8 +58,15 @@ const DiaryPageClient = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
+          onSelect={(entry) => setSelectedEntry(entry)}
         />
-        <DiaryEntryDetails />
+        {selectedEntry && (
+          <DiaryEntryDetails
+            entry={selectedEntry}
+            onDelete={(id) => console.log("Delete", id)}
+            onUpdate={() => console.log("Update")}
+          />
+        )}
       </div>
     </>
   ) : (

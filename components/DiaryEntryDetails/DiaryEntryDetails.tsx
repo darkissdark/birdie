@@ -9,46 +9,48 @@ import { ConfirmationModal } from "../ConfirmationModal/ConfirmationModal";
 
 interface DiaryEntryDetailsProps {
   entry: DiaryEntry;
-  // onDelete: (id: string) => void;
-  // onUpdate: () => void;
+  onDelete: (id: string) => void;
+  onUpdate: () => void;
 }
 
 const DiaryEntryDetails = ({
   entry,
-  // onDelete,
-  // onUpdate,
+  onDelete,
+  onUpdate,
 }: DiaryEntryDetailsProps) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleEditConfirm = () => {
     setShowEditModal(false);
+    onUpdate();
   };
 
   const handleDeleteConfirm = () => {
     setShowDeleteModal(false);
+    onDelete(entry._id);
   };
 
-  // if (!entry) return <p>Запис не знайдено</p>;
+  if (!entry) return <p>Запис не знайдено</p>;
 
-  // const date = entry
-  //   ? new Date(entry.date).toLocaleDateString("uk-UA", {
-  //       year: "numeric",
-  //       month: "long",
-  //       day: "numeric",
-  //     })
-  //   : "Немає дати";
+  const date = entry
+    ? new Date(entry.date).toLocaleDateString("uk-UA", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Немає дати";
 
-  // const title = entry.title || "Без назви";
-  // const description = entry.description || "Немає опису";
-  // const emotions = entry.emotions ?? [];
+  const title = entry.title || "Без назви";
+  const description = entry.description || "Немає опису";
+  const emotions = entry.emotions ?? [];
 
   return (
     <div className={css.diaryEntryDetails}>
       <div className={css.diaryEntryDetailsWrapper}>
         <div className={css.titleDateBtn}>
           <div className={css.diaryEntryDetailsTitleWrapper}>
-            <h2 className={css.diaryEntryDetailsTitle}>{entry.title}</h2>
+            <h2 className={css.diaryEntryDetailsTitle}>{title}</h2>
             <button
               className={css.diaryEntryDetailsEditBtn}
               onClick={() => setShowEditModal(true)}
@@ -57,7 +59,7 @@ const DiaryEntryDetails = ({
             </button>
           </div>
           <div className={css.diaryEntryDetailsDateWrapper}>
-            <p className={css.diaryEntryDetailsDate}>{entry.date}</p>
+            <p className={css.diaryEntryDetailsDate}>{date}</p>
             <button
               className={css.diaryEntryDetailsDeleteBtn}
               onClick={() => setShowDeleteModal(true)}
@@ -67,12 +69,12 @@ const DiaryEntryDetails = ({
           </div>
         </div>
 
-        <p className={css.diaryEntryDetailsContent}>{entry.description}</p>
+        <p className={css.diaryEntryDetailsContent}>{description}</p>
 
         <div>
           <ul className={css.diaryCardListItemWrapperEmotions}>
             {entry?.emotions?.length ? (
-              entry.emotions.map((emo) => (
+              emotions.map((emo) => (
                 <li key={emo._id} className={css.emotionsItem}>
                   {emo.title}
                 </li>

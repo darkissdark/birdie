@@ -39,6 +39,7 @@ import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { User } from "@/types/user";
+import { DiaryEntry } from "@/types/dairy";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -109,26 +110,38 @@ export const getMomTip = async (weekNumber: number): Promise<ComfortTip> => {
 };
 
 export interface UserStats {
-  "curWeekToPregnant": number,
-  "daysBeforePregnant": number,
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
 }
 
 export const getUserStats = async (): Promise<UserStats> => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<UserStats>("/weeks/greeting",  {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
+  const { data } = await nextServer.get<UserStats>("/weeks/greeting", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data;
 };
 
 export const getMe = async () => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<User>("/users/current",  {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
+  const { data } = await nextServer.get<User>("/users/current", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+};
+
+export const fetchNoteByIdServer = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data;
 };
