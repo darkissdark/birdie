@@ -11,8 +11,8 @@ type Props = {
 export async function GET(request: Request, { params }: Props) {
   try {
     const cookieStore = await cookies();
-    const { id } = await params;
-    const res = await api(`/diary/${id}`, {
+    const { id: noteId } = await params;
+    const res = await api(`/diary/${noteId}`, {
       headers: {
         Cookie: cookieStore.toString(),
       },

@@ -182,3 +182,10 @@ export const updateUser = async (updatedUser: UserToUpdate) => {
   const { data } = await nextServer.patch<User>("/users/current", updatedUser);
   return data;
 };
+
+export const fetchNoteByIdClient = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`);
+  return data;
+};

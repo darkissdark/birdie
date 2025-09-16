@@ -39,6 +39,7 @@ import { TasksResponse, Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { User } from "@/types/user";
+import { DiaryEntry } from "@/types/dairy";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -139,6 +140,16 @@ export const getMe = async () => {
   return data;
 };
 
+export const fetchNoteByIdServer = async (
+  noteId: string
+): Promise<DiaryEntry> => {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  
 export const updateTaskStatusServer = async (
   taskId: string,
   isDone: boolean
