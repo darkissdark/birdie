@@ -10,7 +10,6 @@ import useAuthStore from "@/lib/store/authStore";
 import styles from "./GeminiAssistant.module.css";
 import {
   RiAiGenerate,
-  RiAddLine,
   RiCloseLine,
   RiAdvertisementFill,
   RiEmotionHappyFill,
@@ -20,103 +19,9 @@ import { TbBook2 } from "react-icons/tb";
 import { BsCalendar2Event } from "react-icons/bs";
 import { AddDiaryEntryModal } from "@/components/AddDiaryEntryModal/AddDiaryEntryModal";
 import AddTaskModal from "@/components/AddTaskModal/AddTaskModal";
+import AddTaskForm from "@/components/AddTaskForm/AddTaskForm";
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-
-const SimpleTaskForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
-  const [taskName, setTaskName] = useState("");
-  const [taskDate, setTaskDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!taskName.trim()) return;
-
-    setIsSubmitting(true);
-    try {
-      const axiosInstance = (await import("@/lib/axios")).default;
-      await axiosInstance.post("/tasks", {
-        name: taskName,
-        date: taskDate,
-        isDone: false,
-      });
-      onSuccess();
-    } catch (error) {
-      console.error("Помилка створення завдання:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} style={{ padding: "20px" }}>
-      <div style={{ marginBottom: "16px" }}>
-        <label
-          style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}
-        >
-          Назва завдання:
-        </label>
-        <input
-          type="text"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          placeholder="Введіть назву завдання"
-          style={{
-            width: "100%",
-            padding: "8px 16px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            fontSize: "1rem",
-            backgroundColor: "rgba(0, 0, 0, 0.05)",
-          }}
-          required
-        />
-      </div>
-      <div style={{ marginBottom: "16px" }}>
-        <label
-          style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}
-        >
-          Дата:
-        </label>
-        <input
-          type="date"
-          value={taskDate}
-          onChange={(e) => setTaskDate(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "8px 16px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            fontSize: "1rem",
-            backgroundColor: "rgba(0, 0, 0, 0.05)",
-          }}
-          required
-        />
-      </div>
-      <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-        <button
-          type="submit"
-          disabled={!taskName.trim() || isSubmitting}
-          style={{
-            padding: "12px 24px",
-            backgroundColor: "#ffdae0",
-            color: "rgb(0, 0, 0)",
-            border: "none",
-            borderRadius: "100px",
-            fontWeight: "600",
-            cursor:
-              taskName.trim() && !isSubmitting ? "pointer" : "not-allowed",
-            opacity: taskName.trim() && !isSubmitting ? 1 : 0.5,
-          }}
-        >
-          {isSubmitting ? "Створюємо..." : "Створити завдання"}
-        </button>
-      </div>
-    </form>
-  );
-};
 
 interface WeekInfo {
   curWeekToPregnant: number;
@@ -129,6 +34,14 @@ interface WeekInfo {
     image: string;
   };
   momHint: string;
+}
+
+interface DragState {
+  isDragging: boolean;
+  startX: number;
+  startY: number;
+  initialX: number;
+  initialY: number;
 }
 
 export const GeminiAssistant: React.FC = () => {
@@ -146,10 +59,21 @@ export const GeminiAssistant: React.FC = () => {
 
   const [weekInfo, setWeekInfo] = useState<WeekInfo | null>(null);
 
+  // Dragging state
+  const [position, setPosition] = useState({ x: 24, y: 80 });
+  const [dragState, setDragState] = useState<DragState>({
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    initialX: 0,
+    initialY: 0,
+  });
+
   const geminiService = useRef<GeminiAIService | null>(null);
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!geminiService.current && GEMINI_API_KEY) {
@@ -175,6 +99,117 @@ export const GeminiAssistant: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Drag functionality
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    setDragState({
+      isDragging: true,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialX: rect.left,
+      initialY: rect.top,
+    });
+  }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect || !touch) return;
+
+    setDragState({
+      isDragging: true,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      initialX: rect.left,
+      initialY: rect.top,
+    });
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!dragState.isDragging) return;
+
+      const deltaX = e.clientX - dragState.startX;
+      const deltaY = e.clientY - dragState.startY;
+
+      const newX = Math.max(
+        0,
+        Math.min(window.innerWidth - 80, dragState.initialX + deltaX)
+      );
+      const newY = Math.max(
+        0,
+        Math.min(window.innerHeight - 80, dragState.initialY + deltaY)
+      );
+
+      setPosition({
+        x: window.innerWidth - newX - 80, // Convert to right position for CSS
+        y: window.innerHeight - newY - 80, // Convert to bottom position for CSS
+      });
+    },
+    [dragState]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (!dragState.isDragging) return;
+
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - dragState.startX;
+      const deltaY = touch.clientY - dragState.startY;
+
+      const newX = Math.max(
+        0,
+        Math.min(window.innerWidth - 80, dragState.initialX + deltaX)
+      );
+      const newY = Math.max(
+        0,
+        Math.min(window.innerHeight - 80, dragState.initialY + deltaY)
+      );
+
+      setPosition({
+        x: window.innerWidth - newX - 80,
+        y: window.innerHeight - newY - 80,
+      });
+    },
+    [dragState]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setDragState((prev) => ({ ...prev, isDragging: false }));
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setDragState((prev) => ({ ...prev, isDragging: false }));
+  }, []);
+
+  useEffect(() => {
+    if (dragState.isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+    }
+  }, [
+    dragState.isDragging,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchMove,
+    handleTouchEnd,
+  ]);
 
   const fetchWeekInfo = async () => {
     try {
@@ -310,10 +345,6 @@ ${weekInfo.momHint}
     fetchUserContext();
   };
 
-  const handleDiaryCancel = () => {
-    setShowDiaryModal(false);
-  };
-
   const handleTaskSuccess = () => {
     setShowTaskModal(false);
     setMessages((prev) => [
@@ -415,12 +446,9 @@ ${weekInfo.momHint}
             <p>Записуйте своє відчуття, емоції та важливі моменти</p>
             <button
               className={styles.quickReplyButton}
-              onClick={() => {
-                console.log("Кнопка натиснута");
-                setShowDiaryModal(true);
-              }}
+              onClick={() => setShowDiaryModal(true)}
             >
-              <RiAddLine /> Додати новий запис
+              Додати новий запис
             </button>
           </div>
         </div>
@@ -438,7 +466,7 @@ ${weekInfo.momHint}
               onClick={() => setShowTaskModal(true)}
               style={{ marginTop: "16px" }}
             >
-              <RiAddLine /> Додати нове завдання
+              Додати нове завдання
             </button>
           </div>
         </div>
@@ -452,11 +480,25 @@ ${weekInfo.momHint}
     return null;
   }
 
+  const handleButtonClick = () => {
+    if (!dragState.isDragging) {
+      setIsOpen(true);
+    }
+  };
+
   return (
     <>
       <button
-        className={styles.floatingButton}
-        onClick={() => setIsOpen(true)}
+        ref={buttonRef}
+        className={`${styles.floatingButton} ${dragState.isDragging ? styles.dragging : ""}`}
+        style={{
+          right: `${position.x}px`,
+          bottom: `${position.y}px`,
+          cursor: dragState.isDragging ? "grabbing" : "grab",
+        }}
+        onClick={handleButtonClick}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
         aria-label="Відкрити AI асистента"
       >
         <span className={styles.buttonIcon}>
@@ -469,11 +511,20 @@ ${weekInfo.momHint}
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <div className={styles.header}>
-              <h2 className={styles.title}>
-                {isAuthenticated
-                  ? `AI Помічник для ${user?.name || "майбутньої мами"}`
-                  : "AI Помічник з питань материнства"}
-              </h2>
+              <div className={styles.titleContainer}>
+                <h2 className={styles.title}>
+                  {isAuthenticated
+                    ? `AI Помічник для ${user?.name || "майбутньої мами"}`
+                    : "AI Помічник з питань материнства"}
+                </h2>
+                <div
+                  className={styles.betaBadge}
+                  title="Функція в розробці та постійно покращується. Ваші відгуки допомагають нам стати кращими!"
+                >
+                  <span className={styles.betaText}>BETA</span>
+                  <div className={styles.betaGlow}></div>
+                </div>
+              </div>
               <button
                 className={styles.closeButton}
                 onClick={() => setIsOpen(false)}
@@ -484,40 +535,33 @@ ${weekInfo.momHint}
             </div>
 
             <div className={styles.tabs}>
-              <button
-                className={`${styles.tab} ${activeTab === "chat" ? styles.activeTab : ""}`}
-                onClick={() => setActiveTab("chat")}
-              >
-                Чат
-              </button>
-              <button
-                className={`${styles.tab} ${activeTab === "insights" ? styles.activeTab : ""}`}
-                onClick={handleGenerateInsights}
-              >
-                Інсайти
-              </button>
-              <button
-                className={`${styles.tab} ${activeTab === "reminders" ? styles.activeTab : ""}`}
-                onClick={handleGenerateReminders}
-              >
-                Нагадування
-              </button>
-              {isAuthenticated && (
-                <>
-                  <button
-                    className={`${styles.tab} ${activeTab === "diary" ? styles.activeTab : ""}`}
-                    onClick={() => setActiveTab("diary")}
-                  >
-                    Щоденник
-                  </button>
-                  <button
-                    className={`${styles.tab} ${activeTab === "tasks" ? styles.activeTab : ""}`}
-                    onClick={() => setActiveTab("tasks")}
-                  >
-                    Завдання
-                  </button>
-                </>
-              )}
+              {[
+                { key: "chat", label: "Чат" },
+                { key: "insights", label: "Інсайти" },
+                { key: "reminders", label: "Нагадування" },
+                ...(isAuthenticated
+                  ? [
+                      { key: "diary", label: "Щоденник" },
+                      { key: "tasks", label: "Завдання" },
+                    ]
+                  : []),
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  className={`${styles.tab} ${activeTab === tab.key ? styles.activeTab : ""}`}
+                  onClick={() => {
+                    if (tab.key === "insights") {
+                      handleGenerateInsights();
+                    } else if (tab.key === "reminders") {
+                      handleGenerateReminders();
+                    } else {
+                      setActiveTab(tab.key as typeof activeTab);
+                    }
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
             {(activeTab === "diary" || activeTab === "tasks") &&
@@ -642,21 +686,15 @@ ${weekInfo.momHint}
         </div>
       )}
 
-      {/* Diary Modal */}
-      {showDiaryModal && (
-        <AddDiaryEntryModal
-          onSuccess={handleDiarySuccess}
-          isOpen={false}
-          onClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
-      )}
+      <AddDiaryEntryModal
+        isOpen={showDiaryModal}
+        onClose={() => setShowDiaryModal(false)}
+        onSuccess={handleDiarySuccess}
+      />
 
-      {/* Task Modal */}
       {showTaskModal && (
         <AddTaskModal closeModal={() => setShowTaskModal(false)}>
-          <SimpleTaskForm onSuccess={handleTaskSuccess} />
+          <AddTaskForm onClose={handleTaskSuccess} />
         </AddTaskModal>
       )}
     </>

@@ -1,45 +1,46 @@
+/* ================ ПЛАВАЮЧА КНОПКА ================ */
 .floatingButton {
   position: fixed;
-  bottom: 80px;
-  right: 24px;
-  background: linear-gradient(135deg, #fbb6ce 0%, #f687b3 100%);
+  background: #ffdae0;
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 30px;
   padding: 12px 24px;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  cursor: grab;
+  box-shadow: 0 4px 20px rgba(255, 203, 211, 0.6);
   transition: all 0.3s ease;
   z-index: 999;
   font-weight: 600;
+  user-select: none;
 }
 
 .floatingButton:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 203, 211, 0.8);
 }
 
-.buttonIcon {
-  font-size: 20px;
-  animation: sparkle 2s infinite;
+.floatingButton.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(255, 203, 211, 0.9);
+}
+
+.floatingButton svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .buttonText {
   font-size: 14px;
+  white-space: nowrap;
 }
 
-@keyframes sparkle {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
+/* ================ МОДАЛЬНЕ ВІКНО ================ */
 .modal {
   position: fixed;
   top: 0;
@@ -51,7 +52,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.2s ease;
+  animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
@@ -65,27 +66,28 @@
 
 .modalContent {
   background: white;
-  border-radius: 20px;
+  border-radius: 40px;
   width: 90%;
   max-width: 600px;
   height: 80vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: slideUp 0.3s ease;
+  animation: slideUp 0.4s ease;
 }
 
 @keyframes slideUp {
   from {
-    transform: translateY(50px);
+    transform: translateY(50px) scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
+/* ================ ЗАГОЛОВОК ================ */
 .header {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
@@ -96,11 +98,97 @@
   color: rgb(0, 0, 0);
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
 .title {
-  line-height: 2.6;
   font-size: 18px;
   font-weight: 700;
   margin: 0;
+  line-height: 1.4;
+}
+
+.betaBadge {
+  position: relative;
+  background-size: 300% 300%;
+  padding: 4px 10px;
+  border-radius: 12px;
+  cursor: help;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.betaBadge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.betaBadge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.betaBadge:hover::before {
+  left: 100%;
+}
+
+.betaText {
+  position: relative;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  z-index: 1;
+}
+
+.betaGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.betaBadge:hover .betaGlow {
+  opacity: 1;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .closeButton {
@@ -112,45 +200,68 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closeButton:hover {
-  background-color: #f3f4f6;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* ================ ТАБИ ================ */
+.tabs {
+  display: flex;
+  background: #fff4f6;
+  border-radius: 25px;
+  padding: 6px;
+  margin: 16px;
+  gap: 4px;
+  position: relative;
+  overflow-x: auto;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tabs {
-  border-radius: 100px;
-  display: flex;
-  background: rgba(0, 0, 0, 0);
-  padding: 8px;
-  gap: 8px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .tab {
   flex: 1;
-  padding: 10px;
+  padding: 12px 16px;
   border: none;
   background: transparent;
-  border-radius: 8px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s;
-  color: #000000;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.tab:hover {
+  color: #333;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .activeTab {
   background: #ffdae0;
-  border: 1px solid rgba(255, 255, 255, 0);
-  border-radius: 100px;
-  padding: 10px 24px;
-  width: 295px;
-  height: 46px;
-  color: #000000;
+  color: #000;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
+  transform: scale(1.02);
 }
 
+/* ================ ОБЛАСТЬ ПОВІДОМЛЕНЬ ================ */
 .messagesArea {
   flex: 1;
   overflow-y: auto;
@@ -166,6 +277,7 @@
 
 .emptyState p {
   margin: 10px 0;
+  line-height: 1.6;
 }
 
 .message {
@@ -196,7 +308,8 @@
 }
 
 .messageIcon {
-  font-size: 20px;
+  font-size: 18px;
+  color: #666;
 }
 
 .messageTime {
@@ -210,6 +323,7 @@
   white-space: pre-wrap;
 }
 
+/* ================ ПРОПОЗИЦІЇ ТА ТЕМИ ================ */
 .suggestions {
   margin-top: 12px;
   padding-top: 12px;
@@ -238,14 +352,15 @@
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .quickReplyButton:hover {
   background: #ffcbd3;
-  color: #333;
   border-color: #ffb3bd;
   transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
 }
 
 .relatedTopics {
@@ -270,6 +385,7 @@
   font-size: 12px;
 }
 
+/* ================ ЗАВАНТАЖЕННЯ ================ */
 .loadingMessage {
   display: flex;
   align-items: center;
@@ -312,35 +428,32 @@
   }
 }
 
+/* ================ ОБЛАСТЬ ВВЕДЕННЯ ================ */
 .inputArea {
   padding: 16px;
   border-top: 1px solid #f0f0f0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 12px;
   background: white;
+  align-items: center;
 }
 
 .input {
-  width: 100%;
   flex: 1;
-  padding: 8px 16px;
+  padding: 12px 16px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 14px;
   outline: none;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
+  transition: all 0.2s ease;
   background-color: rgba(0, 0, 0, 0.05);
   font-family: inherit;
 }
 
 .input:focus {
-  outline: none;
   border-color: #ffcbd3;
-  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 203, 211, 0.1);
+  background-color: white;
 }
 
 .sendButton {
@@ -348,382 +461,43 @@
   background: #ffdae0;
   color: rgb(0, 0, 0);
   border: none;
-  border-radius: 100px;
+  border-radius: 20px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  border-bottom: 4px solid #ffcbd3;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid #ffcbd3;
+  white-space: nowrap;
 }
 
 .sendButton:hover:not(:disabled) {
-  transform: scale(1.01);
   background: #ffcbd3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 203, 211, 0.3);
+}
+
+.sendButton:active:not(:disabled) {
+  transform: translateY(0);
+  border-bottom-width: 1px;
 }
 
 .sendButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* ================ ПІДКАЗКА ДЛЯ ГОСТЕЙ ================ */
 .guestHint {
   padding: 12px;
-  background: #ffdae0;
+  background: #fff9fa;
   color: #666;
   font-size: 13px;
   text-align: center;
   border-top: 1px solid #f0f0f0;
+  font-style: italic;
 }
 
-/* === ФОРМА ЕЛЕМЕНТИ === */
-.formGroup {
-  margin-bottom: 16px;
-}
-
-.formLabel {
-  font-weight: 500;
-  color: #374151;
-  font-size: 1rem;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.textarea {
-  width: 100%;
-  padding: 8px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
-  background-color: rgba(0, 0, 0, 0.05);
-  font-family: inherit;
-  min-height: 100px;
-  line-height: 1.5;
-  resize: vertical;
-}
-
-.textarea:focus {
-  outline: none;
-  border-color: #ffcbd3;
-  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
-}
-
-/* === СЕЛЕКТ ЕМОЦІЙ (стиль з AddDiaryEntryForm) === */
-.customSelect {
-  position: relative;
-  z-index: 100;
-}
-
-.selectTrigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-  z-index: 101;
-  min-height: 44px;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.selectTrigger:hover {
-  border-color: #d1d5db;
-}
-
-.selectTriggerOpen {
-  border-radius: 12px 12px 0px 0px;
-  border-color: rgba(0, 0, 0, 0.15);
-}
-
-.selectTrigger:focus {
-  outline: none;
-  border-color: #ffcbd3;
-  box-shadow: 0 0 0 2px rgba(255, 203, 211, 0.5);
-}
-
-.selectContent {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.selectPlaceholder {
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.selectArrow {
-  color: #9ca3af;
-  transition: transform 0.2s;
-  margin-left: 8px;
-  flex-shrink: 0;
-}
-
-.selectArrowOpen {
-  transform: rotate(180deg);
-}
-
-/* === ТЕГИ === */
-.selectedTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-}
-
-.selectedTag {
-  display: inline-block;
-  padding: 4px 12px;
-  background: rgba(0, 0, 0, 0.05);
-  color: rgb(0, 0, 0);
-  border-radius: 16px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-/* === DROPDOWN === */
-.selectDropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: rgb(242, 242, 242);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-top: none;
-  border-radius: 0px 0px 12px 12px;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  z-index: 9999;
-  max-height: 220px;
-  overflow: hidden;
-  animation: dropdownFadeIn 0.15s ease-out;
-}
-
-.selectDropdownInner {
-  max-height: 220px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 203, 211, 0.8) transparent;
-}
-
-.selectDropdownInner::-webkit-scrollbar {
-  width: 8px;
-}
-
-.selectDropdownInner::-webkit-scrollbar-track {
-  background: transparent;
-  margin: 4px 0;
-}
-
-.selectDropdownInner::-webkit-scrollbar-thumb {
-  background: rgba(255, 203, 211, 0.8);
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  transition: background 0.2s;
-}
-
-.selectDropdownInner::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 203, 211, 1);
-}
-
-.selectOption {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-  font-size: 1rem;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  color: #374151;
-}
-
-.selectOption:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-}
-
-.selectOption:focus {
-  outline: none;
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.selectOptionSelected {
-  color: #000000;
-  font-weight: 500;
-}
-
-.checkbox {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.selectOptionSelected .checkbox {
-  background-color: #000000;
-  border-color: #000000;
-}
-
-.checkbox svg {
-  display: block;
-}
-
-/* === СТАНИ ЗАВАНТАЖЕННЯ === */
-.loadingContainer,
-.errorContainer,
-.noDataContainer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background-color: #f9fafb;
-}
-
-.errorContainer {
-  border-color: #fecaca;
-  background-color: #fef2f2;
-}
-
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  color: #6b7280;
-}
-
-.spinner,
-.loadingSpinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #e5e7eb;
-  border-top: 2px solid #ffdae0;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.loadingSpinner {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-}
-
-.retryButton {
-  padding: 6px 12px;
-  background-color: #ffdae0;
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-}
-
-.retryButton:hover {
-  background-color: #ffcbd3;
-}
-
-/* === ПОМИЛКИ === */
-.errorMessageContainer {
-  min-height: 24px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.errorMessage {
-  color: #dc2626;
-  font-size: 12px;
-  line-height: 1.25;
-  transition: opacity 0.2s ease;
-  opacity: 0;
-  transform: translateY(-2px);
-}
-
-.errorMessage.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === АНІМАЦІЇ === */
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* === ДОДАТКОВІ СТИЛІ === */
-.formModal {
-  max-width: 500px;
-  height: auto;
-}
-
-.taskModal {
-  max-width: 400px;
-  height: auto;
-}
-
-.formButtons {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.input[type="date"] {
-  color: #333;
-}
-
-.input[type="date"]::-webkit-calendar-picker-indicator {
-  color: #ffdae0;
-  cursor: pointer;
-}
-
-/* === МОДАЛЬНІ СТИЛІ === */
-.modal .customSelect {
-  z-index: 1050;
-}
-
-.modal .selectDropdown {
-  z-index: 10000;
-  position: fixed;
-}
-
-/* === АДАПТИВНІСТЬ === */
+/* ================ АДАПТИВНІСТЬ ================ */
 @media (max-width: 768px) {
   .modalContent {
     width: 100%;
@@ -733,8 +507,47 @@
   }
 
   .floatingButton {
-    bottom: 20px;
-    right: 20px;
+    padding: 14px;
+    border-radius: 50%;
+  }
+
+  .buttonText {
+    display: none;
+  }
+
+  .header {
+    padding: 16px;
+  }
+
+  .titleContainer {
+    gap: 8px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .betaBadge {
+    padding: 3px 8px;
+  }
+
+  .betaText {
+    font-size: 9px;
+  }
+
+  .tabs {
+    margin: 12px;
+    padding: 4px;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    font-size: 12px;
+    min-width: fit-content;
+  }
+
+  .activeTab {
+    transform: scale(1);
   }
 
   .quickReplies {
@@ -743,43 +556,50 @@
 
   .quickReplyButton {
     width: 100%;
+    justify-content: center;
   }
 
-  .selectDropdown {
-    max-height: 180px;
-    z-index: 10001;
+  .inputArea {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .selectOption {
-    padding: 14px 16px;
-    font-size: 16px;
+  .sendButton {
+    width: 100%;
+    justify-content: center;
   }
 
-  .checkbox {
-    width: 22px;
-    height: 22px;
+  .messagesArea {
+    padding: 16px;
+  }
+
+  .message {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .title {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .betaBadge {
+    align-self: flex-start;
   }
 
   .tabs {
-    gap: 4px;
-    padding: 6px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tab {
-    font-size: 12px;
-    padding: 8px 12px;
-    min-width: fit-content;
-    white-space: nowrap;
-  }
-
-  .activeTab {
-    padding: 8px 16px;
-    width: auto;
-    height: auto;
-  }
-
-  .formButtons {
-    flex-direction: column;
+    flex-shrink: 0;
   }
 }
