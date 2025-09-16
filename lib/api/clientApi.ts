@@ -88,8 +88,8 @@ export const uploadImage = async (file: File) => {
 };
 
 export interface UserStats {
-  "curWeekToPregnant": number,
-  "daysBeforePregnant": number,
+  curWeekToPregnant: number;
+  daysBeforePregnant: number;
 }
 
 export const getUserStats = async (): Promise<UserStats> => {

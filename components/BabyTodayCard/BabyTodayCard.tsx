@@ -1,28 +1,18 @@
-"use client";
-
 import css from "./BabyTodayCard.module.css";
 import Image from "next/image";
-import { BabyToday } from "@/types/baby";
-import { useQuery } from "@tanstack/react-query";
-import { getBabyToday } from "@/lib/api/clientApi";
+import { getBabyToday } from "@/lib/api/serverApi";
 
-const BabyTodayCard = () => {
-  const {
-    data: babyToday,
-    isLoading,
-    isError,
-  } = useQuery<BabyToday>({
-    queryKey: ["babyToday"],
-    queryFn: getBabyToday,
-  });
+const BabyTodayCard = async () => {
+  const babyToday = await getBabyToday();
 
-  if (isLoading) {
-    return <div className={css.card}>Завантаження...</div>;
+  if (!babyToday) {
+    return (
+      <div className={css.card}>
+        Помилка завантаження даних, перезавантажте сторінку.
+      </div>
+    );
   }
 
-  if (isError || !babyToday) {
-    return <div className={css.card}>Помилка завантаження даних</div>;
-  }
   return (
     <div className={css.card}>
       <h2 className={css.title}>Малюк сьогодні</h2>
@@ -50,7 +40,7 @@ const BabyTodayCard = () => {
               {babyToday.babyWeight} г
             </p>
           </li>
-          <li>
+          <li className={css.activityItem}>
             <p>
               <span>Активність:&nbsp;</span>
               {babyToday.babyActivity}
