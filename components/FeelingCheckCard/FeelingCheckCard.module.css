@@ -48,12 +48,12 @@
   transition: background-color 0.2s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   border-radius: 100px;
   padding: 8px 24px;
   width: 225px;
   height: 42px;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   font-family: var(--font-family);
   font-size: 14px;
   line-height: 160%;

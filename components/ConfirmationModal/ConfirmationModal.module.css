@@ -54,7 +54,7 @@
 }
 
 .confbtn {
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   border-radius: 100px;
   width: 268px;
   height: 42px;

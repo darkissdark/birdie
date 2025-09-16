@@ -17,15 +17,15 @@
 
 .primaryButton {
   color-scheme: baseButton;
-  background-color: #ffdae0;
+  background-color: var(--bg-accent-high);
   color: #000000;
   border: none;
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
 }
 
 .primaryButton:hover {
   border-bottom: 4px solid rgba(0, 0, 0, 0.15);
-  background-color: #ffcbd3;
+  background-color: var(--accent-ui);
   transform: translateY(-1px);
 }
 
@@ -64,13 +64,17 @@
 
 .gradientButton {
   composes: baseButton;
-  background: linear-gradient(135deg, #ffdae0 0%, #ffcbd3 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-accent-high) 0%,
+    var(--accent-ui) 100%
+  );
   color: #000000;
   border: none;
 }
 
 .gradientButton:hover {
-  background: linear-gradient(135deg, #ffcbd3 0%, #ffb6c1 100%);
+  background: linear-gradient(135deg, var(--accent-ui) 0%, #ffb6c1 100%);
 }
 
 .largeButton {

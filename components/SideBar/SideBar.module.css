@@ -5,7 +5,7 @@
   height: 100dvh;
   width: 300px;
   transform: translateX(-100%);
-  background: var(--color-scheme-foreground);
+  background: #ffffff;
   box-shadow: 2px 0 24px rgba(17, 24, 39, 0.1);
   z-index: 51;
   transition: transform 0.2s ease;
@@ -71,7 +71,7 @@
 }
 
 .active {
-  background: #fff4f6;
+  background: var(--bg-accent);
 }
 
 .footer {

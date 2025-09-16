@@ -1,311 +1,41 @@
-/* Theme Design Tokens for Lehlehka
-   -------------------------------------------------------
-   Как пользоваться в модулях:
-   background: var(--color-scheme-foreground);
-   color: var(--color-scheme-text);
-   border: 1px solid var(--color-scheme-border);
-   акцентные элементы/кнопки: background: var(--color-scheme-accent);
-   ------------------------------------------------------- */
+/* styles/theme-tokens.css
+   Минимальные токены под макет. Использование:
+   background: var(--bg-accent);
+   background: var(--bg-accent-high);
+   var(--accent-ui)
 
-/* БАЗОВЫЕ СЕМАНТИЧЕСКИЕ ТОКЕНЫ (дефолт нейтральной темы) */
+   ThemeController проставляет data-theme="pink|blue|neutral",
+   а также совместимые классы .theme--girl/.theme--boy/.theme--neutral. :contentReference[oaicite:0]{index=0}
+*/
+
+/* NEUTRAL (Ще не знаю) — дефолт для всего приложения */
 :root {
-  /* Текст */
-  --color-scheme-text: #111827; /* основной текст */
-  --color-scheme-text-secondary: #374151; /* вторичный текст */
-  --color-scheme-muted: #6b7280; /* подписи/подсказки */
-
-  /* Фоновые поверхности */
-  --color-scheme-background: #f9fafb; /* общий фон страницы */
-  --color-scheme-foreground: #ffffff; /* карточки/контент */
-  --color-scheme-foreground-secondary: #f3f4f6; /* блоки вторичного уровня */
-
-  /* Контуры и разделители */
-  --color-scheme-border: #e5e7eb;
-
-  /* Акцент/бренд */
-  --color-scheme-accent: #6366f1; /* основной акцент */
-  --color-scheme-accent-contrast: #ffffff; /* текст/иконки на акценте */
-  --color-scheme-accent-soft: rgba(99, 102, 241, 0.08);
-
-  /* Состояния */
-  --color-scheme-success: #16a34a;
-  --color-scheme-warning: #f59e0b;
-  --color-scheme-danger: #ef4444;
-
-  /* Тени (мягкие) */
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.03);
-  --elevation-2: 0 6px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-
-  /* Градиенты/фон */
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
-  --gradient-accent: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
-
-  /* Анимации */
-  --anim-duration-quick: 160ms;
-  --anim-duration-base: 260ms;
-  --anim-timing: cubic-bezier(0.22, 1, 0.36, 1);
+  --bg-accent: #fefbf4; /* Neutral: background accent */
+  --bg-accent-high: #fef1db;
+  --accent-ui: #feeccc; /* Neutral: background high accent */
 }
 
-/* =========================================================================
-   ТЕМЫ (переключаются через <html data-theme="...">)
-   ========================================================================= */
-
-/* PINK — «Дівчинка» */
-html[data-theme="pink"] {
-  --color-scheme-text: #431021;
-  --color-scheme-text-secondary: #6b1a36;
-  --color-scheme-muted: #a23a5b;
-
-  --color-scheme-background: #fff7f9;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #fff0f4;
-
-  --color-scheme-border: #ffd4e0;
-
-  --color-scheme-accent: #ff4f8b;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(255, 79, 139, 0.1);
-
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(255, 149, 184, 0.2) 0%,
-      rgba(255, 149, 184, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(255, 102, 147, 0.2) 0%,
-      rgba(255, 102, 147, 0) 60%
-    ),
-    linear-gradient(180deg, #fff8fb 0%, #ffeef5 100%);
-  --gradient-accent: conic-gradient(
-    from 180deg at 50% 50%,
-    #ff7aa2 0deg,
-    #ff4f8b 120deg,
-    #ff85b1 240deg,
-    #ff7aa2 360deg
-  );
-}
-
-/* BLUE — «Хлопчик» */
-html[data-theme="blue"] {
-  --color-scheme-text: #0f172a;
-  --color-scheme-text-secondary: #1e293b;
-  --color-scheme-muted: #475569;
-
-  --color-scheme-background: #f4f8ff;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #eef4ff;
-
-  --color-scheme-border: #dce7ff;
-
-  --color-scheme-accent: #3b82f6;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(59, 130, 246, 0.1);
-
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(133, 213, 255, 0.22) 0%,
-      rgba(133, 213, 255, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(120, 172, 255, 0.25) 0%,
-      rgba(120, 172, 255, 0) 60%
-    ),
-    linear-gradient(180deg, #f5f8ff 0%, #edf3ff 100%);
-  --gradient-accent: conic-gradient(
-    from 180deg at 50% 50%,
-    #60a5fa 0deg,
-    #3b82f6 120deg,
-    #93c5fd 240deg,
-    #60a5fa 360deg
-  );
-}
-
-/* NEUTRAL — «Ще не знаю» */
-html[data-theme="neutral"] {
-  --color-scheme-text: #111827;
-  --color-scheme-text-secondary: #374151;
-  --color-scheme-muted: #6b7280;
-
-  --color-scheme-background: #f9fafb;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #f3f4f6;
-
-  --color-scheme-border: #e5e7eb;
-
-  --color-scheme-accent: #6366f1;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(99, 102, 241, 0.08);
-
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(169, 213, 255, 0.12) 0%,
-      rgba(169, 213, 255, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(197, 231, 255, 0.14) 0%,
-      rgba(197, 231, 255, 0) 60%
-    ),
-    linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
-  --gradient-accent: conic-gradient(
-    from 180deg at 50% 50%,
-    #a78bfa 0deg,
-    #60a5fa 120deg,
-    #a5b4fc 240deg,
-    #a78bfa 360deg
-  );
-}
-
-/* Класс-алиасы совместимости (если где-то ещё используются .theme--*) */
-html.theme--girl,
-.theme--girl {
-  /* alias → pink */
-  --color-scheme-text: #431021;
-  --color-scheme-text-secondary: #6b1a36;
-  --color-scheme-muted: #a23a5b;
-  --color-scheme-background: #fff7f9;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #fff0f4;
-  --color-scheme-border: #ffd4e0;
-  --color-scheme-accent: #ff4f8b;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(255, 79, 139, 0.1);
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(255, 149, 184, 0.2) 0%,
-      rgba(255, 149, 184, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(255, 102, 147, 0.2) 0%,
-      rgba(255, 102, 147, 0) 60%
-    ),
-    linear-gradient(180deg, #fff8fb 0%, #ffeef5 100%);
-}
-
-html.theme--boy,
+/* BOY (Хлопчик) */
+html[data-theme="blue"],
 .theme--boy {
-  /* alias → blue */
-  --color-scheme-text: #0f172a;
-  --color-scheme-text-secondary: #1e293b;
-  --color-scheme-muted: #475569;
-  --color-scheme-background: #f4f8ff;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #eef4ff;
-  --color-scheme-border: #dce7ff;
-  --color-scheme-accent: #3b82f6;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(59, 130, 246, 0.1);
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(133, 213, 255, 0.22) 0%,
-      rgba(133, 213, 255, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(120, 172, 255, 0.25) 0%,
-      rgba(120, 172, 255, 0) 60%
-    ),
-    linear-gradient(180deg, #f5f8ff 0%, #edf3ff 100%);
+  --bg-accent: #e5fafe; /* Boy: background accent */
+  --bg-accent-high: #c4f2fe;
+  --accent-ui: #adeffe; /* Boy: background high accent */
 }
 
-html.theme--neutral,
-.theme--unknown,
-.theme--neutral {
-  /* alias → neutral */
-  --color-scheme-text: #111827;
-  --color-scheme-text-secondary: #374151;
-  --color-scheme-muted: #6b7280;
-  --color-scheme-background: #f9fafb;
-  --color-scheme-foreground: #ffffff;
-  --color-scheme-foreground-secondary: #f3f4f6;
-  --color-scheme-border: #e5e7eb;
-  --color-scheme-accent: #6366f1;
-  --color-scheme-accent-contrast: #ffffff;
-  --color-scheme-accent-soft: rgba(99, 102, 241, 0.08);
-  --gradient-surface:
-    radial-gradient(
-      1200px 600px at -10% -20%,
-      rgba(169, 213, 255, 0.12) 0%,
-      rgba(169, 213, 255, 0) 60%
-    ),
-    radial-gradient(
-      1000px 500px at 110% -10%,
-      rgba(197, 231, 255, 0.14) 0%,
-      rgba(197, 231, 255, 0) 60%
-    ),
-    linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
+/* GIRL (Дівчинка) */
+html[data-theme="pink"],
+.theme--girl {
+  --bg-accent: var(--bg-accent); /* Girl: background accent */
+  --bg-accent-high: var(--bg-accent-high);
+  --accent-ui: var(--accent-ui); /* Girl: background high accent */
 }
 
-/* Доп. токены для эффектов */
-:root {
-  --surface-card: var(--color-scheme-foreground);
-  --surface-muted: var(--color-scheme-foreground-secondary);
-  --stroke: var(--color-scheme-border);
-  --text-primary: var(--color-scheme-text);
-  --text-secondary: var(--color-scheme-text-secondary);
-
-  /* Анимируемый фон (мягкий перелив) */
-  --animated-gradient:
-    radial-gradient(
-      800px 400px at 0% 0%,
-      rgba(255, 182, 193, 0.25) 0%,
-      rgba(255, 182, 193, 0) 60%
-    ),
-    radial-gradient(
-      800px 400px at 100% 0%,
-      rgba(147, 197, 253, 0.25) 0%,
-      rgba(147, 197, 253, 0) 60%
-    ),
-    radial-gradient(
-      800px 400px at 100% 100%,
-      rgba(167, 139, 250, 0.25) 0%,
-      rgba(167, 139, 250, 0) 60%
-    ),
-    radial-gradient(
-      800px 400px at 0% 100%,
-      rgba(248, 113, 113, 0.18) 0%,
-      rgba(248, 113, 113, 0) 60%
-    ),
-    var(--color-scheme-background);
-}
-
-/* Мягкая анимация перелива */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes gradientShift {
-    0% {
-      background-position:
-        0% 0%,
-        100% 0%,
-        100% 100%,
-        0% 100%;
-    }
-    50% {
-      background-position:
-        50% 30%,
-        60% 10%,
-        40% 70%,
-        20% 40%;
-    }
-    100% {
-      background-position:
-        0% 0%,
-        100% 0%,
-        100% 100%,
-        0% 100%;
-    }
-  }
-
-  .animated-surface {
-    background-image: var(--animated-gradient);
-    background-size: 160% 160%;
-    animation: gradientShift 18s var(--anim-timing) infinite;
-  }
+/* Явное дублирование NEUTRAL (не обязательно, но удобно) */
+html[data-theme="neutral"],
+.theme--neutral,
+.theme--unknown {
+  --bg-accent: #fefbf4;
+  --bg-accent-high: #fef1db;
+  --accent-ui: #feeccc;
 }

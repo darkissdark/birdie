@@ -73,13 +73,13 @@
 
 .submitButton {
   margin-top: 32px;
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   border-radius: 100px;
   padding: 10px 24px;
   width: 480px;
   height: 46px;
 
-  background: #ffdae0;
+  background: var(--bg-accent-high);
 
   font-family: "Lato", sans-serif;
   font-weight: 500;
@@ -94,8 +94,8 @@
 }
 
 .submitButton[data-gender="girl"] {
-  background-color: #ffdae0;
-  border-bottom: 4px solid #ffcbd3;
+  background-color: var(--bg-accent-high);
+  border-bottom: 4px solid var(--accent-ui);
 }
 
 .submitButton[data-gender="unknown"] {

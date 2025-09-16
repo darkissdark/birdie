@@ -18,7 +18,7 @@
   padding: 16px;
   min-width: 97px;
   height: 87px;
-  background: #fff4f6;
+  background: var(--bg-accent);
   opacity: 0.6;
   cursor: pointer;
   transition: background 0.2s;
@@ -30,7 +30,7 @@
   padding: 16px;
   width: 97px;
   height: 87px;
-  background: #ffcbd3;
+  background: var(--accent-ui);
   /* opacity: 1; */
 }
 
