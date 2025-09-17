@@ -5,6 +5,7 @@ export interface DiaryEntry {
   emotions: { _id: string; title: string }[];
   createdAt?: string;
   updatedAt?: string;
+  date?: string;
 }
 
 export interface ApiEmotion {

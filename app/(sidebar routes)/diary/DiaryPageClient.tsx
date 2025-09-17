@@ -99,8 +99,6 @@ const DiaryPageClient = () => {
     return <div style={{ minHeight: "100vh" }}>Loading...</div>;
   }
 
-  console.log("entries:", entries);
-
   return isDesktop ? (
     <>
       <Greeting />
