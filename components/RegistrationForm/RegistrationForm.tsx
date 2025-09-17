@@ -131,6 +131,7 @@ const RegistrationForm = () => {
           width={720}
           height={900}
           className={css.image}
+          priority
         />
       </div>
     </div>
