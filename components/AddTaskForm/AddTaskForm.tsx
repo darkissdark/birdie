@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/lib/api/clientApi";
 import type { CreateTask, Task } from "../../types/task";
 import Button from "../Button/Button";
+import toast from "react-hot-toast";
 
 interface TaskFormProps {
   onClose: () => void;
@@ -45,10 +46,12 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
   ) => {
     mutation.mutate(values, {
       onSuccess: () => {
+        toast.success("Завдання успішно створено!");
         actions.resetForm();
         onClose();
       },
       onError: (error) => {
+        toast.success("Помилка при створенні завдання.");
         console.error("Error submitting task:", error);
       },
     });
