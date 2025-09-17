@@ -67,12 +67,12 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
             />
             <ErrorMessage name="name" component="div" className={css.error} />
           </div>
-          <div className={"${css.formDiv} ${css.error}"}>
+          <div className={css.formDiv}>
             <label htmlFor="date">Дата</label>
-
             <AddTaskDatePicker
               value={formik.values.date}
               onChange={(date) => formik.setFieldValue("date", date)}
+              placeholder={""}
             />
             <ErrorMessage name="date" component="div" />
           </div>

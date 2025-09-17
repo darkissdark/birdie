@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/airbnb.css";
 import { Ukrainian } from "flatpickr/dist/l10n/uk.js";
@@ -19,6 +19,26 @@ interface CustomDatePickerProps {
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
+const formatToday = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
+};
+
+const parseDate = (dateStr: string): Date | null => {
+  if (!dateStr) return null;
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+const formatForAPI = (date: Date): string => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
+};
+
 export default function AddTaskDatePicker({
   value,
   onChange,
@@ -28,13 +48,23 @@ export default function AddTaskDatePicker({
 }: CustomDatePickerProps) {
   const flatpickrRef = useRef<DateTimePickerHandle | null>(null);
 
+  useEffect(() => {
+    const parsedDate = parseDate(value || "");
+    if (flatpickrRef.current?.flatpickr && parsedDate) {
+      flatpickrRef.current.flatpickr.setDate(parsedDate);
+    }
+  }, [value]);
+
+  const finalPlaceholder = placeholder || formatToday(today);
+
   return (
     <div className={styles.container}>
       <Flatpickr
         ref={flatpickrRef}
-        value={value}
+        value={parseDate(value || "") || ""}
         onChange={([date]: Date[]) => {
-          if (date) onChange(date.toISOString());
+          if (!date) return;
+          onChange(formatForAPI(date));
         }}
         options={{
           locale: Ukrainian,
@@ -52,7 +82,7 @@ export default function AddTaskDatePicker({
           },
         }}
         className={styles.input}
-        placeholder={placeholder}
+        placeholder={finalPlaceholder}
       />
 
       <button
