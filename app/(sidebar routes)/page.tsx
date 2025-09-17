@@ -16,6 +16,30 @@ import GreetingBlock from "@/components/GreetingBlock/GreetingBlock";
 import StatusBlock from "@/components/StatusBlock/StatusBlock";
 import FeelingCheckCard from "@/components/FeelingCheckCard/FeelingCheckCard";
 import css from "./page.module.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Лелека - Мій день",
+  description:
+    "Отримуй щоденні поради, відстежуй розвиток малюка та плануй свій день разом з нами.",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Лелека - Мій день",
+    description:
+      "Отримуй щоденні поради, відстежуй розвиток малюка та плануй свій день разом з нами.",
+    url: "https://birdie-kohl.vercel.app/",
+    images: [
+      {
+        url: "https://st2.depositphotos.com/3827765/5416/v/600/depositphotos_54165269-stock-illustration-stork-carrying-a-baby.jpg",
+        width: 600,
+        height: 446,
+        alt: "Лелека - Твій помічник під час вагітності",
+      },
+    ],
+  },
+};
 
 export default async function DashboardPage() {
   const queryClient = new QueryClient();
