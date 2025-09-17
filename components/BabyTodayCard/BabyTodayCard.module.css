@@ -2,7 +2,7 @@
   border-radius: 32px;
   padding: 24px;
   min-width: 335px;
-  width: 100%;
+  margin-bottom: 8px;
   background: var(--bg-accent);
 }
 
@@ -55,6 +55,10 @@
 
 /* !TABLET */
 @media screen and (min-width: 768px) {
+  .card {
+    margin-bottom: 0px;
+  }
+
   .boxImgAndStats {
     display: flex;
     flex-direction: row;
@@ -79,6 +83,7 @@
   .card {
     width: 642px;
     height: 422px;
+    margin-bottom: 24px;
   }
 
   .title {

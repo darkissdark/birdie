@@ -6,7 +6,14 @@
   display: flex;
   flex-direction: column;
   /* padding: 16px 20px 16px 20px; */
+  padding-top: 12px;
   gap: 16px;
+}
+
+.cardsMainContainer {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 32px;
 }
 
 .cardsContainerLeft {
@@ -15,13 +22,25 @@
   gap: 16px;
 }
 
+.cardsContainerRight {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 /* !TABLET */
 @media screen and (min-width: 768px) {
   .pageContainer {
     display: flex;
     flex-direction: column;
-    /* padding: 16px 32px 16px 32px; */
+    padding-top: 0;
+  }
+
+  .cardsMainContainer {
+    display: flex;
+    flex-direction: column;
     gap: 32px;
+    padding-bottom: 0px;
   }
 
   .cardsContainerLeft {
@@ -46,12 +65,12 @@
 
   .cardsContainerLeft {
     width: 642px;
+    gap: 0px;
   }
 
   .cardsContainerRight {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 32px;
   }
 }

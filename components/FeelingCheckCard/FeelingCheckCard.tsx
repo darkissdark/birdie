@@ -1,7 +1,7 @@
- 'use client';
+"use client";
 import { useState } from "react";
-import { AddDiaryEntryModal } from '../AddDiaryEntryModal/AddDiaryEntryModal'; 
-import css from './FeelingCheckCard.module.css';
+import { AddDiaryEntryModal } from "../AddDiaryEntryModal/AddDiaryEntryModal";
+import css from "./FeelingCheckCard.module.css";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/lib/store/authStore";
 
@@ -22,32 +22,30 @@ const FeelCard = () => {
     setIsModalOpen(false);
   };
 
-  const handleSuccess = () => {
-  };
+  const handleSuccess = () => {};
 
   return (
     <>
       <div className={css.wellbeingContainer}>
-        <h2 className={css.wellbeingTitle}>
-          Як ви себе почуваєте?
-        </h2>
+        <h2 className={css.wellbeingTitle}>Як ви себе почуваєте?</h2>
         <div className={css.recommendationsSection}>
-          <p className={css.recommendationsLabel}>
-            Рекомендації на сьогодні:
-          </p>
+          <p className={css.recommendationsLabel}>Рекомендації на сьогодні:</p>
           <p className={css.recommendationsText}>
-            Запропонуйте незвичні відчуття у тілі.
+            Занотуйте незвичні відчуття у тілі.
           </p>
         </div>
         <button
-          onClick={handleMoodJournalClick}
+          onClick={(e) => {
+            handleMoodJournalClick();
+            e.currentTarget.blur();
+          }}
           className={css.journalButton}
         >
           Зробити запис у щоденник
         </button>
       </div>
 
-      <AddDiaryEntryModal 
+      <AddDiaryEntryModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={handleSuccess}

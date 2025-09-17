@@ -2,7 +2,6 @@
 
 import css from "./TasksReminderCard.module.css";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { BiCheck } from "react-icons/bi";
 import { Task } from "@/types/tasks";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getTasks, updateTaskStatus } from "@/lib/api/clientApi";
@@ -11,6 +10,8 @@ import { useState } from "react";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
 import AddTaskForm from "../AddTaskForm/AddTaskForm";
 import { useRouter } from "next/navigation";
+import TaskItem from "./TaskItem";
+import EmptyState from "./EmptyState";
 
 const TasksReminderCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,55 +98,21 @@ const TasksReminderCard = () => {
         )}
       </div>
       <div className={css.tasksList}>
-        {tasks?.length === 0 ? (
-          <div>
-            <h3 className={css.noTasks}>Наразі немає жодних завдань</h3>
-            <p className={css.noTasksDescription}>
-              Створіть мершій нове завдання!
-            </p>
-            <button onClick={handleAddTaskClick} className={css.addTaskButton}>
-              Створити завдання
-            </button>
-          </div>
+        {tasks.length === 0 ? (
+          <EmptyState onClick={handleAddTaskClick} />
         ) : (
           <ul className={css.tasksList}>
-            {tasks?.map((task) => (
-              <li key={task._id} className={css.tasksListItem}>
-                <label htmlFor={`task-${task._id}`} className={css.taskLabel}>
-                  <div className={css.checkWrapper}>
-                    <div
-                      className={
-                        task.isDone
-                          ? `${css.checkImitationTrue}`
-                          : `${css.checkImitationFalse}`
-                      }
-                    >
-                      <input
-                        className={css.check}
-                        type="checkbox"
-                        id={`task-${task._id}`}
-                        checked={task.isDone}
-                        readOnly={false}
-                        onChange={() =>
-                          changeStatus({
-                            taskId: task._id,
-                            isDone: !task.isDone,
-                          })
-                        }
-                      />
-                      <BiCheck
-                        className={
-                          task.isDone ? css.checkIconTrue : css.checkIconFalse
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className={css.taskTextWrapper}>
-                    <span className={css.data}>{task.date}</span>
-                    <p className={css.taskDescription}>{task.name}</p>
-                  </div>
-                </label>
-              </li>
+            {tasks.map((task) => (
+              <TaskItem
+                key={task._id}
+                task={task}
+                onChange={() =>
+                  changeStatus({
+                    taskId: task._id,
+                    isDone: !task.isDone,
+                  })
+                }
+              />
             ))}
           </ul>
         )}
