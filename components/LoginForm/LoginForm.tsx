@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import css from "./LoginForm.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LoginValues {
   email: string;
@@ -28,6 +29,8 @@ const LoginForm = () => {
   const router = useRouter();
   const [error, seterror] = useState("");
   const setUser = useAuthStore((state) => state.setUser);
+  const queryClient = useQueryClient();
+
   const handleSubmit = async (
     values: LoginValues,
     actions: FormikHelpers<LoginValues>
@@ -35,6 +38,9 @@ const LoginForm = () => {
     try {
       const user = await login(values);
       setUser(user);
+
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+
       actions.resetForm();
       router.push("/");
     } catch (error) {

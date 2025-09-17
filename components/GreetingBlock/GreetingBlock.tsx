@@ -1,21 +1,31 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { getMe, checkServerSession } from "@/lib/api/serverApi";
 import GreetingBlockClient from "./GreetingBlockClient";
-import { User } from "@/types/user";
 
 const GreetingBlock = async () => {
-  let initialUser: User | null = null;
+  const queryClient = new QueryClient();
 
   try {
     const isAuth = await checkServerSession();
-
     if (isAuth?.data?.success) {
-      initialUser = await getMe();
+      await queryClient.prefetchQuery({
+        queryKey: ["currentUser"],
+        queryFn: () => getMe(),
+      });
     }
-  } catch (err) {
-    console.error("Помилка завантаження користувача для привітання:", err);
+  } catch (error) {
+    console.error("Error prefetching user for greeting:", error);
   }
 
-  return <GreetingBlockClient initialUser={initialUser} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <GreetingBlockClient />
+    </HydrationBoundary>
+  );
 };
 
 export default GreetingBlock;
