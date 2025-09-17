@@ -5,6 +5,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
+  margin-bottom: 32px;
 }
 
 .avatarImage {
@@ -13,8 +14,6 @@
 
 .profileInfo {
   font-family: "Lato", sans-serif;
-  /* width: 335px;
-  height: 49px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +54,6 @@
 /* tablet */
 @media screen and (min-width: 768px) {
   .profileSection {
-    padding: 24px 32px 0px;
     justify-content: flex-start;
   }
 
@@ -82,9 +80,6 @@
   }
 
   .uploadBtn {
-    border: none;
-    background-color: rgba(0, 0, 0, 0.05);
-    width: 218px;
     height: 42px;
   }
 }

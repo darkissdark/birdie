@@ -36,7 +36,7 @@
 }
 
 .title {
-  font-family: "Lato", sans-serif;
+  font-family: "Comfortaa", sans-serif;
   color: #000;
   font-weight: 700;
   font-size: 40px;
@@ -54,18 +54,23 @@
 }
 
 .confbtn {
-  border-bottom: 4px solid var(--accent-ui);
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.6;
+
+  border-bottom: 4px solid rgba(0, 0, 0, 0.15);
   border-radius: 100px;
   width: 268px;
   height: 42px;
   cursor: pointer;
-  border: none;
-  background-color: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .confbtn:hover,
 .confbtn:focus {
-  background: #fff9fa;
+  border-bottom: 4px solid #ffcbd3;
+  background: #ffdae0;
 }
 
 /* tablet */
@@ -80,10 +85,8 @@
   }
 
   .title {
-    font-size: 48px;
+    font-size: 36px;
     width: 640px;
-    height: 43px;
-    margin-bottom: 48px;
   }
 
   .form {
@@ -114,9 +117,8 @@
   }
 
   .title {
+    font-size: 48px;
     text-align: center;
-    width: 640px;
-    height: 116px;
   }
 
   .confbtn {
