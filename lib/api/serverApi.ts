@@ -52,7 +52,12 @@ export const checkServerSession = async () => {
     return res;
   } catch (error) {
     console.error("Error checking server session:", error);
-    return { data: { success: false } };
+    return { 
+      data: { success: false },
+      headers: {},
+      status: 401,
+      statusText: 'Unauthorized'
+    };
   }
 };
 
