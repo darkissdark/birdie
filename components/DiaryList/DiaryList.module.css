@@ -117,12 +117,14 @@
 
 @media (min-width: 1440px) {
   .diaryWrapper {
-    width: 389px;
+    min-width: 389px;
     height: 727px;
     margin-inline: 0;
   }
 
   .wrapperList {
-    overflow: scroll;
-  }
+      max-height: 727px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
 }
