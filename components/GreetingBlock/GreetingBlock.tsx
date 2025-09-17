@@ -1,68 +1,52 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getMe, checkSession } from "@/lib/api/clientApi";
 import css from "./GreetingBlock.module.css";
+import { getMe, checkServerSession } from "@/lib/api/serverApi";
 
-const useCurrentUser = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+export interface WhoTimeProps {
+  currentHour: number;
+}
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const authResult = await checkSession();
-        setIsAuthenticated(authResult);
-      } catch {
-        setIsAuthenticated(false);
-      } finally {
-        setIsCheckingAuth(false);
-      }
-    };
-    checkAuth();
-  }, []);
+function GreetingTime(): WhoTimeProps {
+  return { currentHour: new Date().getHours() };
+}
 
-  return useQuery({
-    queryKey: ["currentUser"],
-    queryFn: getMe,
-    staleTime: 10 * 60 * 1000,
-    retry: 1,
-    enabled: isAuthenticated && !isCheckingAuth,
-  });
-};
-
-const Greeting = () => {
-  const { data: user, isLoading } = useCurrentUser();
-  const [currentHour, setCurrentHour] = useState<number | null>(null);
-
-  useEffect(() => {
-    setCurrentHour(new Date().getHours());
-  }, []);
-
-  const getGreeting = () => {
-    if (isLoading) return "Завантаження...";
-
-    if (currentHour === null) {
-      return "Доброго дня! Увійдіть для персоналізації";
+const Greeting = async () => {
+  try {
+    const isAuth = await checkServerSession();
+    if (!isAuth?.data?.success) {
+      return (
+        <div className={css.greetingContainer}>
+          <h2 className={css.greetingText}>
+            Вітаю! Увійдіть для персоналізації
+          </h2>
+        </div>
+      );
     }
+
+    const user = await getMe();
+    const whoTime = GreetingTime();
 
     let timeGreeting = "Доброго ранку";
-    if (currentHour >= 12 && currentHour < 17) timeGreeting = "Доброго дня";
-    if (currentHour >= 17) timeGreeting = "Доброго вечора";
+    if (whoTime.currentHour >= 12 && whoTime.currentHour < 17)
+      timeGreeting = "Доброго дня";
+    if (whoTime.currentHour >= 17) timeGreeting = "Доброго вечора";
 
-    if (!user || !user.name) {
-      return `${timeGreeting}! Увійдіть для персоналізації`;
-    }
-
-    return `${timeGreeting}, ${user.name}!`;
-  };
-
-  return (
-    <div className={css.greetingContainer}>
-      <h2 className={css.greetingText}>{getGreeting()}</h2>
-    </div>
-  );
+    return (
+      <div className={css.greetingContainer}>
+        <h2 className={css.greetingText}>
+          {`${timeGreeting}
+          ${user.name}`}
+        </h2>
+      </div>
+    );
+  } catch {
+    return (
+      <div className={css.greetingContainer}>
+        <h2 className={css.greetingText}>
+          Щось пішло не так. Спробуйте перезавантажити сторінку.
+        </h2>
+      </div>
+    );
+  }
 };
 
 export default Greeting;
