@@ -1,15 +1,16 @@
 .pageContainer {
   display: flex;
   justify-content: space-between;
+  height: 100vh;
 }
 
 .formColumn {
   width: 100%;
 }
 
-.illustrationColumn {
-  width: 100%;
+.illustrationColumn img {
   height: 100%;
+  object-fit: cover;
 }
 
 .container {
