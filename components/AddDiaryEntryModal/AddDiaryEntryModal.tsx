@@ -8,7 +8,7 @@ interface AddDiaryEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
   entry?: DiaryEntry;
-  onSuccess: () => void;
+  onSuccess: (updatedEntry?: DiaryEntry) => void;
 }
 
 export const AddDiaryEntryModal: React.FC<AddDiaryEntryModalProps> = ({
@@ -63,8 +63,8 @@ export const AddDiaryEntryModal: React.FC<AddDiaryEntryModalProps> = ({
         <div className={styles.content}>
           <AddDiaryEntryForm
             entry={entry}
-            onSuccess={() => {
-              onSuccess();
+            onSuccess={(updatedEntry) => {
+              onSuccess(updatedEntry);
               onClose();
             }}
             onCancel={onClose}

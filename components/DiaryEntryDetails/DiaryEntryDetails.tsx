@@ -10,7 +10,7 @@ import { ConfirmationModal } from "../ConfirmationModal/ConfirmationModal";
 interface DiaryEntryDetailsProps {
   entry: DiaryEntry;
   onDelete: (id: string) => void;
-  onUpdate: () => void;
+  onUpdate: (updatedEntry?: DiaryEntry) => void;
 }
 
 const DiaryEntryDetails = ({
@@ -21,9 +21,9 @@ const DiaryEntryDetails = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleEditConfirm = () => {
+  const handleEditConfirm = (updatedEntry?: DiaryEntry) => {
     setShowEditModal(false);
-    onUpdate();
+    onUpdate(updatedEntry);
   };
 
   const handleDeleteConfirm = () => {

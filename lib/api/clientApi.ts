@@ -2,11 +2,16 @@ import { User } from "@/types/user";
 import { CreateTask } from "@/types/task";
 import { nextServer } from "./api";
 
-import { TasksResponse, Task } from "@/types/tasks";
+import { Task } from "@/types/tasks";
 import { BabyToday, WeekGreetingResponse } from "@/types/baby";
 import { ComfortTip, FeelingsResponse } from "@/types/tip";
 import { AboutBaby, AboutMom } from "@/types/weeks";
-import { DiaryEntry, DiaryEntryData, SortOrder } from "@/types/diary";
+import {
+  DiaryEntry,
+  DiaryEntryData,
+  DiaryFormValues,
+  SortOrder,
+} from "@/types/diary";
 
 export type { AboutBaby, AboutMom };
 
@@ -189,4 +194,41 @@ export const fetchNoteByIdClient = async (
 ): Promise<DiaryEntry> => {
   const { data } = await nextServer.get<DiaryEntry>(`/diary/${noteId}`);
   return data;
+};
+
+export const createDiaryEntry = async (
+  newEntry: DiaryFormValues
+): Promise<DiaryEntry> => {
+  try {
+    const { data } = await nextServer.post<DiaryEntry>("/diary", newEntry);
+    return data;
+  } catch (error) {
+    console.error("createDiaryEntry - Error:", error);
+    throw error;
+  }
+};
+
+export const updateDiaryEntry = async (
+  id: string,
+  updatedEntry: DiaryFormValues
+): Promise<DiaryEntry> => {
+  try {
+    const { data } = await nextServer.put<DiaryEntry>(
+      `/diary/${id}`,
+      updatedEntry
+    );
+    return data;
+  } catch (error) {
+    console.error("updateDiaryEntry - Error:", error);
+    throw error;
+  }
+};
+
+export const deleteDiaryEntry = async (id: string): Promise<void> => {
+  try {
+    await nextServer.delete(`/diary/${id}`);
+  } catch (error) {
+    console.error("deleteDiaryEntry - Error:", error);
+    throw error;
+  }
 };
