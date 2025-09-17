@@ -109,7 +109,6 @@
     font-size: 16px;
   }
   .contentList.baby {
-    height: 467px;
     display: flex;
     gap: 32px;
     overflow-x: auto;
@@ -121,22 +120,26 @@
     width: 461px;
   }
 }
+.mom .contentList {
+  margin-bottom: 24px;
+}
 /* xxxxxxxxxxxxxxxxxxxx */
 @media (min-width: 1440px) {
-  .contentList.feelings {
+  /* .contentList.feelings {
     height: 194px;
     overflow-x: auto;
   }
   .contentList.tips {
     height: 322px;
     overflow-x: auto;
+  } */
+  .mom .contentList + .contentList {
+    margin-bottom: 0;
   }
 }
 
 /* ======================================== */
-.mom .contentList {
-  margin-bottom: 24px;
-}
+
 .feelingsList {
   display: flex;
   flex-wrap: wrap;
