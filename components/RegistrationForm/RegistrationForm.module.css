@@ -112,6 +112,13 @@
   height: 37px;
   background: rgba(0, 0, 0, 0.05);
 }
+
+.inputField:hover,
+.inputField:focus {
+  border-color: #ffcbd3;
+  outline: none;
+}
+
 @media (min-width: 768px) {
   .inputField {
     width: 480px;
