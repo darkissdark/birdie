@@ -11,14 +11,13 @@ export default function EditProfilePage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async () => {
     setIsLoading(true);
-    console.log("Sending form data:", Object.fromEntries(formData.entries()));
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setIsLoading(false);
-    console.log("Form data submitted successfully!");
+
     router.push("/");
   };
 
