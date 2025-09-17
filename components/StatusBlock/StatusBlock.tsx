@@ -1,26 +1,32 @@
-import React from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { getUserStats, checkServerSession } from "@/lib/api/serverApi";
 import StatusBlockClient from "./StatusBlockClient";
 
-interface UserStats {
-  curWeekToPregnant: number;
-  daysBeforePregnant: number;
-}
-
 const StatusBlock = async () => {
-  let initialData: UserStats | null = null;
+  const queryClient = new QueryClient();
 
   try {
     const isAuth = await checkServerSession();
 
     if (isAuth?.data?.success) {
-      initialData = await getUserStats();
+      await queryClient.prefetchQuery({
+        queryKey: ["userStats"],
+        queryFn: () => getUserStats(),
+      });
     }
-  } catch (err) {
-    console.error("Помилка завантаження початкових статистик:", err);
+  } catch (error) {
+    console.error("Error prefetching user stats:", error);
   }
 
-  return <StatusBlockClient initialData={initialData} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <StatusBlockClient />
+    </HydrationBoundary>
+  );
 };
 
 export default StatusBlock;

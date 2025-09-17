@@ -4,17 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import css from "./StatusBlock.module.css";
 import { getUserStats, checkSession } from "@/lib/api/clientApi";
+import useAuthStore from "@/lib/store/authStore";
 
 interface UserStats {
   curWeekToPregnant: number;
   daysBeforePregnant: number;
 }
 
-interface StatusBlockClientProps {
-  initialData?: UserStats | null;
-}
-
-const StatusBlockClient = ({ initialData }: StatusBlockClientProps) => {
+const StatusBlockClient = () => {
+  const { isAuthenticated } = useAuthStore();
   const {
     data: stats,
     isLoading,
@@ -32,12 +30,12 @@ const StatusBlockClient = ({ initialData }: StatusBlockClientProps) => {
         return null;
       }
     },
-    initialData,
+    enabled: isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });
 
-  if (isLoading) {
+  if (isLoading && isAuthenticated) {
     return (
       <div className={css.container}>
         <div className={css.statItem}>
@@ -52,7 +50,7 @@ const StatusBlockClient = ({ initialData }: StatusBlockClientProps) => {
     );
   }
 
-  if (isError || !stats) {
+  if (isError || !stats || !isAuthenticated) {
     return (
       <div className={css.container}>
         <div className={css.statItem}>
