@@ -42,23 +42,13 @@ import { User } from "@/types/user";
 import { DiaryEntry } from "@/types/diary";
 
 export const checkServerSession = async () => {
-  try {
-    const cookieStore = await cookies();
-    const res = await nextServer.get("/auth/session", {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
-    return res;
-  } catch (error) {
-    console.error("Error checking server session:", error);
-    return { 
-      data: { success: false },
-      headers: {},
-      status: 401,
-      statusText: 'Unauthorized'
-    };
-  }
+  const cookieStore = await cookies();
+  const res = await nextServer.get("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return res;
 };
 
 export async function fetchGreeting(): Promise<WeeksGeneralInfo> {
