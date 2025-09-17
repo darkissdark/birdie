@@ -13,11 +13,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0);
+  border: 1px solid var(--opacity-transparent);
   border-radius: 100px;
   padding: 4px;
   height: 50px;
-  background: var(--bg-accent);
+  background: var(--color-scheme-foreground);
   list-style: none;
   margin-bottom: 16px;
 }
@@ -36,8 +36,9 @@
   font-size: 13px;
   line-height: 1.6;
   text-align: center;
-  background: rgba(255, 255, 255, 0);
+  border: 1px solid var(--opacity-transparent);
   border-radius: 100px;
+  background: var(--opacity-transparent);
   padding: 10px 24px;
   width: 100%;
   height: 42px;
@@ -45,7 +46,7 @@
 }
 .tabItem[data-state="active"] {
   border: 1px solid rgba(255, 255, 255, 0);
-  background: var(--bg-accent-high);
+  background: var(--color-scheme-foreground-alt);
 }
 
 /* ========================================= */
