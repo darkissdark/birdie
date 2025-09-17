@@ -1,6 +1,5 @@
 .journeyDetails {
   min-width: 335px; /*768px;*/
-  border: 1px solid #eee;
   border-radius: 8px;
   background: #fff;
 }
@@ -34,7 +33,7 @@
 .tabItem {
   font-family: "Lato", sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   text-align: center;
   background: rgba(255, 255, 255, 0);
@@ -100,6 +99,9 @@
 @media (min-width: 768px) {
   .babyImg {
     width: 656px;
+  }
+  .tabItem {
+    font-size: 14px;
   }
 }
 @media (min-width: 1440px) {

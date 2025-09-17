@@ -9,6 +9,7 @@ import { TbNorthStar } from "react-icons/tb";
 import Icon from "../Icon/Icon";
 import { useJourneyStore } from "@/lib/store/useJourneyStore";
 import TasksReminderCard from "../TasksReminderCard/TasksReminderCard";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 interface JourneyDetailsProps {
   weekNumber: number;
@@ -94,7 +95,10 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
               </div>
             </div>
           ) : (
-            <p>Завантаження сторінки дитини...</p>
+            <LoadingSpinner
+              message="Завантаження сторінки дитини..."
+              size="medium"
+            />
           )}
         </TabsContent>
 
@@ -139,7 +143,10 @@ export default function JourneyDetails({ weekNumber }: JourneyDetailsProps) {
               </div>
             </div>
           ) : (
-            <p>Завантаження сторінки мами...</p>
+            <LoadingSpinner
+              message="Завантаження сторінки мами..."
+              size="medium"
+            />
           )}
         </TabsContent>
       </Tabs>
