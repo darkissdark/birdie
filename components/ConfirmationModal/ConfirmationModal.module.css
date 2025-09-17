@@ -69,7 +69,7 @@
 
 .confbtn:hover,
 .confbtn:focus {
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   background: #ffdae0;
 }
 

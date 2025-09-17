@@ -42,7 +42,7 @@
 
 .inputField:hover,
 .inputField:focus {
-  border-color: #ffcbd3;
+  border-color: var(--accent-ui);
 }
 
 .labelGender {
