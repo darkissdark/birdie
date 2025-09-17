@@ -23,14 +23,6 @@ const DiaryEntryCard = forwardRef<HTMLLIElement, DiaryEntryCardProps>(
         sessionStorage.setItem("selectedEntry", JSON.stringify(entry));
         router.push(`/diary/${entry._id}`);
       }
-
-      // if (!isDesktop) {
-      //   router.push(`/diary/${entry._id}`);
-      // }
-
-      // if (onSelect) {
-      //   onSelect(entry);
-      // }
     };
 
     const date = new Date(entry.date).toLocaleDateString("uk-UA", {
@@ -46,7 +38,7 @@ const DiaryEntryCard = forwardRef<HTMLLIElement, DiaryEntryCardProps>(
         ref={ref}
       >
         <div className={css.diaryCardListItemWrapper}>
-          <p className={css.diaryCardListItemWrapperText}>{entry.title}</p>
+          <h3 className={css.diaryCardListItemWrapperText}>{entry.title}</h3>
           <p className={css.diaryCardListItemWrapperDate}>{date}</p>
         </div>
         <ul className={css.diaryCardListItemWrapperEmotions}>
