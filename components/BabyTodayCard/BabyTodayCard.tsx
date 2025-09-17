@@ -24,6 +24,7 @@ const BabyTodayCard = async () => {
             alt="Baby Today"
             priority
             fill
+            sizes="(max-width: 768px) 287px, 257px"
             style={{ objectFit: "cover" }}
           />
         </div>
