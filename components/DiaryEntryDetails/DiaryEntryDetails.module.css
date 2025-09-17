@@ -1,5 +1,4 @@
 .diaryEntryDetails {
-  padding: 32px 20px;
   /* max-width: 375px; */
   background-color: #fff;
 }
@@ -113,5 +112,6 @@
 @media screen and (min-width: 1440px) {
   .diaryEntryDetailsWrapper {
     width: 643px;
+    height: 727px;
   }
 }

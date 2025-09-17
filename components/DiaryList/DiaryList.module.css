@@ -123,8 +123,8 @@
   }
 
   .wrapperList {
-      max-height: 727px;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+    max-height: 727px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }

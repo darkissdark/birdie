@@ -34,7 +34,7 @@ const DiaryEntryDetails = ({
   if (!entry) return <p>Запис не знайдено</p>;
 
   const date = entry
-    ? new Date(entry.createdAt || new Date()).toLocaleDateString("uk-UA", {
+    ? new Date(entry.date || new Date()).toLocaleDateString("uk-UA", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -72,10 +72,13 @@ const DiaryEntryDetails = ({
         <p className={css.diaryEntryDetailsContent}>{description}</p>
 
         <div>
-          <ul className={css.diaryCardListItemWrapperEmotions}>
+          <ul className={css.diaryEntryDetailsEmotions}>
             {entry?.emotions?.length ? (
               emotions.map((emo) => (
-                <li key={emo._id} className={css.emotionsItem}>
+                <li
+                  key={emo._id}
+                  className={css.diaryEntryDetailsEmotionsListText}
+                >
                   {emo.title}
                 </li>
               ))
