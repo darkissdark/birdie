@@ -35,7 +35,8 @@
 
 .input:hover,
 .input:focus {
-  border-color: #e9708d;
+  border-color: #ffcbd3;
+  outline: none;
 }
 
 .iconButton {
