@@ -105,7 +105,7 @@ button {
   --color-french-pass-lighter: #e5fafe;
   --color-french-pass-lightest: #fbfefe;
   --color-red: #c60000;
-  --scrollbar-thumb-color: var(--color-scheme-accent, #ffcbd3);
+  --scrollbar-thumb-color: var(--color-scheme-accent, var(--accent-ui));
   --scrollbar-track-bg: var(--color-neutral-lightest, #f0f0f0);
   --scrollbar-thumb-hover: var(--color-scheme-foreground-alt, #ffb3be);
 }
@@ -173,7 +173,7 @@ button {
 }
 
 [data-theme="girl"] {
-  --scrollbar-thumb-color: var(--color-pastel-pink, #ffcbd3);
+  --scrollbar-thumb-color: var(--color-pastel-pink, var(--accent-ui));
   --scrollbar-thumb-hover: var(--color-pastel-pink-light, #ffb3be);
 }
 

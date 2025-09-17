@@ -29,13 +29,15 @@
   color: #7f7f7f;
 
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   cursor: pointer;
 }
 
 .input:hover,
 .input:focus {
-  border-color: #ffcbd3;
+  border-color: var(--accent-ui);
   outline: none;
 }
 
@@ -51,4 +53,3 @@
   display: flex;
   align-items: center;
 }
-
