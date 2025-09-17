@@ -13,7 +13,7 @@ import {
 } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { DiaryEntry, SortOrder } from "@/types/diary";
-import Greeting from "@/components/GreetingBlock/GreetingBlock";
+import Greeting from "@/components/GreetingBlock/GreetingBlockClient";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });

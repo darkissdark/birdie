@@ -1,52 +1,21 @@
-import css from "./GreetingBlock.module.css";
 import { getMe, checkServerSession } from "@/lib/api/serverApi";
+import GreetingBlockClient from "./GreetingBlockClient";
+import { User } from "@/types/user";
 
-export interface WhoTimeProps {
-  currentHour: number;
-}
+const GreetingBlock = async () => {
+  let initialUser: User | null = null;
 
-function GreetingTime(): WhoTimeProps {
-  return { currentHour: new Date().getHours() };
-}
-
-const Greeting = async () => {
   try {
     const isAuth = await checkServerSession();
-    if (!isAuth?.data?.success) {
-      return (
-        <div className={css.greetingContainer}>
-          <h2 className={css.greetingText}>
-            Вітаю! Увійдіть для персоналізації
-          </h2>
-        </div>
-      );
+
+    if (isAuth?.data?.success) {
+      initialUser = await getMe();
     }
-
-    const user = await getMe();
-    const whoTime = GreetingTime();
-
-    let timeGreeting = "Доброго ранку";
-    if (whoTime.currentHour >= 12 && whoTime.currentHour < 17)
-      timeGreeting = "Доброго дня";
-    if (whoTime.currentHour >= 17) timeGreeting = "Доброго вечора";
-
-    return (
-      <div className={css.greetingContainer}>
-        <h2 className={css.greetingText}>
-          {`${timeGreeting}
-          ${user.name}`}
-        </h2>
-      </div>
-    );
-  } catch {
-    return (
-      <div className={css.greetingContainer}>
-        <h2 className={css.greetingText}>
-          Щось пішло не так. Спробуйте перезавантажити сторінку.
-        </h2>
-      </div>
-    );
+  } catch (err) {
+    console.error("Помилка завантаження користувача для привітання:", err);
   }
+
+  return <GreetingBlockClient initialUser={initialUser} />;
 };
 
-export default Greeting;
+export default GreetingBlock;
