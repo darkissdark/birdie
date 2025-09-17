@@ -84,6 +84,7 @@
   .card {
     width: 642px;
     height: 422px;
+    margin-bottom: 24px;
   }
 
   .title {

@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   /* padding: 16px 20px 16px 20px; */
+  padding-top: 12px;
   gap: 16px;
 }
 
@@ -32,7 +33,7 @@
   .pageContainer {
     display: flex;
     flex-direction: column;
-    /* padding: 16px 32px 16px 32px; */
+    padding-top: 0;
   }
 
   .cardsMainContainer {
@@ -64,6 +65,7 @@
 
   .cardsContainerLeft {
     width: 642px;
+    gap: 0px;
   }
 
   .cardsContainerRight {
