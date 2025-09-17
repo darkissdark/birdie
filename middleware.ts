@@ -9,7 +9,7 @@ const publicRoutes = ["/auth"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const cookieStore = await cookies();
-  let accessToken = cookieStore.get("accessToken")?.value;
+  const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
   const isPublicRoute = publicRoutes.some((route) =>
@@ -18,10 +18,6 @@ export async function middleware(request: NextRequest) {
   const isPrivateRoute = privateRoutes.some((route) =>
     pathname.startsWith(route)
   );
-
-  if (accessToken) {
-    cookieStore.delete("accessToken");
-  }
 
   if (!accessToken) {
     if (refreshToken) {
