@@ -55,6 +55,7 @@
 
 .diaryEntryDetailsEmotions {
   display: flex;
+  flex-wrap: wrap;
   padding-top: 8px;
   gap: 8px;
 }
@@ -113,6 +114,5 @@
   .diaryEntryDetailsWrapper {
     width: 643px;
     height: 727px;
-    
   }
 }

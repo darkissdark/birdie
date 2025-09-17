@@ -1,9 +1,12 @@
 "use client";
 
+import toast from "react-hot-toast";
+
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import DiaryEntryDetails from "@/components/DiaryEntryDetails/DiaryEntryDetails";
 import { DiaryEntry } from "@/types/diary";
+import { deleteDiaryEntry } from "@/lib/api/clientApi";
 
 export default function DiaryEntryPage() {
   const params = useParams();
@@ -24,7 +27,7 @@ export default function DiaryEntryPage() {
     try {
       const res = await fetch(`${API_BASE}/diary`, {
         cache: "no-store",
-        credentials: "include", // важливо, якщо бек вимагає куки
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -85,35 +88,19 @@ export default function DiaryEntryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entryId]);
 
-  // Видалення з сервера — з інформативною обробкою помилок
-  const handleDelete = async (id: string) => {
-    setError(null);
+  // // Видалення з сервера — з інформативною обробкою помилок
+
+  const handleDeleteEntry = async (id: string) => {
     try {
-      const res = await fetch(`${API_BASE}/diary/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      await deleteDiaryEntry(id);
 
-      if (!res.ok) {
-        const body = await res
-          .json()
-          .catch(() => ({ message: res.statusText }));
-        console.error("Помилка видалення:", body);
-        setError(
-          `Не вдалося видалити запис: ${body?.message ?? res.statusText}`
-        );
-        return;
-      }
-
-      // очищаємо локальний стейт та sessionStorage — і редірект
       sessionStorage.removeItem("selectedEntry");
       router.push("/diary");
-    } catch (err) {
-      console.error("Помилка під час видалення:", err);
-      setError("Сталася помилка при видаленні запису. Спробуйте ще раз.");
+
+      toast.success("Запис успішно видалено!");
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      toast.error("Помилка при видаленні запису");
     }
   };
 
@@ -139,8 +126,8 @@ export default function DiaryEntryPage() {
   return (
     <DiaryEntryDetails
       entry={entry}
-      onDelete={handleDelete}
-      onUpdate={handleUpdate} // тепер може приймати updated entry
+      onDelete={handleDeleteEntry}
+      onUpdate={handleUpdate}
     />
   );
 }
