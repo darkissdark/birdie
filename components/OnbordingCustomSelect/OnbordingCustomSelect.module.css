@@ -36,7 +36,8 @@
 
 .control:hover,
 .control:focus {
-  border-color: #e9708d;
+  border-color: #ffcbd3;
+  outline: none;
 }
 
 .errorInput {
@@ -70,8 +71,8 @@
 }
 
 .option:active {
-  background: #4a90e2;
-  color: #fff;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #191919;
 }
 
 .errorText {
