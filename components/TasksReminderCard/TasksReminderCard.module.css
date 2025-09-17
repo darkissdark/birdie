@@ -3,7 +3,7 @@
   padding: 24px;
   min-width: 335px;
   width: 100%;
-  background: #fff4f6;
+  background: var(--bg-accent);
 }
 
 .tasksHeader {
@@ -86,12 +86,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   border-radius: 100px;
   padding: 10px 24px;
   width: 173px;
   height: 42px;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   margin-top: 16px;
 
   font-weight: 500;

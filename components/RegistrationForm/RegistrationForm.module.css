@@ -130,10 +130,10 @@
   flex-direction: row;
   width: 335px;
   height: 42px;
-  border-bottom: 4px solid #ffcbd3;
+  border-bottom: 4px solid var(--accent-ui);
   border-radius: 100px;
   padding: 10px 24px;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   margin-bottom: 24px;
   font-size: 14px;
   font-weight: 500;

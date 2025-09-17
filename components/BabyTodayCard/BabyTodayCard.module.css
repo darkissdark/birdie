@@ -3,7 +3,7 @@
   padding: 24px;
   min-width: 335px;
   width: 100%;
-  background: #fff4f6;
+  background: var(--bg-accent);
 }
 
 .title {

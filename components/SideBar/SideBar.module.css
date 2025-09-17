@@ -71,7 +71,7 @@
 }
 
 .active {
-  background: #fff4f6;
+  background: var(--bg-accent);
 }
 
 .footer {
@@ -80,6 +80,7 @@
 
 .userRow {
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
   gap: 8px;
   border-top: 1px solid #00000026;

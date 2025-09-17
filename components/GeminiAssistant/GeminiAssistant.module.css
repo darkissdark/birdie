@@ -1,7 +1,7 @@
 /* ================ ПЛАВАЮЧА КНОПКА ================ */
 .floatingButton {
   position: fixed;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 30px;
@@ -94,7 +94,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: rgb(0, 0, 0);
 }
 
@@ -214,7 +214,7 @@
 /* ================ ТАБИ ================ */
 .tabs {
   display: flex;
-  background: #fff4f6;
+  background: var(--bg-accent);
   border-radius: 25px;
   padding: 6px;
   margin: 16px;
@@ -254,7 +254,7 @@
 }
 
 .activeTab {
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: #000;
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
@@ -346,9 +346,9 @@
 
 .quickReplyButton {
   padding: 8px 16px;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: #333;
-  border: 1px solid #ffcbd3;
+  border: 1px solid var(--accent-ui);
   border-radius: 20px;
   font-size: 13px;
   cursor: pointer;
@@ -357,7 +357,7 @@
 }
 
 .quickReplyButton:hover {
-  background: #ffcbd3;
+  background: var(--accent-ui);
   border-color: #ffb3bd;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
@@ -378,7 +378,7 @@
 }
 
 .topicChip {
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: #666;
   padding: 4px 12px;
   border-radius: 16px;
@@ -451,26 +451,26 @@
 }
 
 .input:focus {
-  border-color: #ffcbd3;
+  border-color: var(--accent-ui);
   box-shadow: 0 0 0 3px rgba(255, 203, 211, 0.1);
   background-color: white;
 }
 
 .sendButton {
   padding: 12px 24px;
-  background: #ffdae0;
+  background: var(--bg-accent-high);
   color: rgb(0, 0, 0);
   border: none;
   border-radius: 20px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-bottom: 3px solid #ffcbd3;
+  border-bottom: 3px solid var(--accent-ui);
   white-space: nowrap;
 }
 
 .sendButton:hover:not(:disabled) {
-  background: #ffcbd3;
+  background: var(--accent-ui);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(255, 203, 211, 0.3);
 }

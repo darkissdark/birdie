@@ -83,9 +83,9 @@ button {
   --opacity-neutral-darkest-50: rgba(0, 0, 0, 0.5);
   --opacity-neutral-darkest-60: rgba(0, 0, 0, 0.6);
   --color-pastel-pink-lightest: #fff9fa;
-  --color-pastel-pink-lighter: #fff4f6;
-  --color-pastel-pink-light: #ffdae0;
-  --color-pastel-pink: #ffcbd3;
+  --color-pastel-pink-lighter: var(--bg-accent);
+  --color-pastel-pink-light: var(--bg-accent-high);
+  --color-pastel-pink: var(--accent-ui);
   --color-pastel-pink-dark: #cca2a8;
   --color-pastel-pink-darker: #665154;
   --color-pastel-pink-darkest: #4c3c3f;

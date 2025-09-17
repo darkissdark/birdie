@@ -102,7 +102,7 @@
 }
 
 .actionBtn:hover {
-  background: #ffdae0;
+  background: var(--bg-accent-high);
 }
 
 .errorMessage {
