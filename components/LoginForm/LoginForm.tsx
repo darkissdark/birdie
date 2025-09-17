@@ -46,7 +46,7 @@ const LoginForm = () => {
       <header className={css.header}>
         <Link href={"/"}>
           <svg width={95} height={30}>
-            <use href="/auth/Logo.svg#logo" />
+            <use href="#logo-white" />
           </svg>
         </Link>
       </header>

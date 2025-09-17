@@ -26,7 +26,7 @@ export default function EditProfilePage() {
       <header className={styles.header}>
         <Link href={"/"}>
           <svg className={styles.logo} width={105} height={45}>
-            <use href="/auth/Logo.svg#logo" />
+            <use href="#logo-white" />
           </svg>
         </Link>
       </header>

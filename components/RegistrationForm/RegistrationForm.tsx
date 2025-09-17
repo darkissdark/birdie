@@ -50,7 +50,7 @@ const RegistrationForm = () => {
       <header className={css.header}>
         <Link href={"/"}>
           <svg className={css.logo} width={105} height={45}>
-            <use href="/auth/Logo.svg#logo" />
+            <use href="#logo-white" />
           </svg>
         </Link>
       </header>
