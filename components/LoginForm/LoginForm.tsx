@@ -37,7 +37,6 @@ const LoginForm = () => {
       setUser(user);
       actions.resetForm();
       router.push("/");
-      console.log(useAuthStore.getState());
     } catch (error) {
       seterror((error as ApiError).message);
     }

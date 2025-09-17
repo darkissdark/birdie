@@ -7,18 +7,50 @@
 }
 
 .wrapper {
-  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-image: #fff;
+  padding: 2rem;
+  min-height: 400px;
+}
+
+.wrapper.small {
+  padding: 1rem;
+}
+
+.wrapper.medium {
+  padding: 2rem;
+}
+
+.wrapper.large {
+  padding: 3rem;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .art {
   animation: _fly 4s linear infinite;
-  position: absolute;
+  position: relative;
 }
+
+.small .art {
+  transform: scale(0.5);
+}
+
+.medium .art {
+  transform: scale(0.7);
+}
+
+.large .art {
+  transform: scale(1);
+}
+
 .art__circle {
   position: absolute;
   width: 20vmax;
@@ -27,6 +59,17 @@
   background-image: radial-gradient(at center, #5a5c6a 0%, #202d3a 81.3%);
   animation: circle-ans 4s linear infinite;
 }
+
+.small .art__circle {
+  width: 10vmax;
+  height: 10vmax;
+}
+
+.medium .art__circle {
+  width: 15vmax;
+  height: 15vmax;
+}
+
 .art__head {
   --wh: 16vmin;
   width: var(--wh);
@@ -35,6 +78,15 @@
   background-color: var(--color-primary);
   position: relative;
 }
+
+.small .art__head {
+  --wh: 8vmin;
+}
+
+.medium .art__head {
+  --wh: 12vmin;
+}
+
 .art__head::after,
 .art__head::before {
   content: "";
@@ -45,16 +97,31 @@
   bottom: 11%;
   background-color: var(--color-primary);
 }
+
+.small .art__head::after,
+.small .art__head::before {
+  width: 4vmin;
+  height: 3.5vmin;
+}
+
+.medium .art__head::after,
+.medium .art__head::before {
+  width: 6vmin;
+  height: 5.25vmin;
+}
+
 .art__head::after {
   left: -1vmin;
   rotate: -60deg;
   animation: left-ans 4s linear infinite;
 }
+
 .art__head::before {
   right: -1vmin;
   rotate: -40deg;
   animation: right-ans 4s linear infinite;
 }
+
 .art__eye {
   --w: 2.5vmin;
   --h: 2.5vmin;
@@ -64,6 +131,17 @@
   border-radius: 50%;
   animation: eyes-blink 4s infinite steps(2);
 }
+
+.small .art__eye {
+  --w: 1.25vmin;
+  --h: 1.25vmin;
+}
+
+.medium .art__eye {
+  --w: 1.875vmin;
+  --h: 1.875vmin;
+}
+
 .art__eye__wrapper {
   display: flex;
   gap: 3vmin;
@@ -74,6 +152,15 @@
   z-index: 1;
   animation: left-and-right-rotate 4s linear infinite;
 }
+
+.small .art__eye__wrapper {
+  gap: 1.5vmin;
+}
+
+.medium .art__eye__wrapper {
+  gap: 2.25vmin;
+}
+
 .art__mouth_helper {
   position: absolute;
   left: 50%;
@@ -81,6 +168,7 @@
   z-index: 1;
   animation: left-and-right-rotate 4s linear infinite;
 }
+
 .art__mouth {
   margin-left: -50%;
   width: 2vmin;
@@ -92,6 +180,17 @@
   );
   transform: scaleY(0.6) rotate(45deg);
 }
+
+.small .art__mouth {
+  width: 1vmin;
+  height: 1vmin;
+}
+
+.medium .art__mouth {
+  width: 1.5vmin;
+  height: 1.5vmin;
+}
+
 .art__leg {
   position: absolute;
   left: 35%;
@@ -102,6 +201,33 @@
   box-shadow: 4vmin 0 0 var(--color-leg);
   z-index: -1;
   animation: leg-ans 4s linear infinite;
+}
+
+.small .art__leg {
+  width: 0.4vmin;
+  height: 1.5vmin;
+  box-shadow: 2vmin 0 0 var(--color-leg);
+}
+
+.medium .art__leg {
+  width: 0.6vmin;
+  height: 2.25vmin;
+  box-shadow: 3vmin 0 0 var(--color-leg);
+}
+
+.message {
+  margin-top: 3rem;
+  color: #666;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.small .message {
+  font-size: 0.875rem;
+}
+
+.large .message {
+  font-size: 1.125rem;
 }
 
 @keyframes eyes-blink {
@@ -122,6 +248,7 @@
     transform: scaleY(1);
   }
 }
+
 @keyframes left-and-right-rotate {
   0% {
     transform: translateX(0);
@@ -161,6 +288,7 @@
     transform: translateY(1.5vmin);
   }
 }
+
 @keyframes _fly {
   0%,
   35%,
@@ -181,6 +309,7 @@
     transform: translateY(2rem);
   }
 }
+
 @keyframes circle-ans {
   0%,
   35% {
@@ -200,6 +329,7 @@
     opacity: 0;
   }
 }
+
 @keyframes left-ans {
   0%,
   39%,
@@ -223,6 +353,7 @@
     rotate: 60deg;
   }
 }
+
 @keyframes right-ans {
   0%,
   39%,
@@ -246,6 +377,7 @@
     rotate: -140deg;
   }
 }
+
 @keyframes leg-ans {
   0%,
   39%,

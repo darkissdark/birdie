@@ -203,6 +203,7 @@
   .tasksContainer {
     width: 390px;
     height: 499px;
+    height: 100%;
   }
 
   .tasksHeader h2 {
@@ -211,7 +212,7 @@
   }
 
   .tasksList {
-    height: 400px;
+    height: 445px;
     overflow-y: auto;
     padding-right: 10px;
   }

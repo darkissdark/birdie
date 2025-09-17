@@ -30,13 +30,10 @@ type JourneyPageProps = {
 
 export default async function Page({ params }: JourneyPageProps) {
   let { weekNumber } = await params;
-  console.log(weekNumber);
   const weekParam = Number(weekNumber);
   const greeting = await fetchGreeting();
   const currentWeek = greeting.curWeekToPregnant;
 
-  console.log("weekNumber: ", weekNumber);
-  console.log("currentWeek: ", currentWeek);
   if (currentWeek < weekNumber) {
     weekNumber = currentWeek;
     redirect(`/journey/${weekNumber}`);

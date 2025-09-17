@@ -1,6 +1,5 @@
 .journeyDetails {
   min-width: 335px; /*768px;*/
-  border: 1px solid #eee;
   border-radius: 8px;
   background: #fff;
 }
@@ -34,7 +33,7 @@
 .tabItem {
   font-family: "Lato", sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   text-align: center;
   background: rgba(255, 255, 255, 0);
@@ -101,13 +100,15 @@
   .babyImg {
     width: 656px;
   }
+  .tabItem {
+    font-size: 14px;
+  }
 }
 @media (min-width: 1440px) {
   .item {
     font-size: 16px;
   }
   .contentList.baby {
-    height: 467px;
     display: flex;
     gap: 32px;
     overflow-x: auto;
@@ -119,22 +120,26 @@
     width: 461px;
   }
 }
+.mom .contentList {
+  margin-bottom: 24px;
+}
 /* xxxxxxxxxxxxxxxxxxxx */
 @media (min-width: 1440px) {
-  .contentList.feelings {
+  /* .contentList.feelings {
     height: 194px;
     overflow-x: auto;
   }
   .contentList.tips {
     height: 322px;
     overflow-x: auto;
+  } */
+  .mom .contentList + .contentList {
+    margin-bottom: 0;
   }
 }
 
 /* ======================================== */
-.mom .contentList {
-  margin-bottom: 24px;
-}
+
 .feelingsList {
   display: flex;
   flex-wrap: wrap;

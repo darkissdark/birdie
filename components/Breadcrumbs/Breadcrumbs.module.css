@@ -2,8 +2,7 @@
   height: 48px;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0 32px;
 }
 
 .list {
@@ -34,7 +33,7 @@
 /* ≥1440: desktop */
 @media (min-width: 1440px) {
   .wrap {
-    padding: 0 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
   .item {
     font-size: 16px;
