@@ -26,7 +26,7 @@ export default function CustomSelect({
   const [open, setOpen] = useState(false);
 
   const handleSelect = (option: Option) => {
-    helpers.setValue(option.value); // у Formik зберігаємо value
+    helpers.setValue(option.value);
     setOpen(false);
   };
 
@@ -40,11 +40,11 @@ export default function CustomSelect({
       <div
         className={`${styles.control} ${
           meta.touched && meta.error ? styles.errorInput : ""
-        }`}
+        } ${open ? styles.open : ""}`}
         onClick={() => setOpen((prev) => !prev)}
       >
         {selectedLabel}
-        <span className={styles.arrow}>{open ? "▲" : "▼"}</span>
+        <span className={styles.customArrow} />
       </div>
 
       {open && (
