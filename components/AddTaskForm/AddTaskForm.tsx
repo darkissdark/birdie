@@ -5,7 +5,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTask } from "@/lib/api/clientApi";
 import type { CreateTask, Task } from "../../types/task";
 import Button from "../Button/Button";
+import AddTaskDatePicker from "../AddTaskDatePicker/AddTaskDatePicker";
 import toast from "react-hot-toast";
+
 
 interface TaskFormProps {
   onClose: () => void;
@@ -19,15 +21,8 @@ const ValidationSchema = Yup.object().shape({
     .default(() => new Date())
     .typeError("Введіть коректну дату"),
 });
-const formatDateISO = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${year}-${month}-${day}`;
-};
 
 const AddTaskForm = ({ onClose }: TaskFormProps) => {
-  const today = formatDateISO(new Date());
   const queryClient = useQueryClient();
   const mutation = useMutation<Task, Error, CreateTask>({
     mutationFn: createTask,
@@ -60,7 +55,7 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
   return (
     <Formik
       validationSchema={ValidationSchema}
-      initialValues={{ name: "", date: today }}
+      initialValues={{ name: "", date: new Date().toISOString() }}
       onSubmit={handleSubmit}
     >
       {(formik) => (
@@ -76,18 +71,14 @@ const AddTaskForm = ({ onClose }: TaskFormProps) => {
             />
             <ErrorMessage name="name" component="div" className={css.error} />
           </div>
-          <div className={css.formDiv}>
+          <div className={"${css.formDiv} ${css.error}"}>
             <label htmlFor="date">Дата</label>
-            <Field
-              type="date"
-              id="date"
-              name="date"
-              onFocus={(e: React.FocusEvent<HTMLInputElement>) =>
-                (e.target as HTMLInputElement).showPicker?.()
-              }
-              className={`${css.date} ${css.inputField}  ${formik.touched.date && formik.errors.name ? css.error : ""}`}
+
+            <AddTaskDatePicker
+              value={formik.values.date}
+              onChange={(date) => formik.setFieldValue("date", date)}
             />
-            <ErrorMessage name="date" component="div" className={css.error} />
+            <ErrorMessage name="date" component="div" />
           </div>
           <div className={css.saveButton}>
             <Button type="submit" variant="primary" disabled={!formik.isValid}>
