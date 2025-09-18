@@ -13,7 +13,7 @@ import {
 } from "@/lib/api/clientApi";
 import toast from "react-hot-toast";
 import { DiaryEntry, SortOrder } from "@/types/diary";
-import Greeting from "@/components/GreetingBlock/GreetingBlockClient";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 const DiaryPageClient = () => {
   const isDesktop = useMediaQuery({ minWidth: 1440 });
@@ -92,16 +92,15 @@ const DiaryPageClient = () => {
   }, [isError]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner message="Завантаження..." size="medium" />;
   }
 
   if (!isClient) {
-    return <div style={{ minHeight: "100vh" }}>Loading...</div>;
+    return <LoadingSpinner message="Завантаження..." size="medium" />;
   }
 
   return isDesktop ? (
     <>
-      <Greeting />
       <div className={css.diaryMainWrapper}>
         <DiaryList
           entries={entries}

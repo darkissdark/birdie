@@ -7,6 +7,7 @@ import css from "./DiaryPage.module.css";
 import DiaryPageClient from "./DiaryPageClient";
 import { getDiaryListServer } from "@/lib/api/serverApi";
 import { DiaryListResponse } from "@/lib/api/clientApi";
+import Greeting from "@/components/GreetingBlock/GreetingBlock";
 
 const DiaryPage = async () => {
   const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const DiaryPage = async () => {
   return (
     <section className={css.dairySection}>
       <div className={css.dairyContainer}>
+        <Greeting />
         <HydrationBoundary state={dehydrate(queryClient)}>
           <DiaryPageClient />
         </HydrationBoundary>

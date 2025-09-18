@@ -16,7 +16,7 @@
   min-width: 335px;
   width: 100%;
   padding: 24px 16px;
-  margin: 0 auto;
+  margin: 20px auto 0;
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -119,7 +119,7 @@
   .diaryWrapper {
     min-width: 389px;
     height: 727px;
-    margin-inline: 0;
+    margin: 0;
   }
 
   .wrapperList {
