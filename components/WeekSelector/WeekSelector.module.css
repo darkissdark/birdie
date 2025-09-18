@@ -18,7 +18,7 @@
   padding: 16px;
   width: 97px;
   height: 101px;
-  background: var(--color-scheme-foreground);
+  background: var(--bg-accent);
   /* opacity: 0.6; */
   cursor: pointer;
   transition: background 0.2s;

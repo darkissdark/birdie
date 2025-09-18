@@ -20,6 +20,10 @@
   background: var(--bg-accent);
 }
 
+.errorItem {
+  background-color: #fef2f2;
+}
+
 .label {
   margin-bottom: 4px;
   font-weight: 400;
