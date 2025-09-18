@@ -11,7 +11,7 @@
   align-items: center;
   gap: 8px;
   cursor: grab;
-  box-shadow: 0 4px 20px rgba(255, 203, 211, 0.6);
+  box-shadow: 0 4px 20px var(--accent-ui-scroll);
   transition: all 0.3s ease;
   z-index: 9;
   font-weight: 600;
@@ -20,13 +20,13 @@
 
 .floatingButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 203, 211, 0.8);
+  box-shadow: 0 8px 25px var(--accent-ui-scroll);
 }
 
 .floatingButton.dragging {
   cursor: grabbing;
   transform: scale(1.1);
-  box-shadow: 0 12px 30px rgba(255, 203, 211, 0.9);
+  box-shadow: 0 12px 30px var(--accent-ui-scroll);
 }
 
 .floatingButton svg {
@@ -257,7 +257,7 @@
   background: var(--bg-accent-high);
   color: #000;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
+  box-shadow: 0 2px 8px var(--accent-ui-scroll);
   transform: scale(1.02);
 }
 
@@ -358,9 +358,9 @@
 
 .quickReplyButton:hover {
   background: var(--accent-ui);
-  border-color: #ffb3bd;
+  border-color: var(--bg-accent-high);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(255, 203, 211, 0.3);
+  box-shadow: 0 2px 8px var(--accent-ui-scroll);
 }
 
 .relatedTopics {
@@ -402,7 +402,7 @@
 .typingIndicator span {
   width: 8px;
   height: 8px;
-  background: #ff8fa3;
+  background: var(--accent-ui);
   border-radius: 50%;
   animation: typing 1.4s infinite;
 }
@@ -452,7 +452,7 @@
 
 .input:focus {
   border-color: var(--accent-ui);
-  box-shadow: 0 0 0 3px rgba(255, 203, 211, 0.1);
+  box-shadow: 0 0 0 3px var(--accent-ui-scroll);
   background-color: white;
 }
 
@@ -472,7 +472,7 @@
 .sendButton:hover:not(:disabled) {
   background: var(--accent-ui);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 203, 211, 0.3);
+  box-shadow: 0 4px 12px var(--accent-ui-scroll);
 }
 
 .sendButton:active:not(:disabled) {
