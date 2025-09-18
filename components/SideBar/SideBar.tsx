@@ -4,24 +4,46 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Icon from "@/components/Icon/Icon";
 import BrandLogo from "@/components/Logo/BrandLogo";
 import { useUIStore } from "@/lib/store/uiStore";
 import useAuthStore from "@/lib/store/authStore";
-import { getWeekFromDueDate } from "@/lib/pregnancy/week";
 import api from "@/lib/axios";
 import { ConfirmationModal } from "@/components/ConfirmationModal/ConfirmationModal";
+import { checkSession, getUserStats } from "@/lib/api/clientApi";
+import { getWeekFromDueDate } from "@/lib/pregnancy/week";
 import css from "./SideBar.module.css";
+
+type UserStats = { curWeekToPregnant: number; daysBeforePregnant: number };
 
 export default function SideBar() {
   const pathname = usePathname();
   const router = useRouter();
   const isOpen = useUIStore((s) => s.isSidebarOpen);
   const close = useUIStore((s) => s.closeSidebar);
+
   const me = useAuthStore((s) => s.user);
   const clearIsAuthenticated = useAuthStore((s) => s.clearIsAuthenticated);
   const isAuthed = !!me;
+
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const { data: stats } = useQuery<UserStats | null>({
+    queryKey: ["userStats"],
+    queryFn: async () => {
+      const ok = await checkSession();
+      if (!ok) return null;
+      try {
+        return await getUserStats();
+      } catch {
+        return null;
+      }
+    },
+    enabled: isAuthed,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -35,12 +57,16 @@ export default function SideBar() {
     };
   }, [isOpen, close]);
 
-  const week = useMemo(() => getWeekFromDueDate(me) ?? 1, [me]);
+  const preferredWeek = useMemo(() => {
+    if (stats?.curWeekToPregnant) return stats.curWeekToPregnant;
+    return getWeekFromDueDate(me) ?? 1;
+  }, [stats?.curWeekToPregnant, me]);
+
   const nav = isAuthed
     ? ([
         { href: "/", text: "Мій день", icon: "myDay_icon" as const },
         {
-          href: `/journey/${week}`,
+          href: `/journey/${preferredWeek}`,
           text: "Подорож",
           icon: "journey_icon" as const,
         },
@@ -48,11 +74,7 @@ export default function SideBar() {
         { href: "/profile", text: "Профіль", icon: "profile_icon" as const },
       ] as const)
     : ([
-        {
-          href: "/",
-          text: "Мій день",
-          icon: "myDay_icon" as const,
-        },
+        { href: "/", text: "Мій день", icon: "myDay_icon" as const },
         {
           href: "/auth/register",
           text: "Подорож",
@@ -155,7 +177,6 @@ export default function SideBar() {
         className={`${css.overlay} ${isOpen ? css.overlayOpen : ""}`}
         onClick={close}
       />
-
       <aside
         id="sidebar-drawer"
         className={`${css.sidebar} ${isOpen ? css.open : ""}`}
