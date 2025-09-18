@@ -30,7 +30,7 @@
 }
 
 .primaryButton:active {
-  background-color: #ffb6c1;
+  background-color: var(--accent-ui);
   transform: translateY(0);
 }
 
@@ -74,7 +74,11 @@
 }
 
 .gradientButton:hover {
-  background: linear-gradient(135deg, var(--accent-ui) 0%, #ffb6c1 100%);
+  background: linear-gradient(
+    135deg,
+    var(--accent-ui) 0%,
+    var(--accent-ui-scroll) 100%
+  );
 }
 
 .largeButton {
@@ -152,7 +156,7 @@
 
 .baseButton:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(151, 71, 255, 0.3);
+  box-shadow: 0 0 0 3px var(--accent-ui);
 }
 
 @media (max-width: 768px) {
