@@ -17,7 +17,7 @@
   border-radius: 100px;
   padding: 4px;
   height: 50px;
-  background: var(--color-scheme-foreground);
+  background: var(--bg-accent);
   list-style: none;
   margin-bottom: 16px;
 }

@@ -5,7 +5,7 @@
   padding: 24px;
   width: 335px;
   height: 193px;
-  background: var(--color-scheme-foreground);
+  background: var(--bg-accent);
 }
 
 .wellbeingTitle {
