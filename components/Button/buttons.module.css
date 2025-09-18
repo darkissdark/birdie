@@ -30,7 +30,7 @@
 }
 
 .primaryButton:active {
-  background-color: #ffb6c1;
+  background-color: var(--accent-ui);
   transform: translateY(0);
 }
 
@@ -152,7 +152,7 @@
 
 .baseButton:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(151, 71, 255, 0.3);
+  box-shadow: 0 0 0 3px var(--accent-ui-scroll);
 }
 
 @media (max-width: 768px) {

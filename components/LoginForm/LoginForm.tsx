@@ -1,5 +1,5 @@
 "use client";
-import { login } from "@/lib/api/clientApi";
+import { login, getMe } from "@/lib/api/clientApi";
 import useAuthStore from "@/lib/store/authStore";
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
 import { ApiError } from "next/dist/server/api-utils";
@@ -35,6 +35,16 @@ const LoginForm = () => {
     try {
       const user = await login(values);
       setUser(user);
+
+      try {
+        const fullUserData = await getMe();
+        if (fullUserData) {
+          setUser(fullUserData);
+        }
+      } catch (userDataError) {
+        console.warn("Could not fetch full user data:", userDataError);
+      }
+
       actions.resetForm();
       router.push("/");
     } catch (error) {
