@@ -94,8 +94,8 @@
 }
 
 .submitButton[data-gender="girl"] {
-  background-color: --bg-accent-high;
-  border-bottom: 4px solid var(--accent-ui);
+  background-color: #ffdae0;
+  border-bottom: 4px solid #ffcbd3;
 }
 
 .submitButton[data-gender="unknown"] {
