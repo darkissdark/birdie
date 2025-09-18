@@ -70,7 +70,7 @@
 .confbtn:hover,
 .confbtn:focus {
   border-bottom: 4px solid var(--accent-ui);
-  background: #ffdae0;
+  background: var(--bg-accent-high);
 }
 
 /* tablet */
