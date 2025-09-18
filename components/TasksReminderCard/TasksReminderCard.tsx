@@ -97,7 +97,7 @@ const TasksReminderCard = () => {
           </AddTaskModal>
         )}
       </div>
-      <div className={css.tasksList}>
+      <div className={css.wrapperTasksList}>
         {tasks.length === 0 ? (
           <EmptyState onClick={handleAddTaskClick} />
         ) : (
