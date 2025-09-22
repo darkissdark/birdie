@@ -1,14 +1,12 @@
 "use client";
 import css from "./RegistrationForm.module.css";
 import { register } from "@/lib/api/clientApi";
+import { AxiosError } from "axios";
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
-import { ApiError } from "next/dist/server/api-utils";
 import Image from "next/image";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-import { useState } from "react";
+import toast from "react-hot-toast";
 import * as Yup from "yup";
 
 interface RegistrationValues {
@@ -32,7 +30,7 @@ const Schema = Yup.object().shape({
 
 const RegistrationForm = () => {
   const router = useRouter();
-  const [error, seterror] = useState("");
+
   const handleSubmit = async (
     values: RegistrationValues,
     actions: FormikHelpers<RegistrationValues>
@@ -42,7 +40,11 @@ const RegistrationForm = () => {
       actions.resetForm();
       router.push("/profile/edit");
     } catch (error) {
-      seterror((error as ApiError).message);
+      if ((error as AxiosError).status === 409) {
+        toast.error("Email уже використовується");
+      } else {
+        toast.error("Щось пішло не так, спробйте пізніше");
+      }
     }
   };
   return (
@@ -116,7 +118,6 @@ const RegistrationForm = () => {
                 >
                   Зареєструватись
                 </button>
-                {error && <p className={css.apiError}>{error}</p>}
                 <p className={css.text}> Вже маєте акаунт?</p>
                 <Link href={"/auth/login"} className={css.link}>
                   Увійти
