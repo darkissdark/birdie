@@ -2,13 +2,13 @@
 import { login, getMe } from "@/lib/api/clientApi";
 import useAuthStore from "@/lib/store/authStore";
 import { Field, Form, Formik, type FormikHelpers, ErrorMessage } from "formik";
-import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import * as Yup from "yup";
 import css from "./LoginForm.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 interface LoginValues {
   email: string;
@@ -26,7 +26,6 @@ const Schema = Yup.object().shape({
 
 const LoginForm = () => {
   const router = useRouter();
-  const [error, seterror] = useState("");
   const setUser = useAuthStore((state) => state.setUser);
   const handleSubmit = async (
     values: LoginValues,
@@ -48,7 +47,11 @@ const LoginForm = () => {
       actions.resetForm();
       router.push("/");
     } catch (error) {
-      seterror((error as ApiError).message);
+      if ((error as AxiosError).status === 401) {
+        toast.error("Логін або пароль не вірний");
+      } else {
+        toast.error("Щось пішло не так, спробйте пізніше");
+      }
     }
   };
   return (
@@ -109,7 +112,6 @@ const LoginForm = () => {
                 >
                   Увійти
                 </button>
-                {error && <p className={css.apiError}>{error}</p>}
                 <p className={css.text}> Немає аккаунту?</p>
                 <Link href={"/auth/register"} className={css.link}>
                   Зареєструватися
