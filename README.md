@@ -2,19 +2,6 @@
 
 > A modern, AI-powered pregnancy companion platform designed to support expecting mothers throughout their journey with personalized insights, daily tips, and comprehensive tracking tools.
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Environment Variables](#environment-variables)
-- [Development Guidelines](#development-guidelines)
-- [API Integration](#api-integration)
-- [Contributing](#contributing)
-
 ## 🎯 Overview
 
 Birdie (Лелека) is a comprehensive pregnancy companion application that helps expecting mothers track their journey, manage daily tasks, maintain a personal diary, and receive AI-powered insights tailored to their pregnancy week. The application provides a seamless, user-friendly experience with both authenticated and guest access modes.
